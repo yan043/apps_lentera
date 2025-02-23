@@ -9,10 +9,10 @@
 
 /node_modules
 /storage
-# /vendor
+/vendor
 
-# .env
-# .env.example
+.env
+.env.example
 .env.backup
 .env.production
 
