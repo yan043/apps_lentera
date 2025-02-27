@@ -13,6 +13,6 @@ class HomeController extends Controller
             return redirect()->route('login')->withErrors(['login' => 'Harap login terlebih dahulu.']);
         }
 
-        return view('additional.home');
+        return view('additionals.home');
     }
 }

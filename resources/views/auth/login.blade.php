@@ -18,11 +18,12 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
 
-                @include('partial.alerts')
+                @include('partials.alerts')
 
                 <section class="login_content">
                     <form method="POST">
-                        {{ csrf_field() }}
+                        @csrf
+                        @method('POST')
 
                         <h1><i class="fa fa-fire"></i>&nbsp; Lentera</h1>
                         <div>
@@ -37,7 +38,6 @@
                         </div>
 
                         <div class="separator">
-
                             <div class="clearfix"></div>
 
                             <div>
@@ -51,6 +51,7 @@
     </div>
 </body>
 </html>
+
 <script src="/theme/vendors/jquery/dist/jquery.min.js"></script>
 <script src="/theme/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/theme/build/js/custom.min.js"></script>

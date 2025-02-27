@@ -10,7 +10,7 @@
 
     <link href="/theme/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/theme/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/theme/vendors/nprogress/nprogress.css" rel="stylesheet">
+    {{-- <link href="/theme/vendors/nprogress/nprogress.css" rel="stylesheet"> --}}
     <link href="/theme/build/css/custom.min.css" rel="stylesheet">
     <style>
         .nav.toggle {
@@ -139,6 +139,9 @@
                                 <li>
                                     <a href="/shared_service/warehouse/return">Return</a>
                                 </li>
+                                <li>
+                                    <a href="/shared_service/warehouse/usage">Usage</a>
+                                </li>
                             </ul>
                         </li>
                         <li>
@@ -157,18 +160,18 @@
                   <li>
                     <a>
                         <i class="fa fa-group"></i>
-                        Administrator
+                        Administrators
                         <span class="fa fa-chevron-down"></span>
                     </a>
                     <ul class="nav child_menu">
                         <li>
-                            <a href="/administrator/employee">Employee</a>
+                            <a href="/administrators/employee">Employee</a>
                         </li>
                         <li>
-                            <a href="/administrator/team">Team</a>
+                            <a href="/administrators/team">Team</a>
                         </li>
                         <li>
-                            <a href="/administrator/sector">Sector</a>
+                            <a href="/administrators/sector">Sector</a>
                         </li>
                         <li>
                             <a>
@@ -177,13 +180,13 @@
                             </a>
                             <ul class="nav child_menu">
                                 <li class="sub_menu">
-                                    <a href="/administrator/order/stock">Status</a>
+                                    <a href="/administrators/order/stock">Status</a>
                                 </li>
                                 <li>
-                                    <a href="/administrator/order/return">Action</a>
+                                    <a href="/administrators/order/return">Action</a>
                                 </li>
                                 <li>
-                                    <a href="/administrator/order/return">Segment</a>
+                                    <a href="/administrators/order/return">Segment</a>
                                 </li>
                             </ul>
                         </li>
@@ -192,21 +195,21 @@
                   <li>
                     <a>
                         <i class="fa fa-cog"></i>
-                        Setting
+                        Settings
                         <span class="fa fa-chevron-down"></span>
                     </a>
                     <ul class="nav child_menu">
                         <li>
-                            <a href="/setting/regional">Regional</a>
+                            <a href="/settings/regional">Regional</a>
                         </li>
                         <li>
-                            <a href="/setting/witel">Witel</a>
+                            <a href="/settings/witel">Witel</a>
                         </li>
                         <li>
-                            <a href="/setting/mitra">Mitra</a>
+                            <a href="/settings/mitra">Mitra</a>
                         </li>
                         <li>
-                            <a href="/setting/level">Level</a>
+                            <a href="/settings/level">Level</a>
                         </li>
                     </ul>
                   </li>
@@ -297,8 +300,8 @@
 
     <script src="/theme/vendors/jquery/dist/jquery.min.js"></script>
     <script src="/theme/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/theme/vendors/fastclick/lib/fastclick.js"></script>
-    <script src="/theme/vendors/nprogress/nprogress.js"></script>
+    {{-- <script src="/theme/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="/theme/vendors/nprogress/nprogress.js"></script> --}}
     <script src="/theme/build/js/custom.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
