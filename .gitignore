@@ -8,8 +8,11 @@
 /.env
 
 /node_modules
+/node_modules/*
 /storage
+/storage/*
 /vendor
+/vendor/
 
 .env
 .env.example

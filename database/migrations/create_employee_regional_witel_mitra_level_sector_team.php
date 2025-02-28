@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('tb_employee', function (Blueprint $table) {
@@ -22,6 +23,7 @@ return new class extends Migration {
             $table->date('date_of_birth')->nullable();
             $table->string('place_of_birth', 50)->nullable();
             $table->string('remember_token', 100)->nullable();
+            $table->string('google2fa_secret', 100)->nullable();
             $table->string('password', 100)->nullable();
             $table->string('ip_address', 50)->nullable();
             $table->dateTime('login_at')->nullable();
@@ -30,13 +32,13 @@ return new class extends Migration {
             $table->timestamps();
             $table->integer('updated_by')->nullable();
 
-            $table->index('regional_id');
-            $table->index('witel_id');
-            $table->index('mitra_id');
-            $table->index('level_id');
-            $table->index('nik');
-            $table->index('created_by');
             $table->index('updated_by');
+            $table->index('created_by');
+            $table->index('nik');
+            $table->index('level_id');
+            $table->index('mitra_id');
+            $table->index('witel_id');
+            $table->index('regional_id');
         });
 
         Schema::create('tb_regional', function (Blueprint $table) {
@@ -50,6 +52,7 @@ return new class extends Migration {
             $table->integer('regional_id')->default(0);
             $table->string('name', 50)->nullable();
             $table->string('alias', 50)->nullable();
+
             $table->index('regional_id');
         });
 
@@ -57,6 +60,7 @@ return new class extends Migration {
             $table->id();
             $table->integer('witel_id')->default(0);
             $table->string('name', 50)->nullable();
+
             $table->index('witel_id');
         });
 
@@ -75,9 +79,8 @@ return new class extends Migration {
             $table->integer('team_leader3')->default(0);
             $table->integer('is_active')->default(0)->comment('0 : deactive, 1 : active');
             $table->integer('created_by')->default(0);
-            $table->dateTime('created_at')->nullable();
+            $table->timestamps();
             $table->integer('updated_by')->default(0);
-            $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
             $table->index('mitra_id');
             $table->index('team_leader1');
@@ -95,9 +98,8 @@ return new class extends Migration {
             $table->integer('technician2')->default(0);
             $table->integer('is_active')->default(0)->comment('0 : deactive, 1 : active');
             $table->integer('created_by')->default(0);
-            $table->dateTime('created_at')->nullable();
+            $table->timestamps();
             $table->integer('updated_by')->default(0);
-            $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
             $table->index('sector_id');
             $table->index('technician1');

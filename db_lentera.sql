@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Feb 2025 pada 19.14
+-- Waktu pembuatan: 27 Feb 2025 pada 22.33
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -42,6 +42,7 @@ CREATE TABLE `tb_employee` (
   `date_of_birth` date DEFAULT NULL,
   `place_of_birth` varchar(50) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
+  `google2fa_secret` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `ip_address` varchar(50) DEFAULT NULL,
   `login_at` datetime DEFAULT NULL,
@@ -56,8 +57,9 @@ CREATE TABLE `tb_employee` (
 -- Dumping data untuk tabel `tb_employee`
 --
 
-INSERT INTO `tb_employee` (`id`, `regional_id`, `witel_id`, `mitra_id`, `level_id`, `nik`, `full_name`, `chat_id`, `number_phone`, `home_address`, `gender`, `date_of_birth`, `place_of_birth`, `remember_token`, `password`, `ip_address`, `login_at`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
-(1, 6, 1, 3, 1, 16990591, 'Ahmad Hidayat', '611959936', NULL, NULL, 'Laki-Laki', NULL, NULL, 'ckeIZSXieNs1L7ktRHmAK4VIK6WDuhi95K77qom2q8Jnlvo7uUFu3gV1tVAS', '$2y$12$ggCLHdhCLBBv4HB3p/rRb.v33vK2QM57aHnXE0L5LPLg2AKh/deNa', '127.0.0.1', '2025-02-25 17:37:47', 1, NULL, NULL, NULL, '2025-02-25 17:37:47');
+INSERT INTO `tb_employee` (`id`, `regional_id`, `witel_id`, `mitra_id`, `level_id`, `nik`, `full_name`, `chat_id`, `number_phone`, `home_address`, `gender`, `date_of_birth`, `place_of_birth`, `remember_token`, `google2fa_secret`, `password`, `ip_address`, `login_at`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
+(1, 6, 1, 3, 1, 16990591, 'Ahmad Hidayat', '611959936', NULL, NULL, 'Laki-Laki', NULL, NULL, '7ohQhCApQRtt3zv0KQ6wa6LPyxYmFo3nkIzeTcZu08641d6qVFHipD8g5Ush', NULL, '$2y$12$ggCLHdhCLBBv4HB3p/rRb.v33vK2QM57aHnXE0L5LPLg2AKh/deNa', '127.0.0.1', '2025-02-27 20:22:13', 1, NULL, NULL, NULL, '2025-02-27 20:22:13'),
+(2, 6, 1, 3, 1, 20981020, 'Mahdian', '611959936', NULL, NULL, 'Laki-Laki', NULL, NULL, '7ohQhCApQRtt3zv0KQ6wa6LPyxYmFo3nkIzeTcZu08641d6qVFHipD8g5Ush', NULL, '$2y$12$ggCLHdhCLBBv4HB3p/rRb.v33vK2QM57aHnXE0L5LPLg2AKh/deNa', '127.0.0.1', '2025-02-27 20:22:13', 1, NULL, NULL, NULL, '2025-02-27 20:22:13');
 
 -- --------------------------------------------------------
 
@@ -273,7 +275,7 @@ ALTER TABLE `tb_witel`
 -- AUTO_INCREMENT untuk tabel `tb_employee`
 --
 ALTER TABLE `tb_employee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_level`
