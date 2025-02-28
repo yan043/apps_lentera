@@ -24,6 +24,7 @@ class UserModel extends Authenticatable
         'date_of_birth',
         'place_of_birth',
         'remember_token',
+        'google2fa_secret',
         'password',
         'ip_address',
         'login_at',
@@ -36,6 +37,7 @@ class UserModel extends Authenticatable
 
     protected $hidden = [
         'password',
+        'google2fa_secret',
         'remember_token',
     ];
 
