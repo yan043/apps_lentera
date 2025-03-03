@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use App\Models\UserModel;
+use Mews\Captcha\Facades\Captcha;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,7 @@ class AuthController extends Controller
         $request->validate([
             'nik'      => 'required|numeric',
             'password' => 'required|string',
+            'captcha'  => 'required|captcha'
         ]);
 
         $user = UserModel::identity($request->nik);

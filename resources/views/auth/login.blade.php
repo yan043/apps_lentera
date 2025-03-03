@@ -32,6 +32,13 @@
                         <div>
                             <input type="password" class="form-control text-center" placeholder="Password" name="password" required />
                         </div>
+                        <div class="form-group">
+                            <label for="captcha">Captcha</label>
+                            <div>
+                                <img src="{{ captcha_src() }}" alt="captcha">
+                                <input type="text" id="captcha" name="captcha">
+                            </div>
+                        </div>
                         <br /><br />
                         <div>
                             <button type="submit" class="btn btn-xl btn-dark btn-block submit">Sign In</button>

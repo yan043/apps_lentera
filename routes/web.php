@@ -4,12 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SettingsController;
+use Mews\Captcha\Captcha;
 
 Route::get('/welcome', fn() => view('additionals.welcome'));
 Route::get('/layouts', fn() => view('layouts.general'));
 Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('captcha', [Captcha::class, 'create']);
 
 Route::middleware(['auth'])->group(function () {
 
