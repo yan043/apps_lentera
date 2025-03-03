@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SettingsController;
 
 Route::get('/welcome', fn() => view('additionals.welcome'));
+Route::get('/layouts', fn() => view('layouts.general'));
 Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
