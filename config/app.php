@@ -123,4 +123,12 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'providers' => [
+        Mews\Captcha\CaptchaServiceProvider::class,
+    ],
+
+    'aliases' => [
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
+    ]
+
 ];
