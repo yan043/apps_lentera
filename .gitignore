@@ -7,8 +7,8 @@
 /.env
 
 /bootstrap/cache
-/storage
-/storage/*
+# /storage
+# /storage/*
 /vendor
 /vendor/*
 /node_modules
