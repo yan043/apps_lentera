@@ -3,18 +3,16 @@
 /.fleet
 /.idea
 /.nova
-/.vscode
 /.zed
 /.env
 
-/node_modules
-/node_modules/*
+/bootstrap/cache
 /storage
 /storage/*
 /vendor
 /vendor/*
-/bootstrap/cache
-/bootstrap/cache/*
+/node_modules
+/node_modules/*
 
 .env
 .env.example
