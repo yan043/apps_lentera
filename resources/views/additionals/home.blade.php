@@ -6,19 +6,16 @@
 @section('title', 'Home')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2>Dashboard</h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                    <p>Welcome to Lentera</p>
-                </div>
-            </div>
-        </div>
+<div class="card">
+    <div class="card-header">
+        Card Title
     </div>
+    <div class="card-body">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+</div>
 @endsection
 
 @section('scripts')

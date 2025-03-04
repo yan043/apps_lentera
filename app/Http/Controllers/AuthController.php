@@ -23,6 +23,8 @@ class AuthController extends Controller
             'nik'      => 'required|numeric',
             'password' => 'required|string',
             'captcha'  => 'required|captcha'
+        ], [
+            'captcha.captcha' => 'Captcha yang dimasukkan salah.'
         ]);
 
         $user = UserModel::identity($request->nik);
@@ -94,7 +96,6 @@ class AuthController extends Controller
 
         return back()->withErrors(['login' => 'NIK atau password salah!']);
     }
-
 
     public function logout()
     {

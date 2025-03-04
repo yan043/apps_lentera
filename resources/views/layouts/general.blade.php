@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Facades\Request;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +11,8 @@
     <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogIDxjaXJjbGUgY3g9IjMyIiBjeT0iMTgiIHI9IjYiIC8+CiAgPHBhdGggZD0iTTI0IDRoMTYiIC8+CiAgPHBhdGggZD0iTTIyIDI0aDIwdjE2YTEwIDEwIDAgMCAxLTIwIDB6IiAvPgogIDxwYXRoIGQ9Ik0zMiA0MHYxMiIgLz4KICA8cGF0aCBkPSJNMjggNTJoOCIgLz4KPC9zdmc+" type="image/png" sizes="32x32">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="/assets/extensions/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" crossorigin href="/assets/compiled/css/extra-component-sweetalert.css">
     @yield('styles')
 </head>
 
@@ -158,8 +163,8 @@
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
-                                            <h6 class="mb-0 text-gray-600">John Ducky</h6>
-                                            <p class="mb-0 text-sm text-gray-600">Administrator</p>
+                                            <h6 class="mb-0 text-gray-600">{{ Session::get('full_name') }}</h6>
+                                            <p class="mb-0 text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', Session::get('level_name'))) }}</p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
@@ -170,7 +175,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
                                     <li>
-                                        <h6 class="dropdown-header">Hello, John!</h6>
+                                        <h6 class="dropdown-header">Hello, {{ explode(' ', Session::get('full_name'))[0] }}!</h6>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="/profile">
@@ -214,6 +219,7 @@
                             </div>
                         </div>
                     </div>
+                    @include('partials.alerts')
                     @yield('content')
                 </div>
             </div>
@@ -231,6 +237,8 @@
     <script src="/assets/static/js/components/dark.js"></script>
     <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/assets/compiled/js/app.js"></script>
+    <script src="/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/assets/static/js/pages/sweetalert2.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 
