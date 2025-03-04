@@ -11,8 +11,6 @@
     <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogIDxjaXJjbGUgY3g9IjMyIiBjeT0iMTgiIHI9IjYiIC8+CiAgPHBhdGggZD0iTTI0IDRoMTYiIC8+CiAgPHBhdGggZD0iTTIyIDI0aDIwdjE2YTEwIDEwIDAgMCAxLTIwIDB6IiAvPgogIDxwYXRoIGQ9Ik0zMiA0MHYxMiIgLz4KICA8cGF0aCBkPSJNMjggNTJoOCIgLz4KPC9zdmc+" type="image/png" sizes="32x32">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app-dark.css">
-    <link rel="stylesheet" href="/assets/extensions/sweetalert2/sweetalert2.min.css">
-    <link rel="stylesheet" crossorigin href="/assets/compiled/css/extra-component-sweetalert.css">
     @yield('styles')
 </head>
 
@@ -237,8 +235,6 @@
     <script src="/assets/static/js/components/dark.js"></script>
     <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/assets/compiled/js/app.js"></script>
-    <script src="/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-    <script src="/assets/static/js/pages/sweetalert2.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 

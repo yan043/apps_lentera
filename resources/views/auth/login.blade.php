@@ -11,8 +11,6 @@
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app-dark.css">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/assets/extensions/sweetalert2/sweetalert2.min.css">
-    <link rel="stylesheet" crossorigin href="/assets/compiled/css/extra-component-sweetalert.css">
 </head>
 
 <body>
@@ -70,8 +68,6 @@
 </body>
 <script src="/assets/extensions/jquery/jquery.min.js"></script>
 <script src="/assets/static/js/initTheme.js"></script>
-<script src="/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="/assets/static/js/pages/sweetalert2.js"></script>
 <script>
     $(document).ready(function() {
         var interval;

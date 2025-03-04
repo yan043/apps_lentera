@@ -1,10 +1,16 @@
+<link rel="stylesheet" href="/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" crossorigin href="/assets/compiled/css/extra-component-sweetalert.css">
+<script src="/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="/assets/static/js/pages/sweetalert2.js"></script>
 @if ($errors->any())
-    @foreach ($errors->all() as $error)
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-            {{ $error }}
-        </div>
-    @endforeach
+    <script>
+        window.onload = function () {
+            @foreach ($errors->all() as $error)
+                Toast.fire({
+                    icon: 'error',
+                    title: '{{ $error }}'
+                });
+            @endforeach
+        };
+    </script>
 @endif
