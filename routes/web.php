@@ -13,9 +13,6 @@ use App\Http\Controllers\EmployeeManagementController;
 use App\Http\Controllers\RegionalUnitController;
 use App\Http\Controllers\ReportingConfigurationController;
 
-Route::get('/welcome', fn() => view('welcome'));
-Route::get('/layouts', fn() => view('layouts.general'));
-
 Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
