@@ -61,72 +61,167 @@
                 </div>
                 <div class="sidebar-menu">
                     <ul class="menu">
-                        <li class="sidebar-title">Menu</li>
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-trophy-fill"></i>
-                                <span>Provisioning</span>
+                        <li class="sidebar-title">Main Menu</li>
+                        <li class="sidebar-item {{ Request::is('/') ? 'active' : '' }}">
+                            <a href="/" class='sidebar-link'>
+                                <i class="bi bi-speedometer2"></i>
+                                <span>Dashboard</span>
                             </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item  ">
-                                    <a href="/provisioning/search" class="submenu-link">Search</a>
+                        </li>
+                        <li class="sidebar-item has-sub {{ Request::is('order-management/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-card-list"></i>
+                                <span>Order Management</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('order-management/new') ? 'active' : '' }}">
+                                    <a href="/order-management/new" class="submenu-link">New Orders</a>
                                 </li>
-                                <li class="submenu-item  ">
-                                    <a href="/provisioning/track" class="submenu-link">Track Order</a>
+                                <li class="submenu-item {{ Request::is('order-management/assigned') ? 'active' : '' }}">
+                                    <a href="/order-management/assigned" class="submenu-link">Assigned Orders</a>
                                 </li>
-                                <li class="submenu-item  ">
-                                    <a href="/provisioning/daily-report" class="submenu-link">Daily Report</a>
+                                <li class="submenu-item {{ Request::is('order-management/ongoing') ? 'active' : '' }}">
+                                    <a href="/order-management/ongoing" class="submenu-link">Ongoing Orders</a>
                                 </li>
-                                <li class="submenu-item  has-sub">
-                                    <a href="#" class="submenu-link">Dashboard</a>
-                                    <ul class="submenu submenu-level-2 ">
-                                        <li class="submenu-item ">
-                                            <a href="/provisioning/dashboard/order" class="submenu-link">Order</a>
-                                        </li>
-                                        <li class="submenu-item ">
-                                            <a href="/provisioning/dashboard/undispatch" class="submenu-link">Undispatch</a>
-                                        </li>
-                                        <li class="submenu-item ">
-                                            <a href="/provisioning/dashboard/productivity" class="submenu-link">Productivity</a>
-                                        </li>
-                                    </ul>
+                                <li class="submenu-item {{ Request::is('order-management/completed') ? 'active' : '' }}">
+                                    <a href="/order-management/completed" class="submenu-link">Completed Orders</a>
                                 </li>
-                                <li class="submenu-item  ">
-                                    <a href="/provisioning/maps-order" class="submenu-link">Maps Order</a>
+                                <li class="submenu-item {{ Request::is('order-management/cancel') ? 'active' : '' }}">
+                                    <a href="/order-management/cancel" class="submenu-link">Cancel Orders</a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-shield-fill"></i>
-                                <span>Assurance</span>
+                        <li class="sidebar-item {{ Request::is('support/order-tracking') ? 'active' : '' }}">
+                            <a href="/support/order-tracking" class='sidebar-link'>
+                                <i class="bi bi-search"></i>
+                                <span>Order Tracking</span>
                             </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item  ">
-                                    <a href="/assurance/search" class="submenu-link">Search</a>
+                        </li>
+                        <li class="sidebar-item {{ Request::is('support/helpdesk-monitoring') ? 'active' : '' }}">
+                            <a href="/support/helpdesk-monitoring" class='sidebar-link'>
+                                <i class="bi bi-headset"></i>
+                                <span>Helpdesk Monitoring</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Request::is('support/maps-routing') ? 'active' : '' }}">
+                            <a href="/support/maps-routing" class='sidebar-link'>
+                                <i class="bi bi-map"></i>
+                                <span>Maps & Routing</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item has-sub {{ Request::is('technician-attendance/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-people"></i>
+                                <span>Technician Attendance</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('technician-attendance/daily-attendance') ? 'active' : '' }}">
+                                    <a href="/technician-attendance/daily-attendance" class="submenu-link">Daily Attendance</a>
                                 </li>
-                                <li class="submenu-item  ">
-                                    <a href="/assurance/track" class="submenu-link">Track Order</a>
+                                <li class="submenu-item {{ Request::is('technician-attendance/shift-management') ? 'active' : '' }}">
+                                    <a href="/technician-attendance/shift-management" class="submenu-link">Shift Management</a>
                                 </li>
-                                <li class="submenu-item  ">
-                                    <a href="/assurance/daily-report" class="submenu-link">Daily Report</a>
+                                <li class="submenu-item {{ Request::is('technician-attendance/leave-request') ? 'active' : '' }}">
+                                    <a href="/technician-attendance/leave-request" class="submenu-link">Leave Requests</a>
                                 </li>
-                                <li class="submenu-item  has-sub">
-                                    <a href="#" class="submenu-link">Dashboard</a>
-                                    <ul class="submenu submenu-level-2 ">
-                                        <li class="submenu-item ">
-                                            <a href="/assurance/dashboard/order" class="submenu-link">Order</a>
-                                        </li>
-                                        <li class="submenu-item ">
-                                            <a href="/assurance/dashboard/undispatch" class="submenu-link">Undispatch</a>
-                                        </li>
-                                        <li class="submenu-item ">
-                                            <a href="/assurance/dashboard/productivity" class="submenu-link">Productivity</a>
-                                        </li>
-                                    </ul>
+                                <li class="submenu-item {{ Request::is('technician-attendance/attendance-report') ? 'active' : '' }}">
+                                    <a href="/technician-attendance/attendance-report" class="submenu-link">Attendance Report</a>
                                 </li>
-                                <li class="submenu-item  ">
-                                    <a href="/assurance/maps-order" class="submenu-link">Maps Order</a>
+                                <li class="submenu-item {{ Request::is('technician-attendance/late-absence-logs') ? 'active' : '' }}">
+                                    <a href="/technician-attendance/late-absence-logs" class="submenu-link">Late & Absence Logs</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item has-sub {{ Request::is('inventory-management/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-box-seam"></i>
+                                <span>Inventory Management</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('inventory-management/stock-overview') ? 'active' : '' }}">
+                                    <a href="/inventory-management/stock-overview" class="submenu-link">Stock Overview</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('inventory-management/material-request') ? 'active' : '' }}">
+                                    <a href="/inventory-management/material-request" class="submenu-link">Material Request</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('inventory-management/material-inbound') ? 'active' : '' }}">
+                                    <a href="/inventory-management/material-inbound" class="submenu-link">Material Inbound</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('inventory-management/material-usage') ? 'active' : '' }}">
+                                    <a href="/inventory-management/material-usage" class="submenu-link">Material Usage</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('inventory-management/material-return') ? 'active' : '' }}">
+                                    <a href="/inventory-management/material-return" class="submenu-link">Material Return</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item has-sub {{ Request::is('reports-payment/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-file-earmark-text"></i>
+                                <span>Reports & Payment</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('reports-payment/daily-reports') ? 'active' : '' }}">
+                                    <a href="/reports-payment/daily-reports" class="submenu-link">Daily Reports</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reports-payment/technician-performance') ? 'active' : '' }}">
+                                    <a href="/reports-payment/technician-performance" class="submenu-link">Technician Performance</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reports-payment/billing-payment') ? 'active' : '' }}">
+                                    <a href="/reports-payment/billing-payment" class="submenu-link">Billing & Payment</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-title">Administrator</li>
+                        <li class="sidebar-item has-sub {{ Request::is('employee-management/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-person-badge"></i>
+                                <span>Employee Management</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('employee-management/list') ? 'active' : '' }}">
+                                    <a href="/employee-management/list" class="submenu-link">Employee List</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('employee-management/roles-permissions') ? 'active' : '' }}">
+                                    <a href="/employee-management/roles-permissions" class="submenu-link">Employee Roles & Permissions</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item has-sub {{ Request::is('regional-unit/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-globe"></i>
+                                <span>Regional & Unit</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('regional-unit/regional') ? 'active' : '' }}">
+                                    <a href="/regional-unit/regional" class="submenu-link">Regional</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('regional-unit/witel') ? 'active' : '' }}">
+                                    <a href="/regional-unit/witel" class="submenu-link">Witel</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('regional-unit/unit') ? 'active' : '' }}">
+                                    <a href="/regional-unit/unit" class="submenu-link">Unit</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('regional-unit/mitra') ? 'active' : '' }}">
+                                    <a href="/regional-unit/mitra" class="submenu-link">Mitra</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item has-sub {{ Request::is('reporting-configuration/*') ? 'active' : '' }}">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-sliders"></i>
+                                <span>Reporting Configuration</span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="submenu-item {{ Request::is('reporting-configuration/status') ? 'active' : '' }}">
+                                    <a href="/reporting-configuration/status" class="submenu-link">Order Status</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reporting-configuration/actions') ? 'active' : '' }}">
+                                    <a href="/reporting-configuration/actions" class="submenu-link">Order Actions</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reporting-configuration/segments') ? 'active' : '' }}">
+                                    <a href="/reporting-configuration/segments" class="submenu-link">Order Segments</a>
                                 </li>
                             </ul>
                         </li>

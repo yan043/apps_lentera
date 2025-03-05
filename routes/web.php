@@ -1,13 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SettingsController;
 use Mews\Captcha\Captcha;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderManagementController;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\TechnicianAttendanceController;
+use App\Http\Controllers\InventoryManagementController;
+use App\Http\Controllers\ReportsPaymentController;
+use App\Http\Controllers\EmployeeManagementController;
+use App\Http\Controllers\RegionalUnitController;
+use App\Http\Controllers\ReportingConfigurationController;
 
-Route::get('/welcome', fn() => view('additionals.welcome'));
+Route::get('/welcome', fn() => view('welcome'));
 Route::get('/layouts', fn() => view('layouts.general'));
+
 Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -16,24 +24,62 @@ Route::get('captcha', [Captcha::class, 'create']);
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::prefix('settings')->name('settings.')->middleware('role:Developer')->group(function () {
-        Route::get('regional', [SettingsController::class, 'regional'])->name('regional');
-        Route::post('regional/store', [SettingsController::class, 'regional_store'])->name('regional.store');
-        Route::get('regional/{id}', [SettingsController::class, 'regional_destroy'])->name('regional.destroy');
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 
-        Route::get('witel', [SettingsController::class, 'witel'])->name('witel');
-        Route::post('witel/store', [SettingsController::class, 'witel_store'])->name('witel.store');
-        Route::get('witel/{id}', [SettingsController::class, 'witel_destroy'])->name('witel.destroy');
+    Route::prefix('order-management')->group(function () {
+        Route::get('new', [OrderManagementController::class, 'newOrders']);
+        Route::get('assigned', [OrderManagementController::class, 'assignedOrders']);
+        Route::get('ongoing', [OrderManagementController::class, 'ongoingOrders']);
+        Route::get('completed', [OrderManagementController::class, 'completedOrders']);
+        Route::get('cancel', [OrderManagementController::class, 'cancelOrders']);
+    });
 
-        Route::get('mitra', [SettingsController::class, 'mitra'])->name('mitra');
-        Route::post('mitra/store', [SettingsController::class, 'mitra_store'])->name('mitra.store');
-        Route::get('mitra/{id}', [SettingsController::class, 'mitra_destroy'])->name('mitra.destroy');
+    Route::prefix('support')->group(function () {
+        Route::get('order-tracking', [SupportController::class, 'orderTracking']);
+        Route::get('helpdesk-monitoring', [SupportController::class, 'helpdeskMonitoring']);
+        Route::get('maps-routing', [SupportController::class, 'mapsRouting']);
+    });
 
-        Route::get('level', [SettingsController::class, 'level'])->name('level');
-        Route::post('level/store', [SettingsController::class, 'level_store'])->name('level.store');
-        Route::get('level/{id}', [SettingsController::class, 'level_destroy'])->name('level.destroy');
+    Route::prefix('technician-attendance')->group(function () {
+        Route::get('daily-attendance', [TechnicianAttendanceController::class, 'dailyAttendance']);
+        Route::get('shift-management', [TechnicianAttendanceController::class, 'shiftManagement']);
+        Route::get('leave-request', [TechnicianAttendanceController::class, 'leaveRequest']);
+        Route::get('attendance-report', [TechnicianAttendanceController::class, 'attendanceReport']);
+        Route::get('late-absence-logs', [TechnicianAttendanceController::class, 'lateAbsenceLogs']);
+    });
+
+    Route::prefix('inventory-management')->group(function () {
+        Route::get('stock-overview', [InventoryManagementController::class, 'stockOverview']);
+        Route::get('material-request', [InventoryManagementController::class, 'materialRequest']);
+        Route::get('material-inbound', [InventoryManagementController::class, 'materialInbound']);
+        Route::get('material-usage', [InventoryManagementController::class, 'materialUsage']);
+        Route::get('material-return', [InventoryManagementController::class, 'materialReturn']);
+    });
+
+    Route::prefix('reports-payment')->group(function () {
+        Route::get('daily-reports', [ReportsPaymentController::class, 'dailyReports']);
+        Route::get('technician-performance', [ReportsPaymentController::class, 'technicianPerformance']);
+        Route::get('billing-payment', [ReportsPaymentController::class, 'billingPayment']);
+    });
+
+    Route::prefix('employee-management')->group(function () {
+        Route::get('list', [EmployeeManagementController::class, 'employeeList']);
+        Route::get('roles-permissions', [EmployeeManagementController::class, 'rolesPermissions']);
+    });
+
+    Route::prefix('regional-unit')->group(function () {
+        Route::get('regional', [RegionalUnitController::class, 'regional']);
+        Route::get('witel', [RegionalUnitController::class, 'witel']);
+        Route::get('unit', [RegionalUnitController::class, 'unit']);
+        Route::get('mitra', [RegionalUnitController::class, 'mitra']);
+    });
+
+    Route::prefix('reporting-configuration')->group(function () {
+        Route::get('status', [ReportingConfigurationController::class, 'status']);
+        Route::get('actions', [ReportingConfigurationController::class, 'actions']);
+        Route::get('segments', [ReportingConfigurationController::class, 'segments']);
     });
 
 });

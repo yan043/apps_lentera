@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
+use App\Models\DashboardModel;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
     public function index()
     {
@@ -13,6 +14,6 @@ class HomeController extends Controller
             return redirect()->route('login')->withErrors(['login' => 'Harap login terlebih dahulu.']);
         }
 
-        return view('additionals.home');
+        return view('dashboard.index');
     }
 }

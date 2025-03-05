@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use App\Models\UserModel;
+use App\Models\AuthModel;
 use Mews\Captcha\Facades\Captcha;
 
 class AuthController extends Controller
@@ -27,7 +27,7 @@ class AuthController extends Controller
             'captcha.captcha' => 'Captcha yang dimasukkan salah.'
         ]);
 
-        $user = UserModel::identity($request->nik);
+        $user = AuthModel::identity($request->nik);
 
         if ($user && Hash::check($request->password, $user->password))
         {
@@ -71,7 +71,7 @@ class AuthController extends Controller
                 $ip_address = 'UNKNOWN';
             }
 
-            UserModel::set_token($request->nik, $token, $ip_address);
+            AuthModel::set_token($request->nik, $token, $ip_address);
 
             Session::put([
                 'regional_id'    => $user->regional_id,
@@ -91,7 +91,7 @@ class AuthController extends Controller
                 'is_logged_in'   => true
             ]);
 
-            return redirect()->route('home');
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors(['login' => 'NIK atau password salah!']);
@@ -104,5 +104,10 @@ class AuthController extends Controller
         Session::flush();
 
         return redirect()->route('login');
+    }
+
+    public function profile()
+    {
+        return view('auth.profile');
     }
 }

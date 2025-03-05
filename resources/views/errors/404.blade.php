@@ -1,39 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>404 Page Not Found</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lentera</title>
+    <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPGNpcmNsZSBjeD0iNjQiIGN5PSIzNiIgcj0iMTIiIC8+CiAgPHBhdGggZD0iTTQ4IDhoMzIiIC8+CiAgPHBhdGggZD0iTTQ0IDQ4aDQwdjMyYTIwIDIwIDAgMCAxLTQwIDB6IiAvPgogIDxwYXRoIGQ9Ik02NCA4MHYyNCIgLz4KICA8cGF0aCBkPSJNNjAgMTA0aDg0IiAvPgo8L3N2Zz4=" type="image/x-icon" sizes="32x32">
+    <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogIDxjaXJjbGUgY3g9IjMyIiBjeT0iMTgiIHI9IjYiIC8+CiAgPHBhdGggZD0iTTI0IDRoMTYiIC8+CiAgPHBhdGggZD0iTTIyIDI0aDIwdjE2YTEwIDEwIDAgMCAxLTIwIDB6IiAvPgogIDxwYXRoIGQ9Ik0zMiA0MHYxMiIgLz4KICA8cGF0aCBkPSJNMjggNTJoOCIgLz4KPC9zdmc+" type="image/png" sizes="32x32">
+  <link rel="stylesheet" crossorigin href="/assets/compiled/css/app.css">
+  <link rel="stylesheet" crossorigin href="/assets/compiled/css/error.css">
+</head>
 
-    <link href="/theme/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/theme/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/theme/vendors/nprogress/nprogress.css" rel="stylesheet">
+<body>
+    <script src="/assets/static/js/initTheme.js"></script>
+    <div id="error">
 
-    <link href="/theme/build/css/custom.min.css" rel="stylesheet">
-  </head>
 
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-        <div class="col-md-12">
-          <div class="col-middle">
-            <div class="text-center text-center">
-              <h1 class="error-number">404</h1>
-              <h2>Sorry but we couldn't find this page</h2>
-              <p>This page you are looking for does not exist</p>
-            </div>
-          </div>
+<div class="error-page container">
+    <div class="col-md-8 col-12 offset-md-2">
+        <div class="text-center">
+            <img class="img-error" src="/assets/compiled/svg/error-404.svg" alt="Not Found">
+            <h1 class="error-title">Not Found</h1>
+            <p class='fs-5 text-gray-600'>The page you are looking not found.</p>
+            <a href="/" class="btn btn-lg btn-outline-primary mt-3">Go Home</a>
         </div>
-      </div>
     </div>
+</div>
 
-    <script src="/theme/vendors/jquery/dist/jquery.min.js"></script>
-   <script src="/theme/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/theme/vendors/fastclick/lib/fastclick.js"></script>
-    <script src="/theme/vendors/nprogress/nprogress.js"></script>
-    <script src="/theme/build/js/custom.min.js"></script>
-  </body>
+
+    </div>
+</body>
+
 </html>

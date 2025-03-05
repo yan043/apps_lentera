@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
-class UserModel extends Authenticatable
+class AuthModel extends Authenticatable
 {
     protected $table = 'tb_employee';
 
