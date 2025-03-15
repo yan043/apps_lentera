@@ -70,11 +70,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('regional', [RegionalUnitController::class, 'regional']);
         Route::get('witel', [RegionalUnitController::class, 'witel']);
         Route::get('unit', [RegionalUnitController::class, 'unit']);
+        Route::get('sub-unit', [RegionalUnitController::class, 'subUnit']);
         Route::get('mitra', [RegionalUnitController::class, 'mitra']);
     });
 
     Route::prefix('reporting-configuration')->group(function () {
         Route::get('status', [ReportingConfigurationController::class, 'status']);
+        Route::get('sub-status', [ReportingConfigurationController::class, 'subStatus']);
         Route::get('actions', [ReportingConfigurationController::class, 'actions']);
         Route::get('segments', [ReportingConfigurationController::class, 'segments']);
     });

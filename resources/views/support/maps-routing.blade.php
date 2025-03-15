@@ -6,7 +6,7 @@
 @section('title', 'Maps & Routing')
 
 @section('content')
-<div class="card">
+{{-- <div class="card">
     <div class="card-header">
         Card Title
     </div>
@@ -15,7 +15,7 @@
         <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
         <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
-</div>
+</div> --}}
 @endsection
 
 @section('scripts')

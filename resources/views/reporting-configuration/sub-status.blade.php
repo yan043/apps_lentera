@@ -4,7 +4,7 @@
 <link rel="stylesheet" crossorigin href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
 @endsection
 
-@section('title', 'Data Level')
+@section('title', 'Order Sub Status')
 
 @section('content')
 <div class="card">

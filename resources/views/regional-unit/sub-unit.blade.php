@@ -4,7 +4,7 @@
 <link rel="stylesheet" crossorigin href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
 @endsection
 
-@section('title', 'Data Unit')
+@section('title', 'Data Sub-Unit')
 
 @section('content')
 <div class="card">
@@ -17,6 +17,7 @@
                 <tr>
                     <th>#</th>
                     <th>Unit</th>
+                    <th>Sub-Unit</th>
                     <th></th>
                 </tr>
             </thead>
@@ -24,6 +25,7 @@
                 @foreach ($data as $k => $v)
                 <tr>
                     <td>{{ ++$k }}</td>
+                    <td>{{ $v->unit_name }}</td>
                     <td>{{ $v->name }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-{{ $v->id }}">
@@ -39,15 +41,26 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modal-edit-label-{{ $v->id }}">Edit Unit</h5>
+                                <h5 class="modal-title" id="modal-edit-label-{{ $v->id }}">Edit Sub-Unit</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="/regional-unit/unit/store" method="POST">
+                                <form action="/regional-unit/sub-unit/store" method="POST">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $v->id }}">
                                     <div class="mb-3">
-                                        <label for="name_{{ $v->id }}" class="form-label">Nama Unit</label>
+                                        <label for="unit_id_{{ $v->id }}" class="form-label">Unit</label>
+                                        <select class="choices form-select" id="unit_id_{{ $v->id }}" name="unit_id" required>
+                                            <option value="" disabled>Silahkan Pilih Unit</option>
+                                            @foreach($get_unit as $unit)
+                                                <option value="{{ $unit->id }}" {{ $unit->id == $v->unit_id ? 'selected' : '' }}>
+                                                    {{ $unit->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="name_{{ $v->id }}" class="form-label">Sub-Unit</label>
                                         <input type="text" class="form-control" id="name_{{ $v->id }}" name="name" value="{{ $v->name }}" required>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -70,15 +83,24 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label">Tambah Data Unit</h5>
+                <h5 class="modal-title" id="modal-add-label">Tambah Data Sub-Unit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/unit/store" method="POST">
+                <form action="/regional-unit/sub-unit/store" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="">
                     <div class="mb-3">
-                        <label for="name_add" class="form-label">Nama Unit</label>
+                        <label for="unit_id_add" class="form-label">Unit</label>
+                        <select class="choices form-select" id="unit_id_add" name="unit_id" required>
+                            <option value="" selected disabled>Silahkan Pilih Unit</option>
+                            @foreach($get_unit as $unit)
+                                <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name_add" class="form-label">Sub-Unit</label>
                         <input type="text" class="form-control" id="name_add" name="name" required>
                     </div>
                     <div class="d-flex justify-content-end">
@@ -121,7 +143,7 @@
             confirmButtonText: 'Ya, hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/regional-unit/unit/destroy/' + id;
+                window.location.href = '/regional-unit/sub-unit/destroy/' + id;
             }
         });
     }

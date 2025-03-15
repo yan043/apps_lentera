@@ -12,6 +12,11 @@ class ReportingConfigurationController extends Controller
         return view('reporting-configuration.status');
     }
 
+    public function subStatus()
+    {
+        return view('reporting-configuration.sub-status');
+    }
+
     public function actions()
     {
         return view('reporting-configuration.actions');

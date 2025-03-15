@@ -8,9 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Home') - Lentera</title>
     <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPGNpcmNsZSBjeD0iNjQiIGN5PSIzNiIgcj0iMTIiIC8+CiAgPHBhdGggZD0iTTQ4IDhoMzIiIC8+CiAgPHBhdGggZD0iTTQ0IDQ4aDQwdjMyYTIwIDIwIDAgMCAxLTQwIDB6IiAvPgogIDxwYXRoIGQ9Ik02NCA4MHYyNCIgLz4KICA8cGF0aCBkPSJNNjAgMTA0aDg0IiAvPgo8L3N2Zz4=" type="image/x-icon" sizes="32x32">
-    <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogIDxjaXJjbGUgY3g9IjMyIiBjeT0iMTgiIHI9IjYiIC8+CiAgPHBhdGggZD0iTTI0IDRoMTYiIC8+CiAgPHBhdGggZD0iTTIyIDI0aDIwdjE2YTEwIDEwIDAgMCAxLTIwIDB6IiAvPgogIDxwYXRoIGQ9Ik0zMiA0MHYxMiIgLz4KICA8cGF0aCBkPSJNMjggNTJoOCIgLz4KPC9zdmc+" type="image/png" sizes="32x32">
+    <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogIDxjaXJjbGUgY3g9IjMyIiBjeT0iMTgiIHI9IjYiIC8+CiAgPHBhdGggZD0iTTI0NGgxNiIgLz4KICA8cGF0aCBkPSJNMjIgMjRoMjB2MTZhMTAgMTAgMCAwIDEtMjAgMHoiIC8+CiAgPHBhdGggZD0iTTMyIDQwdjEyIiAvPgogIDxwYXRoIGQ9Ik0yOCA1Mmg4IiAvPgo8L3N2Zz4=" type="image/png" sizes="32x32">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="/assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+    <link rel="stylesheet" href="/assets/extensions/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" crossorigin href="/assets/compiled/css/extra-component-sweetalert.css">
     @yield('styles')
 </head>
 
@@ -203,6 +206,9 @@
                                 <li class="submenu-item {{ Request::is('regional-unit/unit') ? 'active' : '' }}">
                                     <a href="/regional-unit/unit" class="submenu-link">Unit</a>
                                 </li>
+                                <li class="submenu-item {{ Request::is('regional-unit/sub-unit') ? 'active' : '' }}">
+                                    <a href="/regional-unit/sub-unit" class="submenu-link">Sub Unit</a>
+                                </li>
                                 <li class="submenu-item {{ Request::is('regional-unit/mitra') ? 'active' : '' }}">
                                     <a href="/regional-unit/mitra" class="submenu-link">Mitra</a>
                                 </li>
@@ -216,6 +222,9 @@
                             <ul class="submenu">
                                 <li class="submenu-item {{ Request::is('reporting-configuration/status') ? 'active' : '' }}">
                                     <a href="/reporting-configuration/status" class="submenu-link">Order Status</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reporting-configuration/sub-status') ? 'active' : '' }}">
+                                    <a href="/reporting-configuration/sub-status" class="submenu-link">Order Sub Status</a>
                                 </li>
                                 <li class="submenu-item {{ Request::is('reporting-configuration/actions') ? 'active' : '' }}">
                                     <a href="/reporting-configuration/actions" class="submenu-link">Order Actions</a>
@@ -237,9 +246,7 @@
                             <i class="bi bi-justify fs-3"></i>
                         </a>
 
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="clock-container" style="margin-left: 15px; font-size: 14px; color: #73879c">
@@ -330,6 +337,10 @@
     <script src="/assets/static/js/components/dark.js"></script>
     <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/assets/compiled/js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/assets/static/js/pages/sweetalert2.js"></script>
+    @yield('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -407,6 +418,5 @@
             }
         });
     </script>
-    @yield('scripts')
 </body>
 </html>
