@@ -10,7 +10,7 @@
 <div class="card">
     <div class="card-body">
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
-            <i class="bi bi-plus-circle"></i>&nbsp; Tambah Data
+            <i class="bi bi-plus-circle"></i>&nbsp; Add Data
         </button>
         <table class="table table-striped text-center" id="table-detail">
             <thead>
@@ -47,7 +47,7 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $v->id }}">
                                     <div class="mb-3">
-                                        <label for="name_{{ $v->id }}" class="form-label">Nama Unit</label>
+                                        <label for="name_{{ $v->id }}" class="form-label">Unit Name</label>
                                         <input type="text" class="form-control" id="name_{{ $v->id }}" name="name" value="{{ $v->name }}" required>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -70,7 +70,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label">Tambah Data Unit</h5>
+                <h5 class="modal-title" id="modal-add-label">Add Unit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -78,7 +78,7 @@
                     @csrf
                     <input type="hidden" name="id" value="">
                     <div class="mb-3">
-                        <label for="name_add" class="form-label">Nama Unit</label>
+                        <label for="name_add" class="form-label">Unit Name</label>
                         <input type="text" class="form-control" id="name_add" name="name" required>
                     </div>
                     <div class="d-flex justify-content-end">
@@ -105,7 +105,8 @@
             new Choices(choices[i], {
                 placeholder: true,
                 allowHTML: true,
-                removeItemButton: true
+                removeItemButton: true,
+                shouldSort: false
             });
         }
     });

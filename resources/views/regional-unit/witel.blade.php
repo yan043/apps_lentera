@@ -10,7 +10,7 @@
 <div class="card">
     <div class="card-body">
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
-            <i class="bi bi-plus-circle"></i>&nbsp; Tambah Data
+            <i class="bi bi-plus-circle"></i>&nbsp; Add Data
         </button>
         <table class="table table-striped text-center" id="table-detail">
             <thead>
@@ -51,9 +51,9 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $v->id }}">
                                     <div class="mb-3">
-                                        <label for="regional_id_{{ $v->id }}" class="form-label">Regional</label>
+                                        <label for="regional_id_{{ $v->id }}" class="form-label">Regional Name</label>
                                         <select class="choices form-select" id="regional_id_{{ $v->id }}" name="regional_id" required>
-                                            <option value="" disabled>Silahkan Pilih Regional</option>
+                                            <option value="" disabled>Silahkan Pilih Nama Regional</option>
                                             @foreach($get_regional as $regional)
                                                 <option value="{{ $regional->id }}" {{ $regional->id == $v->regional_id ? 'selected' : '' }}>
                                                     {{ $regional->name }}
@@ -62,7 +62,7 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="name_{{ $v->id }}" class="form-label">Witel</label>
+                                        <label for="name_{{ $v->id }}" class="form-label">Witel Name</label>
                                         <input type="text" class="form-control" id="name_{{ $v->id }}" name="name" value="{{ $v->name }}" required>
                                     </div>
                                     <div class="mb-3">
@@ -89,7 +89,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label">Tambah Data Witel</h5>
+                <h5 class="modal-title" id="modal-add-label">Add Witel</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -97,16 +97,16 @@
                     @csrf
                     <input type="hidden" name="id" value="">
                     <div class="mb-3">
-                        <label for="regional_id_add" class="form-label">Regional</label>
+                        <label for="regional_id_add" class="form-label">Regional Name</label>
                         <select class="choices form-select" id="regional_id_add" name="regional_id" required>
-                            <option value="" selected disabled>Silahkan Pilih Regional</option>
+                            <option value="" selected disabled>Silahkan Pilih Nama Regional</option>
                             @foreach($get_regional as $regional)
                                 <option value="{{ $regional->id }}">{{ $regional->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="name_add" class="form-label">Witel</label>
+                        <label for="name_add" class="form-label">Witel Name</label>
                         <input type="text" class="form-control" id="name_add" name="name" required>
                     </div>
                     <div class="mb-3">
@@ -137,7 +137,8 @@
             new Choices(choices[i], {
                 placeholder: true,
                 allowHTML: true,
-                removeItemButton: true
+                removeItemButton: true,
+                shouldSort: false
             });
         }
     });

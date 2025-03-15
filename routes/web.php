@@ -77,8 +77,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('reporting-configuration')->group(function () {
         Route::get('status', [ReportingConfigurationController::class, 'status']);
         Route::get('sub-status', [ReportingConfigurationController::class, 'subStatus']);
-        Route::get('actions', [ReportingConfigurationController::class, 'actions']);
         Route::get('segments', [ReportingConfigurationController::class, 'segments']);
+        Route::get('actions', [ReportingConfigurationController::class, 'actions']);
     });
 
 });
