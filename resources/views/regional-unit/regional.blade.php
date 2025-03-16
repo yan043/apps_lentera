@@ -9,7 +9,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add-">
+        <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
             <i class="bi bi-plus-circle"></i>&nbsp; Add Data
         </button>
         <table class="table table-striped text-center" id="table-detail">
@@ -76,11 +76,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-add-" tabindex="-1" aria-labelledby="modal-add-label" aria-hidden="true">
+<div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="modal-add-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label"Add Regional</h5>
+                <h5 class="modal-title" id="modal-add-label">Add Regional</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

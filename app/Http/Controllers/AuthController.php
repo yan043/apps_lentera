@@ -108,6 +108,13 @@ class AuthController extends Controller
 
     public function profile()
     {
-        return view('auth.profile');
+        $get_gender = collect([
+            (object) ['id' => 'Laki-Laki', 'name' => 'Laki-Laki'],
+            (object) ['id' => 'Perempuan', 'name' => 'Perempuan']
+        ]);
+
+        $data = AuthModel::profile(Session::get('nik'));
+
+        return view('auth.profile', compact('get_gender', 'data'));
     }
 }

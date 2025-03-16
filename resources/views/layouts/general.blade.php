@@ -279,7 +279,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="/profile">
-                                            <i class="icon-mid bi bi-person me-2"></i> My Profile
+                                            <i class="icon-mid bi bi-person me-2"></i> Profile
                                         </a>
                                     </li>
                                     <li>
@@ -415,6 +415,16 @@
                 });
             } else {
                 console.error("Geolocation is not available.");
+            }
+
+            let choices = document.querySelectorAll(".choices");
+            for (let i = 0; i < choices.length; i++) {
+                new Choices(choices[i], {
+                    placeholder: true,
+                    allowHTML: true,
+                    removeItemButton: true,
+                    shouldSort: false
+                });
             }
         });
     </script>

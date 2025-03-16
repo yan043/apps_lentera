@@ -121,16 +121,6 @@
 <script>
     $(document).ready(function() {
         $('#table-detail').DataTable();
-
-        let choices = document.querySelectorAll(".choices");
-        for (let i = 0; i < choices.length; i++) {
-            new Choices(choices[i], {
-                placeholder: true,
-                allowHTML: true,
-                removeItemButton: true,
-                shouldSort: false
-            });
-        }
     });
 
     function confirmDelete(id) {
