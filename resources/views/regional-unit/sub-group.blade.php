@@ -4,7 +4,7 @@
 <link rel="stylesheet" crossorigin href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
 @endsection
 
-@section('title', 'Data Unit')
+@section('title', 'Data Sub-Group')
 
 @section('content')
 <div class="card">
@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Unit</th>
+                    <th>Sub-Group</th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,15 +39,15 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modal-edit-label-{{ $v->id }}">Edit Unit</h5>
+                                <h5 class="modal-title" id="modal-edit-label-{{ $v->id }}">Edit Sub-Group</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="/regional-unit/unit/store" method="POST">
+                                <form action="/regional-unit/sub-group/store" method="POST">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $v->id }}">
                                     <div class="mb-3">
-                                        <label for="name_{{ $v->id }}" class="form-label">Unit Name</label>
+                                        <label for="name_{{ $v->id }}" class="form-label">Sub-Group Name</label>
                                         <input type="text" class="form-control" id="name_{{ $v->id }}" name="name" value="{{ $v->name }}" required>
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -70,15 +70,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label">Add Unit</h5>
+                <h5 class="modal-title" id="modal-add-label">Add Sub-Group</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/unit/store" method="POST">
+                <form action="/regional-unit/sub-group/store" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="">
                     <div class="mb-3">
-                        <label for="name_add" class="form-label">Unit Name</label>
+                        <label for="name_add" class="form-label">Sub-Group Name</label>
                         <input type="text" class="form-control" id="name_add" name="name" required>
                     </div>
                     <div class="d-flex justify-content-end">

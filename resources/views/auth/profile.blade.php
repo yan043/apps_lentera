@@ -17,7 +17,8 @@
                         </div>
 
                         <h3 class="mt-3">{{ $data->full_name }}</h3>
-                        <p class="text-small">{{ ucwords(str_replace('_', ' ', $data->level_name)) }}</p>
+                        <p class="text-small">{{ $data->nik }}</p>
+                        <p class="text-small">{{ ucwords(str_replace('_', ' ', $data->role_name)) }}</p>
                     </div>
                 </div>
             </div>

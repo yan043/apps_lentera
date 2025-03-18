@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use App\Models\AuthModel;
-use Mews\Captcha\Facades\Captcha;
 
 class AuthController extends Controller
 {
@@ -74,11 +73,14 @@ class AuthController extends Controller
             AuthModel::set_token($request->nik, $token, $ip_address);
 
             Session::put([
+                'employee_id'    => $user->id,
                 'regional_id'    => $user->regional_id,
                 'witel_id'       => $user->witel_id,
                 'mitra_id'       => $user->mitra_id,
-                'level_id'       => $user->level->id,
-                'level_name'     => $user->level->name,
+                'sub_unit_id'    => $user->sub_unit_id,
+                'sub_group_id'   => $user->sub_group_id,
+                'role_id'        => $user->role->id,
+                'role_name'      => $user->role->name,
                 'nik'            => $user->nik,
                 'full_name'      => $user->full_name,
                 'chat_id'        => $user->chat_id,
@@ -113,7 +115,7 @@ class AuthController extends Controller
             (object) ['id' => 'Perempuan', 'name' => 'Perempuan']
         ]);
 
-        $data = AuthModel::profile(Session::get('nik'));
+        $data = AuthModel::profile(Session::get('employee_id'));
 
         return view('auth.profile', compact('get_gender', 'data'));
     }

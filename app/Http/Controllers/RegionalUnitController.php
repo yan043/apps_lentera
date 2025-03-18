@@ -23,20 +23,20 @@ class RegionalUnitController extends Controller
         return view('regional-unit.witel', ['get_regional' => $get_regional, 'data' => $data]);
     }
 
-    public function unit()
-    {
-        $data = RegionalUnitModel::get_unit();
-
-        return view('regional-unit.unit', ['data' => $data]);
-    }
-
     public function subUnit()
     {
-        $get_unit = RegionalUnitModel::get_unit();
+        $get_regional = RegionalUnitModel::get_regional();
 
         $data = RegionalUnitModel::get_sub_unit();
 
-        return view('regional-unit.sub-unit', ['get_unit' => $get_unit, 'data' => $data]);
+        return view('regional-unit.sub-unit', ['get_regional' => $get_regional, 'data' => $data]);
+    }
+
+    public function subGroup()
+    {
+        $data = RegionalUnitModel::get_sub_group();
+
+        return view('regional-unit.sub-group', ['data' => $data]);
     }
 
     public function mitra()

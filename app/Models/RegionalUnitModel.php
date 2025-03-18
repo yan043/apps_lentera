@@ -20,17 +20,17 @@ class RegionalUnitModel extends Model
         ->get();
     }
 
-    public static function get_unit()
-    {
-        return DB::table('tb_unit')->get();
-    }
-
     public static function get_sub_unit()
     {
         return DB::table('tb_sub_unit AS tsu')
-        ->leftJoin('tb_unit AS tu', 'tsu.unit_id', '=', 'tu.id')
-        ->select('tsu.*', 'tu.id AS unit_id', 'tu.name AS unit_name')
+        ->leftJoin('tb_regional AS tr', 'tsu.regional_id', '=', 'tr.id')
+        ->select('tsu.*', 'tr.id AS regional_id', 'tr.name AS regional_name')
         ->get();
+    }
+
+    public static function get_sub_group()
+    {
+        return DB::table('tb_sub_group')->get();
     }
 
     public static function get_mitra()

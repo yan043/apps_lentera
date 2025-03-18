@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LevelModel extends Model
+class RolesPermissionsModel extends Model
 {
-    protected $table = 'tb_level';
+    protected $table = 'tb_roles_permissions';
 
     protected $fillable = ['name'];
 }

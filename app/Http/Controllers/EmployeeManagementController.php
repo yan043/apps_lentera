@@ -9,11 +9,15 @@ class EmployeeManagementController extends Controller
 {
     public function employeeList()
     {
-        return view('employee-management.list');
+        $data = EmployeeManagementModel::employeeList();
+
+        return view('employee-management.list', ['data' => $data]);
     }
 
     public function rolesPermissions()
     {
-        return view('employee-management.roles-permissions');
+        $data = EmployeeManagementModel::rolesPermissions();
+
+        return view('employee-management.roles-permissions', ['data' => $data]);
     }
 }

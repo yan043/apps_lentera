@@ -203,11 +203,11 @@
                                 <li class="submenu-item {{ Request::is('regional-unit/witel') ? 'active' : '' }}">
                                     <a href="/regional-unit/witel" class="submenu-link">Witel</a>
                                 </li>
-                                <li class="submenu-item {{ Request::is('regional-unit/unit') ? 'active' : '' }}">
-                                    <a href="/regional-unit/unit" class="submenu-link">Unit</a>
-                                </li>
                                 <li class="submenu-item {{ Request::is('regional-unit/sub-unit') ? 'active' : '' }}">
                                     <a href="/regional-unit/sub-unit" class="submenu-link">Sub Unit</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('regional-unit/sub-group') ? 'active' : '' }}">
+                                    <a href="/regional-unit/sub-group" class="submenu-link">Sub-Group</a>
                                 </li>
                                 <li class="submenu-item {{ Request::is('regional-unit/mitra') ? 'active' : '' }}">
                                     <a href="/regional-unit/mitra" class="submenu-link">Mitra</a>
@@ -226,11 +226,11 @@
                                 <li class="submenu-item {{ Request::is('reporting-configuration/sub-status') ? 'active' : '' }}">
                                     <a href="/reporting-configuration/sub-status" class="submenu-link">Order Sub Status</a>
                                 </li>
-                                <li class="submenu-item {{ Request::is('reporting-configuration/segments') ? 'active' : '' }}">
-                                    <a href="/reporting-configuration/segments" class="submenu-link">Order Segments</a>
-                                </li>
                                 <li class="submenu-item {{ Request::is('reporting-configuration/actions') ? 'active' : '' }}">
                                     <a href="/reporting-configuration/actions" class="submenu-link">Order Actions</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reporting-configuration/segments') ? 'active' : '' }}">
+                                    <a href="/reporting-configuration/segments" class="submenu-link">Order Segments</a>
                                 </li>
                             </ul>
                         </li>
@@ -264,7 +264,7 @@
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
                                             <h6 class="mb-0 text-gray-600">{{ Session::get('full_name') }}</h6>
-                                            <p class="mb-0 text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', Session::get('level_name'))) }}</p>
+                                            <p class="mb-0 text-sm text-gray-600">{{ ucwords(str_replace('_', ' ', Session::get('role_name'))) }}</p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
@@ -279,7 +279,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="/profile">
-                                            <i class="icon-mid bi bi-person me-2"></i> Profile
+                                            <i class="icon-mid bi bi-person me-2"></i> My Profile
                                         </a>
                                     </li>
                                     <li>

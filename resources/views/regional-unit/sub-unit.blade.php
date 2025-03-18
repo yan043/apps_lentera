@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Unit</th>
+                    <th>Regional</th>
                     <th>Sub-Unit</th>
                     <th></th>
                 </tr>
@@ -25,7 +25,7 @@
                 @foreach ($data as $k => $v)
                 <tr>
                     <td>{{ ++$k }}</td>
-                    <td>{{ $v->unit_name }}</td>
+                    <td>{{ $v->regional_name }}</td>
                     <td>{{ $v->name }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-{{ $v->id }}">
@@ -49,12 +49,12 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $v->id }}">
                                     <div class="mb-3">
-                                        <label for="unit_id_{{ $v->id }}" class="form-label">Unit Name</label>
-                                        <select class="choices form-select" id="unit_id_{{ $v->id }}" name="unit_id" required>
-                                            <option value="" disabled>Silahkan Pilih Nama Unit</option>
-                                            @foreach($get_unit as $unit)
-                                                <option value="{{ $unit->id }}" {{ $unit->id == $v->unit_id ? 'selected' : '' }}>
-                                                    {{ $unit->name }}
+                                        <label for="regional_id_{{ $v->id }}" class="form-label">Regional</label>
+                                        <select class="choices form-select" style="width: 100%;" id="regional_id_{{ $v->id }}" name="regional_id" required>
+                                            <option value="" disabled>Silahkan Pilih Regional</option>
+                                            @foreach($get_regional as $regional)
+                                                <option value="{{ $regional->id }}" {{ $regional->id == $v->regional_id ? 'selected' : '' }}>
+                                                    {{ $regional->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -91,11 +91,11 @@
                     @csrf
                     <input type="hidden" name="id" value="">
                     <div class="mb-3">
-                        <label for="unit_id_add" class="form-label">Unit Name</label>
-                        <select class="choices form-select" id="unit_id_add" name="unit_id" required>
-                            <option value="" selected disabled>Silahkan Pilih Nama Unit</option>
-                            @foreach($get_unit as $unit)
-                                <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                        <label for="regional_id_add" class="form-label">Regional</label>
+                        <select class="choices form-select`" style="width: 100%;" id="regional_id_add" name="regional_id" required>
+                            <option></option>
+                            @foreach($get_regional as $regional)
+                                <option value="{{ $regional->id }}">{{ $regional->name }}</option>
                             @endforeach
                         </select>
                     </div>

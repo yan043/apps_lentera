@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Models\RolesPermissionsModel;
 use Carbon\Carbon;
 
 class AuthModel extends Authenticatable
@@ -15,9 +16,9 @@ class AuthModel extends Authenticatable
         'regional_id',
         'witel_id',
         'mitra_id',
-        'unit_id',
         'sub_unit_id',
-        'level_id',
+        'sub_group_id',
+        'role_id',
         'nik',
         'full_name',
         'chat_id',
@@ -46,7 +47,7 @@ class AuthModel extends Authenticatable
 
     public static function identity(string $nik): ?self
     {
-        return self::with('level')
+        return self::with('role')
             ->where('nik', $nik)
             ->first();
     }
@@ -79,32 +80,32 @@ class AuthModel extends Authenticatable
         return 'nik';
     }
 
-    public function level()
+    public function role()
     {
-        return $this->belongsTo(LevelModel::class, 'level_id');
+        return $this->belongsTo(RolesPermissionsModel::class, 'role_id');
     }
 
-    public static function profile($nik)
+    public static function profile($id)
     {
         return DB::table('tb_employee AS te')
         ->leftJoin('tb_regional AS tr', 'te.regional_id', '=', 'tr.id')
         ->leftJoin('tb_witel AS tw', 'te.witel_id', '=', 'tw.id')
         ->leftJoin('tb_mitra AS tm', 'te.mitra_id', '=', 'tm.id')
-        ->leftJoin('tb_unit AS tu', 'te.unit_id', '=', 'tu.id')
         ->leftJoin('tb_sub_unit AS tsu', 'te.sub_unit_id', '=', 'tsu.id')
-        ->leftJoin('tb_level AS tl', 'te.level_id', '=', 'tl.id')
+        ->leftJoin('tb_sub_group AS tsg', 'te.sub_group_id', '=', 'tsg.id')
+        ->leftJoin('tb_roles_permissions AS trp', 'te.role_id', '=', 'trp.id')
         ->select(
             'te.*',
             'tr.name AS regional_name',
             'tw.name AS witel_name',
             'tm.name AS mitra_name',
-            'tu.name AS unit_name',
             'tsu.name AS sub_unit_name',
-            'tl.name AS level_name'
+            'tsg.name AS sub_group_name',
+            'trp.name AS role_name'
         )
         ->where([
-            'te.nik'       => $nik,
-            'te.is_active' =>  1
+            'te.id'        => $id,
+            'te.is_active' => 1
         ])
         ->first();
     }
