@@ -226,11 +226,11 @@
                                 <li class="submenu-item {{ Request::is('reporting-configuration/sub-status') ? 'active' : '' }}">
                                     <a href="/reporting-configuration/sub-status" class="submenu-link">Order Sub Status</a>
                                 </li>
-                                <li class="submenu-item {{ Request::is('reporting-configuration/actions') ? 'active' : '' }}">
-                                    <a href="/reporting-configuration/actions" class="submenu-link">Order Actions</a>
-                                </li>
                                 <li class="submenu-item {{ Request::is('reporting-configuration/segments') ? 'active' : '' }}">
                                     <a href="/reporting-configuration/segments" class="submenu-link">Order Segments</a>
+                                </li>
+                                <li class="submenu-item {{ Request::is('reporting-configuration/actions') ? 'active' : '' }}">
+                                    <a href="/reporting-configuration/actions" class="submenu-link">Order Actions</a>
                                 </li>
                             </ul>
                         </li>

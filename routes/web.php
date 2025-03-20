@@ -12,6 +12,7 @@ use App\Http\Controllers\ReportsPaymentController;
 use App\Http\Controllers\EmployeeManagementController;
 use App\Http\Controllers\RegionalUnitController;
 use App\Http\Controllers\ReportingConfigurationController;
+use App\Http\Controllers\AjaxController;
 
 Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
@@ -81,4 +82,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('actions', [ReportingConfigurationController::class, 'actions']);
     });
 
+    Route::prefix('ajax')->group(function () {
+        Route::prefix('reporting-configuration')->group(function () {
+            Route::get('status', [AjaxController::class, 'get_order_status']);
+            Route::get('sub-status', [AjaxController::class, 'get_order_sub_status']);
+            Route::get('segments', [AjaxController::class, 'get_order_segments']);
+            Route::get('actions', [AjaxController::class, 'get_order_actions']);
+        });
+    });
 });
