@@ -1,6 +1,6 @@
 @extends('layouts.general')
 
-@section('css')
+@section('styles')
 @endsection
 
 @section('title', 'Leave Request')

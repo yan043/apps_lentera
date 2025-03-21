@@ -1,6 +1,7 @@
 @extends('layouts.general')
 
-@section('css')
+@section('styles')
+<link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">
 @endsection
 
 @section('title', 'My Profile')
@@ -84,4 +85,18 @@
 @endsection
 
 @section('scripts')
+<script src="/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let choices = document.querySelectorAll(".choices");
+        for (let i = 0; i < choices.length; i++) {
+            new Choices(choices[i], {
+                placeholder: true,
+                allowHTML: true,
+                removeItemButton: true,
+                shouldSort: false
+            });
+        }
+    });
+</script>
 @endsection
