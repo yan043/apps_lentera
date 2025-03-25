@@ -120,20 +120,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('get-sub-unit-by-regional/{regional_id}', [AjaxController::class, 'get_sub_unit_by_regional']);
         });
 
-        Route::prefix('reporting-configuration')->group(function () {
-            Route::get('status', [AjaxController::class, 'get_order_status']);
-            Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id']);
-
-            Route::get('sub-status', [AjaxController::class, 'get_order_sub_status']);
-            Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id']);
-
-            Route::get('segments', [AjaxController::class, 'get_order_segments']);
-            Route::get('segments/{id}', [AjaxController::class, 'get_order_segement_by_id']);
-
-            Route::get('actions', [AjaxController::class, 'get_order_actions']);
-            Route::get('actions/{id}', [AjaxController::class, 'get_order_actions_by_id']);
-        });
-
         Route::prefix('regional-unit')->group(function () {
             Route::get('regional', [AjaxController::class, 'get_regional']);
             Route::get('regional/{id}', [AjaxController::class, 'get_regional_by_id']);
@@ -149,6 +135,20 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('mitra', [AjaxController::class, 'get_mitra']);
             Route::get('mitra/{id}', [AjaxController::class, 'get_mitra_by_id']);
+        });
+
+        Route::prefix('reporting-configuration')->group(function () {
+            Route::get('status', [AjaxController::class, 'get_order_status']);
+            Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id']);
+
+            Route::get('sub-status', [AjaxController::class, 'get_order_sub_status']);
+            Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id']);
+
+            Route::get('segments', [AjaxController::class, 'get_order_segments']);
+            Route::get('segments/{id}', [AjaxController::class, 'get_order_segement_by_id']);
+
+            Route::get('actions', [AjaxController::class, 'get_order_actions']);
+            Route::get('actions/{id}', [AjaxController::class, 'get_order_actions_by_id']);
         });
     });
 });

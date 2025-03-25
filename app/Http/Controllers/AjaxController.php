@@ -69,14 +69,14 @@ class AjaxController extends Controller
 
     public function get_regional()
     {
-        $data = RegionalUnitModel::get_regional();
+        $data = RegionalUnitModel::get_data('tb_regional');
 
         return response()->json($data);
     }
 
     public function get_regional_by_id($id)
     {
-        $data = RegionalUnitModel::get_regional_by_id($id);
+        $data = RegionalUnitModel::get_data('tb_regional', $id);
 
         return response()->json($data);
     }
@@ -111,14 +111,14 @@ class AjaxController extends Controller
 
     public function get_sub_group()
     {
-        $data = RegionalUnitModel::get_sub_group();
+        $data = RegionalUnitModel::get_data('tb_sub_group');
 
         return response()->json($data);
     }
 
     public function get_sub_group_by_id($id)
     {
-        $data = RegionalUnitModel::get_sub_group_by_id($id);
+        $data = RegionalUnitModel::get_data('tb_sub_group', $id);
 
         return response()->json($data);
     }
