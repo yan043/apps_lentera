@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeManagementModel extends Model
 {
@@ -82,5 +82,15 @@ class EmployeeManagementModel extends Model
     public static function get_role()
     {
         return DB::table('tb_roles_permissions')->get();
+    }
+
+    public static function storeEmployee($data)
+    {
+        DB::table('tb_employee')->insert($data);
+    }
+
+    public static function updateEmployee($id, $data)
+    {
+        DB::table('tb_employee')->where('id', $id)->update($data);
     }
 }

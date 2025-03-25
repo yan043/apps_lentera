@@ -65,6 +65,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('employee-management')->group(function () {
         Route::get('list', [EmployeeManagementController::class, 'employeeList']);
         Route::get('roles-permissions', [EmployeeManagementController::class, 'rolesPermissions']);
+        Route::post('store', [EmployeeManagementController::class, 'store']);
+        Route::put('update/{id}', [EmployeeManagementController::class, 'update']);
     });
 
     Route::prefix('regional-unit')->group(function () {
