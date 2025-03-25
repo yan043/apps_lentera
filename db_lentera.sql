@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS `cache` (
 
 -- Dumping data for table db_lentera.cache: ~0 rows (approximately)
 DELETE FROM `cache`;
+INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+	('laravel_cache_captcha_767a4b91ee70258f038cf0803a2611f1', 'a:6:{i:0;s:1:"u";i:1;s:1:"8";i:2;s:1:"c";i:3;s:1:"q";i:4;s:1:"f";i:5;s:1:"u";}', 1742922805);
 
 -- Dumping structure for table db_lentera.cache_locks
 DROP TABLE IF EXISTS `cache_locks`;
@@ -203,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `tb_employee` (
 DELETE FROM `tb_employee`;
 INSERT INTO `tb_employee` (`id`, `regional_id`, `witel_id`, `mitra_id`, `sub_unit_id`, `sub_group_id`, `role_id`, `nik`, `full_name`, `chat_id`, `number_phone`, `home_address`, `gender`, `date_of_birth`, `place_of_birth`, `remember_token`, `google2fa_secret`, `password`, `ip_address`, `login_at`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
 	(1, 4, 1, 3, 0, 0, 1, 16990591, 'Ahmad Hidayat', '611959936', NULL, NULL, 'Laki-Laki', NULL, NULL, 'hnlrlMuu5XVDnDNJHmXtmrBssz4a06IEFTcndbub6sHf0uBkHEgoj80tjyrk', NULL, '$2y$12$aU/DMYnrf2tA2wmQieCnfegrzjz1aAcB7FBZ.VtP1jrwp56v.OxDW', '127.0.0.1', '2025-02-27 20:22:13', 1, NULL, NULL, NULL, '2025-03-18 23:25:21'),
-	(2, 4, 1, 2, 0, 0, 1, 981020, 'Mahdian', '401791818', NULL, NULL, 'Laki-Laki', '1998-10-26', NULL, 'soaJWm2N6ESpx3cIKmuH9uZYglL9svLMGAThKsFsc4kqpmG5vmVgAk1L6gJV', NULL, '$2y$12$aU/DMYnrf2tA2wmQieCnfegrzjz1aAcB7FBZ.VtP1jrwp56v.OxDW', '127.0.0.1', '2025-03-18 20:15:03', 1, NULL, NULL, NULL, '2025-03-18 20:15:03');
+	(2, 4, 1, 2, 0, 0, 1, 981020, 'Mahdian', '401791818', NULL, NULL, 'Laki-Laki', '1998-10-26', NULL, 'cUkms30UUR3WCWH17mgo7XW7J62qc9lSYfCK3dvWoJd7G2sN5APbZrNzm5Tw', NULL, '$2y$12$aU/DMYnrf2tA2wmQieCnfegrzjz1aAcB7FBZ.VtP1jrwp56v.OxDW', '127.0.0.1', '2025-03-25 16:29:57', 1, NULL, NULL, NULL, '2025-03-25 16:29:57');
 
 -- Dumping structure for table db_lentera.tb_inventory_reports
 DROP TABLE IF EXISTS `tb_inventory_reports`;
@@ -238,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `tb_mitra` (
   `alias` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `witel_id` (`witel_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table db_lentera.tb_mitra: ~3 rows (approximately)
 DELETE FROM `tb_mitra`;
@@ -255,9 +257,9 @@ CREATE TABLE IF NOT EXISTS `tb_order_action` (
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_segment_id` (`order_segment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_action: ~0 rows (approximately)
+-- Dumping data for table db_lentera.tb_order_action: ~1 rows (approximately)
 DELETE FROM `tb_order_action`;
 
 -- Dumping structure for table db_lentera.tb_order_segment
@@ -266,10 +268,13 @@ CREATE TABLE IF NOT EXISTS `tb_order_segment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_segment: ~0 rows (approximately)
+-- Dumping data for table db_lentera.tb_order_segment: ~3 rows (approximately)
 DELETE FROM `tb_order_segment`;
+INSERT INTO `tb_order_segment` (`id`, `name`) VALUES
+	(1, 'CPE'),
+	(2, 'ONT');
 
 -- Dumping structure for table db_lentera.tb_order_status
 DROP TABLE IF EXISTS `tb_order_status`;
@@ -277,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `tb_order_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table db_lentera.tb_order_status: ~6 rows (approximately)
 DELETE FROM `tb_order_status`;
@@ -297,10 +302,13 @@ CREATE TABLE IF NOT EXISTS `tb_order_sub_status` (
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_status_id` (`order_status_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_sub_status: ~0 rows (approximately)
+-- Dumping data for table db_lentera.tb_order_sub_status: ~3 rows (approximately)
 DELETE FROM `tb_order_sub_status`;
+INSERT INTO `tb_order_sub_status` (`id`, `order_status_id`, `name`) VALUES
+	(1, 1, 'NEED-PROGRESS'),
+	(2, 2, 'BERANGKAT');
 
 -- Dumping structure for table db_lentera.tb_regional
 DROP TABLE IF EXISTS `tb_regional`;
@@ -309,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `tb_regional` (
   `name` varchar(50) DEFAULT NULL,
   `alias` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table db_lentera.tb_regional: ~5 rows (approximately)
 DELETE FROM `tb_regional`;
@@ -318,7 +326,7 @@ INSERT INTO `tb_regional` (`id`, `name`, `alias`) VALUES
 	(2, 'Regional 2', NULL),
 	(3, 'Regional 3', NULL),
 	(4, 'Regional 4', 'Kalimantan'),
-	(5, 'Regional 5', NULL);
+	(5, 'Regional 5', 'null');
 
 -- Dumping structure for table db_lentera.tb_roles_permissions
 DROP TABLE IF EXISTS `tb_roles_permissions`;
@@ -381,10 +389,51 @@ CREATE TABLE IF NOT EXISTS `tb_sub_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_sub_group: ~0 rows (approximately)
+-- Dumping data for table db_lentera.tb_sub_group: ~40 rows (approximately)
 DELETE FROM `tb_sub_group`;
+INSERT INTO `tb_sub_group` (`id`, `name`) VALUES
+	(2, 'ASSURANCE & MAINTENANCE'),
+	(3, 'B2C'),
+	(4, 'BGES'),
+	(5, 'BGES SERVICES'),
+	(6, 'BUSINESS SUPPORT'),
+	(7, 'COMMERCE'),
+	(8, 'COMMERCIAL & SUPPLY CHAIN'),
+	(9, 'CONSTRUCTION'),
+	(10, 'CORRECTIVE MAINTENANCE & QE'),
+	(11, 'DATA MANAGEMENT'),
+	(12, 'FA & HSE'),
+	(13, 'FIBER ACADEMY'),
+	(14, 'FIBER EXPERT & MARSHAL AREA'),
+	(15, 'FINANCE & BILCO'),
+	(16, 'FTM'),
+	(17, 'HCM & CULTURE'),
+	(18, 'INVENTORY & ASSET MANAGEMENT AREA'),
+	(19, 'IOAN'),
+	(20, 'LINTAS ARTA'),
+	(21, 'LOGIC ON DESK'),
+	(22, 'MO SPBU'),
+	(23, 'MS MITRATEL'),
+	(24, 'NE'),
+	(25, 'OLO'),
+	(26, 'OPERATION'),
+	(27, 'PATROLI ASET'),
+	(28, 'PROCUREMENT & PARTNERSHIP'),
+	(29, 'PROVISIONING & MIGRASI'),
+	(30, 'PROVISIONING & MIGRATION'),
+	(31, 'PROVISIONING BGES'),
+	(32, 'PROVISIONING WIBS'),
+	(33, 'SDI'),
+	(34, 'SERVICE DELIVERY'),
+	(35, 'SHARED SERVICE'),
+	(36, 'TECHNICIAN ON SITE'),
+	(37, 'TSEL'),
+	(38, 'WAREHOUSE SO'),
+	(39, 'WASPANG'),
+	(40, 'WIFI'),
+	(41, 'WILSUS');
 
 -- Dumping structure for table db_lentera.tb_sub_unit
 DROP TABLE IF EXISTS `tb_sub_unit`;
@@ -394,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `tb_sub_unit` (
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `regional_id` (`regional_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table db_lentera.tb_sub_unit: ~9 rows (approximately)
 DELETE FROM `tb_sub_unit`;
@@ -494,9 +543,9 @@ CREATE TABLE IF NOT EXISTS `tb_witel` (
   `alias` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `regional_id` (`regional_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_witel: ~6 rows (approximately)
+-- Dumping data for table db_lentera.tb_witel: ~7 rows (approximately)
 DELETE FROM `tb_witel`;
 INSERT INTO `tb_witel` (`id`, `regional_id`, `name`, `alias`) VALUES
 	(1, 4, 'Banjarmasin', 'Kalsel'),
