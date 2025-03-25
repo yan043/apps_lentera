@@ -54,11 +54,6 @@ class EmployeeManagementModel extends Model
         return DB::table('tb_roles_permissions')->get();
     }
 
-    public static function get_regional()
-    {
-        return DB::table('tb_regional')->get();
-    }
-
     public static function get_witel_by_regional($regional_id)
     {
         return DB::table('tb_witel')->where('regional_id', $regional_id)->get();

@@ -30,16 +30,16 @@ class EmployeeManagementController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'nik' => 'required|min:6',
-            'full_name' => 'required',
-            'password' => 'required',
-            'regional_id' => 'required',
-            'witel_id' => 'required',
-            'mitra_id' => 'required',
-            'sub_unit_id' => 'required',
+            'nik'          => 'required|min: 6',
+            'full_name'    => 'required',
+            'password'     => 'required',
+            'regional_id'  => 'required',
+            'witel_id'     => 'required',
+            'mitra_id'     => 'required',
+            'sub_unit_id'  => 'required',
             'sub_group_id' => 'required',
-            'role_id' => 'required',
-            'is_active' => 'required'
+            'role_id'      => 'required',
+            'is_active'    => 'required'
         ]);
 
         EmployeeManagementModel::storeEmployee($validatedData);
@@ -50,16 +50,16 @@ class EmployeeManagementController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'nik' => 'required|min:6',
-            'full_name' => 'required',
-            'password' => 'required',
-            'regional_id' => 'required',
-            'witel_id' => 'required',
-            'mitra_id' => 'required',
-            'sub_unit_id' => 'required',
+            'nik'          => 'required|min: 6',
+            'full_name'    => 'required',
+            'password'     => 'required',
+            'regional_id'  => 'required',
+            'witel_id'     => 'required',
+            'mitra_id'     => 'required',
+            'sub_unit_id'  => 'required',
             'sub_group_id' => 'required',
-            'role_id' => 'required',
-            'is_active' => 'required'
+            'role_id'      => 'required',
+            'is_active'    => 'required'
         ]);
 
         EmployeeManagementModel::updateEmployee($id, $validatedData);

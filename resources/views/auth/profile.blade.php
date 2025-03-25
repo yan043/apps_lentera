@@ -71,6 +71,51 @@
                             <input type="text" name="place_of_birth" id="place_of_birth" class="form-control" placeholder="Masukan Tempat Lahir" value="{{ $data->place_of_birth }}" />
                         </div>
                         <div class="form-group">
+                            <label for="regional_id" class="form-label">Regional</label>
+                            <select name="regional_id" id="regional_id" class="choices form-select" required>
+                                <option></option>
+                                @foreach($get_regional as $regional)
+                                    <option value="{{ $regional->id }}" {{ $regional->id == $data->regional_id ? 'selected' : '' }}>{{ $regional->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="witel_id" class="form-label">Witel</label>
+                            <select name="witel_id" id="witel_id" class="choices form-select" required>
+                                <option></option>
+                                @foreach($get_witel as $witel)
+                                    <option value="{{ $witel->id }}" {{ $witel->id == $data->witel_id ? 'selected' : '' }}>{{ $witel->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mitra_id" class="form-label">Mitra</label>
+                            <select name="mitra_id" id="mitra_id" class="choices form-select" required>
+                                <option></option>
+                                @foreach($get_mitra as $mitra)
+                                    <option value="{{ $mitra->id }}" {{ $mitra->id == $data->mitra_id ? 'selected' : '' }}>{{ $mitra->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub_unit_id" class="form-label">Sub Unit</label>
+                            <select name="sub_unit_id" id="sub_unit_id" class="choices form-select" required>
+                                <option></option>
+                                @foreach($get_sub_unit as $sub_unit)
+                                    <option value="{{ $sub_unit->id }}" {{ $sub_unit->id == $data->sub_unit_id ? 'selected' : '' }}>{{ $sub_unit->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub_group_id" class="form-label">Sub Group</label>
+                            <select name="sub_group_id" id="sub_group_id" class="choices form-select" required>
+                                <option></option>
+                                @foreach($get_sub_group as $sub_group)
+                                    <option value="{{ $sub_group->id }}" {{ $sub_group->id == $data->sub_group_id ? 'selected' : '' }}>{{ $sub_group->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="password" class="form-label">Password</label>
                             <input type="text" name="password" id="password" class="form-control" placeholder="Masukan Tempat Lahir" value="{{ $data->password }}" />
                         </div>
@@ -95,15 +140,63 @@
             dateFormat: "Y-m-d",
         });
 
-        let choices = document.querySelectorAll(".choices");
-        for (let i = 0; i < choices.length; i++) {
-            new Choices(choices[i], {
+        let choicesInstances = {};
+        let choicesElements = document.querySelectorAll(".choices");
+        choicesElements.forEach((element) => {
+            choicesInstances[element.id] = new Choices(element, {
                 placeholder: true,
                 allowHTML: true,
                 removeItemButton: true,
                 shouldSort: false
             });
-        }
+        });
+
+        $('#regional_id').on('change', function() {
+            let regionalId = $(this).val();
+            $.ajax({
+                url: `/ajax/employee-management/get-witel-by-regional/${regionalId}`,
+                method: 'GET',
+                success: function(data) {
+                    let witelSelect = $('#witel_id');
+                    witelSelect.empty().append('<option></option>');
+                    data.forEach(function(item) {
+                        witelSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                    choicesInstances['witel_id'].setChoices(data.map(item => ({ value: item.id, label: item.name })), 'value', 'label', true);
+                }
+            });
+
+            $.ajax({
+                url: `/ajax/employee-management/get-sub-unit-by-regional/${regionalId}`,
+                method: 'GET',
+                success: function(data) {
+                    let subUnitSelect = $('#sub_unit_id');
+                    subUnitSelect.empty().append('<option></option>');
+                    data.forEach(function(item) {
+                        subUnitSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                    choicesInstances['sub_unit_id'].setChoices(data.map(item => ({ value: item.id, label: item.name })), 'value', 'label', true);
+                }
+            });
+        });
+
+        $('#witel_id').on('change', function() {
+            let witelId = $(this).val();
+            if (witelId) {
+                $.ajax({
+                    url: `/ajax/employee-management/get-mitra-by-witel/${witelId}`,
+                    method: 'GET',
+                    success: function(data) {
+                        let mitraSelect = $('#mitra_id');
+                        mitraSelect.empty().append('<option></option>');
+                        data.forEach(function(item) {
+                            mitraSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                        });
+                        choicesInstances['mitra_id'].setChoices(data.map(item => ({ value: item.id, label: item.name })), 'value', 'label', true);
+                    }
+                });
+            }
+        });
     });
 </script>
 @endsection

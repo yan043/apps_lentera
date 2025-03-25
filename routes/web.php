@@ -145,10 +145,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id']);
 
             Route::get('segments', [AjaxController::class, 'get_order_segments']);
-            Route::get('segments/{id}', [AjaxController::class, 'get_order_segement_by_id']);
+            Route::get('segments/{id}', [AjaxController::class, 'get_order_segment_by_id']);
 
             Route::get('actions', [AjaxController::class, 'get_order_actions']);
-            Route::get('actions/{id}', [AjaxController::class, 'get_order_actions_by_id']);
+            Route::get('actions/{id}', [AjaxController::class, 'get_order_action_by_id']);
         });
     });
 });

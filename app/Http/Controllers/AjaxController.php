@@ -46,9 +46,9 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_order_segement_by_id($id)
+    public function get_order_segment_by_id($id)
     {
-        $data = ReportingConfigurationModel::get_order_segement_by_id($id);
+        $data = ReportingConfigurationModel::get_order_segment_by_id($id);
 
         return response()->json($data);
     }
@@ -60,9 +60,9 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_order_actions_by_id($id)
+    public function get_order_action_by_id($id)
     {
-        $data = ReportingConfigurationModel::get_order_actions_by_id($id);
+        $data = ReportingConfigurationModel::get_order_action_by_id($id);
 
         return response()->json($data);
     }

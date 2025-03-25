@@ -69,7 +69,7 @@ class ReportingConfigurationModel extends Model
         return DB::table('tb_order_segment')->get();
     }
 
-    public static function get_order_segement_by_id($id)
+    public static function get_order_segment_by_id($id)
     {
         return DB::table('tb_order_segment')->where('id', $id)->first();
     }
@@ -97,7 +97,7 @@ class ReportingConfigurationModel extends Model
         ->get();
     }
 
-    public static function get_order_actions_by_id($id)
+    public static function get_order_action_by_id($id)
     {
         return DB::table('tb_order_action AS toa')
         ->leftJoin('tb_order_segment AS tos', 'tos.id', '=', 'toa.order_segment_id')
