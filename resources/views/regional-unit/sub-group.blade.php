@@ -3,6 +3,11 @@
 @section('styles')
 <link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" crossorigin href="/assets/compiled/css/table-datatable-jquery.css">
+<style>
+    .modal-body {
+        text-align: left;
+    }
+</style>
 @endsection
 
 @section('title', 'Data Sub-Group')
@@ -10,6 +15,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
+        @include('partials.alerts')
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
             <i class="bi bi-plus-circle"></i>&nbsp; Add Data
         </button>
@@ -17,52 +23,12 @@
             <table class="table table-striped text-center detail-data-table">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Sub-Group</th>
-                        <th></th>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Sub-Group</th>
+                        <th class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($data as $k => $v)
-                    <tr>
-                        <td>{{ ++$k }}</td>
-                        <td>{{ $v->name }}</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-{{ $v->id }}">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $v->id }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <div class="modal fade" id="modal-edit-{{ $v->id }}" tabindex="-1" aria-labelledby="modal-edit-label-{{ $v->id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modal-edit-label-{{ $v->id }}">Edit Sub-Group</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="/regional-unit/sub-group/store" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $v->id }}">
-                                        <div class="mb-3">
-                                            <label for="name_{{ $v->id }}" class="form-label">Sub-Group Name</label>
-                                            <input type="text" class="form-control" id="name_{{ $v->id }}" name="name" value="{{ $v->name }}" required>
-                                        </div>
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="bi bi-save"></i>&nbsp; Save
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -101,32 +67,75 @@
 <script src="/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function() {
-        let jquery_datatable = $(".detail-data-table").DataTable({
-            responsive: true
-        });
-        let customized_datatable = $(".detail-data-table-jquery").DataTable({
+        let table = $(".detail-data-table").DataTable({
             responsive: true,
-            pagingType: 'simple',
-            dom:
-                "<'row'<'col-3'l><'col-9'f>>" +
-                "<'row dt-row'<'col-sm-12'tr>>" +
-                "<'row'<'col-4'i><'col-8'p>>",
-            "language": {
-                "info": "Page _PAGE_ of _PAGES_",
-                "lengthMenu": "_MENU_ ",
-                "search": "",
-                "searchPlaceholder": "Search.."
+            ajax: {
+                url: '/ajax/regional-unit/sub-group',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'name' },
+                {
+                    data: 'id',
+                    render: function(data, type, row) {
+                        return `
+                            <button type="button" class="btn btn-sm btn-primary" onclick="loadEditModal(${data})">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        `;
+                    }
+                }
+            ]
+        });
+    });
+
+    function loadEditModal(id) {
+        $.ajax({
+            url: `/ajax/regional-unit/sub-group/${id}`,
+            method: 'GET',
+            success: function(data) {
+                let modal = generateEditModal(data);
+                $("body").append(modal);
+                $(`#modal-edit-${data.id}`).modal('show');
             }
         });
+    }
 
-        const setTableColor = () => {
-            document.querySelectorAll('.dataTables_paginate .pagination').forEach(dt => {
-                dt.classList.add('pagination-primary')
-            });
-        };
-        setTableColor();
-        jquery_datatable.on('draw', setTableColor);
-    });
+    function generateEditModal(data) {
+        let modal = `
+            <div class="modal fade" id="modal-edit-${data.id}" tabindex="-1" aria-labelledby="modal-edit-label-${data.id}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-edit-label-${data.id}">Edit Sub-Group</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/regional-unit/sub-group/store" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" value="${data.id}">
+                                <div class="mb-3">
+                                    <label for="name_${data.id}" class="form-label">Sub-Group Name</label>
+                                    <input type="text" class="form-control" id="name_${data.id}" name="name" value="${data.name}" required>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i>&nbsp; Save
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return modal;
+    }
 
     function confirmDelete(id) {
         Swal.fire({
@@ -139,7 +148,7 @@
             confirmButtonText: 'Ya, hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/regional-unit/unit/destroy/' + id;
+                window.location.href = '/regional-unit/sub-group/destroy/' + id;
             }
         });
     }
