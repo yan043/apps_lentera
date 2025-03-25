@@ -2,6 +2,7 @@
 
 @section('styles')
 <link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="/assets/extensions/flatpickr/flatpickr.min.css">
 @endsection
 
 @section('title', 'My Profile')
@@ -32,7 +33,7 @@
                         <input type="hidden" name="id" value="{{ $data->id }}" />
                         <div class="form-group">
                             <label for="nik" class="form-label">NIK</label>
-                            <input type="text" name="nik" id="nik" class="form-control" placeholder="Masukan NIK" value="{{ $data->nik }}" disabled />
+                            <input type="text" name="nik" id="nik" class="form-control" placeholder="Masukan NIK" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="6" value="{{ $data->nik }}" disabled />
                         </div>
                         <div class="form-group">
                             <label for="full_name" class="form-label">Full Name</label>
@@ -44,7 +45,7 @@
                         </div>
                         <div class="form-group">
                             <label for="number_phone" class="form-label">Number Phone</label>
-                            <input type="text" name="number_phone" id="number_phone" class="form-control" placeholder="Masukan Nomor Telpon" value="{{ $data->number_phone }}" />
+                            <input type="text" name="number_phone" id="number_phone" class="form-control" placeholder="Masukan Nomor Telpon" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="11" value="{{ $data->number_phone }}" />
                         </div>
                         <div class="form-group">
                             <label for="home_address" class="form-label">Home Address</label>
@@ -63,7 +64,7 @@
                         </div>
                         <div class="form-group">
                             <label for="date_of_birth" class="form-label">Date of Birth</label>
-                            <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" placeholder="Masukan Tanggal Lahir" value="{{ $data->date_of_birth }}" />
+                            <input type="date" name="date_of_birth" id="date_of_birth" class="form-control flatpickr-no-config" placeholder="Masukan Tanggal Lahir" value="{{ $data->date_of_birth }}" />
                         </div>
                         <div class="form-group">
                             <label for="place_of_birth" class="form-label">Place of Birth</label>
@@ -86,8 +87,14 @@
 
 @section('scripts')
 <script src="/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="/assets/extensions/flatpickr/flatpickr.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        flatpickr('.flatpickr-no-config', {
+            enableTime: false,
+            dateFormat: "Y-m-d",
+        });
+
         let choices = document.querySelectorAll(".choices");
         for (let i = 0; i < choices.length; i++) {
             new Choices(choices[i], {
