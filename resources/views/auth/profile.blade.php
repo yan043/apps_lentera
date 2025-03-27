@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label for="sub_unit_id" class="form-label">Sub Unit</label>
                             <select name="sub_unit_id" id="sub_unit_id" class="choices form-select" required>
-                                <option></option>
+                                <option value="" disabled selected>Pilih Sub Unit</option>
                                 @foreach($get_sub_unit as $sub_unit)
                                     <option value="{{ $sub_unit->id }}" {{ $sub_unit->id == $data->sub_unit_id ? 'selected' : '' }}>{{ $sub_unit->name }}</option>
                                 @endforeach
@@ -109,7 +109,7 @@
                         <div class="form-group">
                             <label for="sub_group_id" class="form-label">Sub Group</label>
                             <select name="sub_group_id" id="sub_group_id" class="choices form-select" required>
-                                <option></option>
+                                <option value="" disabled selected>Pilih Sub Group</option>
                                 @foreach($get_sub_group as $sub_group)
                                     <option value="{{ $sub_group->id }}" {{ $sub_group->id == $data->sub_group_id ? 'selected' : '' }}>{{ $sub_group->name }}</option>
                                 @endforeach
@@ -121,6 +121,7 @@
                         </div>
                         <div class="form-group d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i>&nbsp; Save Changes</button>
+                            <button type="button" class="btn btn-danger ms-2" id="deactivate-account"><i class="bi bi-x-circle"></i>&nbsp; Deactivate Account</button>
                         </div>
                     </form>
                 </div>
@@ -196,6 +197,22 @@
                     }
                 });
             }
+        });
+
+        $('#deactivate-account').on('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, deactivate it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/profile/deactive/{{ $data->id }}`;
+                }
+            })
         });
     });
 </script>

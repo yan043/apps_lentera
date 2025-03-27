@@ -64,9 +64,6 @@
                         <label for="regional_id_add" class="form-label">Regional</label>
                         <select class="choices form-select" id="regional_id_add" name="regional_id" required>
                             <option></option>
-                            @foreach($get_regional as $regional)
-                                <option value="{{ $regional->id }}">{{ $regional->name }}</option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
@@ -91,18 +88,12 @@
                         <label for="sub_group_id_add" class="form-label">Sub Group</label>
                         <select class="choices form-select" id="sub_group_id_add" name="sub_group_id" required>
                             <option></option>
-                            @foreach($get_sub_group as $sub_group)
-                                <option value="{{ $sub_group->id }}">{{ $sub_group->name }}</option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="role_id_add" class="form-label">Role</label>
                         <select class="choices form-select" id="role_id_add" name="role_id" required>
                             <option></option>
-                            @foreach($get_role as $role)
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
@@ -128,6 +119,89 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-edit" tabindex="-1" aria-labelledby="modal-edit-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-edit-label">Edit Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="nik_edit" class="form-label">NIK</label>
+                        <input type="text" class="form-control" id="nik_edit" name="nik" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="6" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="full_name_edit" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="full_name_edit" name="full_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_edit" class="form-label">Password</label>
+                        <input type="text" class="form-control" id="password_edit" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="regional_id_edit" class="form-label">Regional</label>
+                        <select class="choices form-select" id="regional_id_edit" name="regional_id" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="witel_id_edit" class="form-label">Witel</label>
+                        <select class="choices form-select" id="witel_id_edit" name="witel_id" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mitra_id_edit" class="form-label">Mitra</label>
+                        <select class="choices form-select" id="mitra_id_edit" name="mitra_id" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sub_unit_id_edit" class="form-label">Sub Unit</label>
+                        <select class="choices form-select" id="sub_unit_id_edit" name="sub_unit_id" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sub_group_id_edit" class="form-label">Sub Group</label>
+                        <select class="choices form-select" id="sub_group_id_edit" name="sub_group_id" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role_id_edit" class="form-label">Role</label>
+                        <select class="choices form-select" id="role_id_edit" name="role_id" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="is_active" id="active_edit" value="1">
+                                <label class="form-check-label" for="active_edit">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="is_active" id="deactive_edit" value="0">
+                                <label class="form-check-label" for="deactive_edit">Deactive</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i>&nbsp; Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -136,102 +210,99 @@
 <script src="/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
 <script>
     $(document).ready(function() {
-        let table = $(".detail-data-table").DataTable({
-            responsive: true,
-            ajax: {
-                url: '/ajax/employee-management/list',
-                dataSrc: ''
+    let table = $(".detail-data-table").DataTable({
+        responsive: true,
+        ajax: {
+            url: '/ajax/employee-management/list',
+            dataSrc: ''
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'nik' },
+            { data: 'full_name' },
+            { data: 'regional_name' },
+            { data: 'witel_name' },
+            { data: 'mitra_name' },
+            { data: 'sub_unit_name' },
+            { data: 'sub_group_name' },
+            { data: 'role_name' },
+            {
+                data: 'is_active',
+                render: function(data) {
+                    return data ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
+                }
             },
-            columns: [
-                { data: 'id' },
-                { data: 'nik' },
-                { data: 'full_name' },
-                { data: 'regional_name' },
-                { data: 'witel_name' },
-                { data: 'mitra_name' },
-                { data: 'sub_unit_name' },
-                { data: 'sub_group_name' },
-                { data: 'role_name' },
-                {
-                    data: 'is_active',
-                    render: function(data) {
-                        return data ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
-                    }
-                },
-                {
-                    data: 'id',
-                    render: function(data) {
-                        return `
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-${data}">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        `;
-                    }
+            {
+                data: 'id',
+                render: function(data) {
+                    return `
+                        <button type="button" class="btn btn-sm btn-primary" onclick="editEmployee(${data})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    `;
                 }
-            ]
-        });
+            }
+        ]
+    });
 
-        let choicesInstances = {};
-        let choicesElements = document.querySelectorAll(".choices");
-        choicesElements.forEach((element) => {
-            choicesInstances[element.id] = new Choices(element, {
-                placeholder: true,
-                allowHTML: true,
-                removeItemButton: true,
-                shouldSort: false
-            });
-        });
-
-        $('#regional_id_add').on('change', function() {
-            let regionalId = $(this).val();
-            $.ajax({
-                url: `/ajax/employee-management/get-witel-by-regional/${regionalId}`,
-                method: 'GET',
-                success: function(data) {
-                    let witelSelect = $('#witel_id_add');
-                    witelSelect.empty().append('<option></option>');
-                    data.forEach(function(item) {
-                        witelSelect.append(`<option value="${item.id}">${item.name}</option>`);
-                    });
-                    choicesInstances['witel_id_add'].setChoices(data.map(item => ({ value: item.id, label: item.name })), 'value', 'label', true);
-                }
-            });
-
-            $.ajax({
-                url: `/ajax/employee-management/get-sub-unit-by-regional/${regionalId}`,
-                method: 'GET',
-                success: function(data) {
-                    let subUnitSelect = $('#sub_unit_id_add');
-                    subUnitSelect.empty().append('<option></option>');
-                    data.forEach(function(item) {
-                        subUnitSelect.append(`<option value="${item.id}">${item.name}</option>`);
-                    });
-                    choicesInstances['sub_unit_id_add'].setChoices(data.map(item => ({ value: item.id, label: item.name })), 'value', 'label', true);
-                }
-            });
-        });
-
-        $('#witel_id_add').on('change', function() {
-            let witelId = $(this).val();
-            if (witelId) {
-                $.ajax({
-                    url: `/ajax/employee-management/get-mitra-by-witel/${witelId}`,
-                    method: 'GET',
-                    success: function(data) {
-                        let mitraSelect = $('#mitra_id_add');
-                        mitraSelect.empty().append('<option></option>');
-                        data.forEach(function(item) {
-                            mitraSelect.append(`<option value="${item.id}">${item.name}</option>`);
-                        });
-                        choicesInstances['mitra_id_add'].setChoices(data.map(item => ({ value: item.id, label: item.name })), 'value', 'label', true);
-                    }
+    function loadSelectData(url, target, selectedValue) {
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(data) {
+                let select = $(target);
+                select.empty().append('<option></option>');
+                data.forEach(function(item) {
+                    select.append(`<option value="${item.id}" ${item.id == selectedValue ? 'selected' : ''}>${item.name}</option>`);
                 });
             }
         });
+    }
+
+    function updateDependentSelects(regionalId, prefix) {
+        loadSelectData(`/ajax/employee-management/get-witel-by-regional/${regionalId}`, `#witel_id_${prefix}`);
+        loadSelectData(`/ajax/employee-management/get-sub-unit-by-regional/${regionalId}`, `#sub_unit_id_${prefix}`);
+    }
+
+    $('#regional_id_add, #regional_id_edit').on('change', function() {
+        let regionalId = $(this).val();
+        let prefix = $(this).attr('id').split('_')[2];
+        if (regionalId) {
+            updateDependentSelects(regionalId, prefix);
+        }
     });
+
+    $('#witel_id_add, #witel_id_edit').on('change', function() {
+        let witelId = $(this).val();
+        let prefix = $(this).attr('id').split('_')[2];
+        if (witelId) {
+            loadSelectData(`/ajax/employee-management/get-mitra-by-witel/${witelId}`, `#mitra_id_${prefix}`);
+        }
+    });
+
+    function editEmployee(id) {
+        $.ajax({
+            url: `/ajax/employee-management/list/${id}`,
+            method: 'GET',
+            success: function(data) {
+                $('#edit-form').attr('action', `/employee-management/update/${id}`);
+                $('#nik_edit').val(data.nik);
+                $('#full_name_edit').val(data.full_name);
+                $('#password_edit').val(data.password);
+                $('#regional_id_edit').val(data.regional_id).trigger('change');
+                $('#witel_id_edit').val(data.witel_id).trigger('change');
+                $('#mitra_id_edit').val(data.mitra_id).trigger('change');
+                $('#sub_unit_id_edit').val(data.sub_unit_id).trigger('change');
+                $('#sub_group_id_edit').val(data.sub_group_id).trigger('change');
+                $('#role_id_edit').val(data.role_id).trigger('change');
+                $('#active_edit').prop('checked', data.is_active);
+                $('#modal-edit').modal('show');
+            }
+        });
+    }
 
     function confirmDelete(id) {
         Swal.fire({
@@ -248,5 +319,7 @@
             }
         });
     }
+});
+
 </script>
 @endsection
