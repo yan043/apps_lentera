@@ -18,6 +18,10 @@ Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/layouts2', function() {
+    return view('layouts2');
+});
+
 Route::get('captcha', [Captcha::class, 'create']);
 
 Route::middleware(['auth'])->group(function () {

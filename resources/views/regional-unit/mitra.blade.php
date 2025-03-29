@@ -1,4 +1,4 @@
-@extends('layouts.general')
+@extends('layouts')
 
 @section('styles')
 <link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">

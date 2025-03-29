@@ -1,4 +1,4 @@
-@extends('layouts.general')
+@extends('layouts')
 
 @section('styles')
 <link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
