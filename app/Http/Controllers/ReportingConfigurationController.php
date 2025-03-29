@@ -25,14 +25,14 @@ class ReportingConfigurationController extends Controller
             ReportingConfigurationModel::insert_order_status(['name' => $data['name']]);
         }
 
-        return redirect()->back()->with('success', 'Status saved successfully.');
+        return redirect()->back()->with('success', 'Status berhasil disimpan.');
     }
 
     public function destroyStatus($id)
     {
         ReportingConfigurationModel::delete_order_status($id);
 
-        return redirect()->back()->with('success', 'Status deleted successfully.');
+        return redirect()->back()->with('success', 'Status berhasil dihapus.');
     }
 
     public function subStatus()
@@ -55,14 +55,14 @@ class ReportingConfigurationController extends Controller
             ReportingConfigurationModel::insert_order_sub_status($data);
         }
 
-        return redirect()->back()->with('success', 'Sub-Status saved successfully.');
+        return redirect()->back()->with('success', 'Sub-Status berhasil disimpan.');
     }
 
     public function destroySubStatus($id)
     {
         ReportingConfigurationModel::delete_order_sub_status($id);
 
-        return redirect()->back()->with('success', 'Sub-Status deleted successfully.');
+        return redirect()->back()->with('success', 'Sub-Status berhasil dihapus.');
     }
 
     public function segments()
@@ -83,14 +83,14 @@ class ReportingConfigurationController extends Controller
             ReportingConfigurationModel::insert_order_segment(['name' => $data['name']]);
         }
 
-        return redirect()->back()->with('success', 'Segment saved successfully.');
+        return redirect()->back()->with('success', 'Segment berhasil disimpan.');
     }
 
     public function destroySegment($id)
     {
         ReportingConfigurationModel::delete_order_segment($id);
 
-        return redirect()->back()->with('success', 'Segment deleted successfully.');
+        return redirect()->back()->with('success', 'Segment berhasil dihapus.');
     }
 
     public function actions()
@@ -113,13 +113,13 @@ class ReportingConfigurationController extends Controller
             ReportingConfigurationModel::insert_order_action($data);
         }
 
-        return redirect()->back()->with('success', 'Action saved successfully.');
+        return redirect()->back()->with('success', 'Action berhasil disimpan.');
     }
 
     public function destroyAction($id)
     {
         ReportingConfigurationModel::delete_order_action($id);
 
-        return redirect()->back()->with('success', 'Action deleted successfully.');
+        return redirect()->back()->with('success', 'Action berhasil dihapus.');
     }
 }

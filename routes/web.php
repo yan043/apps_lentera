@@ -18,17 +18,15 @@ Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/layouts2', function() {
-    return view('layouts2');
-});
-
 Route::get('captcha', [Captcha::class, 'create']);
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::get('profile', [AuthController::class, 'profile'])->name('profile');
+    Route::post('profile/store', [AuthController::class, 'storeProfile'])->name('profile.store');
+    Route::get('profile/deactivate', [AuthController::class, 'deactivateAccount'])->name('profile.deactivate');
 
     Route::prefix('order-management')->group(function () {
         Route::get('new', [OrderManagementController::class, 'newOrders']);
@@ -68,9 +66,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('employee-management')->group(function () {
         Route::get('list', [EmployeeManagementController::class, 'employeeList']);
+        Route::post('list/store', [EmployeeManagementController::class, 'storeEmployee'])->name('employee.store');
+        Route::put('list/update/{id}', [EmployeeManagementController::class, 'updateEmployee'])->name('employee.update');
+
         Route::get('roles-permissions', [EmployeeManagementController::class, 'rolesPermissions']);
-        Route::post('store', [EmployeeManagementController::class, 'store']);
-        Route::put('update/{id}', [EmployeeManagementController::class, 'update']);
+        Route::post('roles-permissions/store', [EmployeeManagementController::class, 'storeRole'])->name('roles-permissions.store');
+        Route::put('roles-permissions/update', [EmployeeManagementController::class, 'updateRole'])->name('roles-permissions.update');
     });
 
     Route::prefix('regional-unit')->group(function () {

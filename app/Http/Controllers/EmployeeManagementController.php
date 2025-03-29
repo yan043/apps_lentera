@@ -7,6 +7,8 @@ use App\Models\EmployeeManagementModel;
 use App\Models\RegionalUnitModel;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AjaxController;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class EmployeeManagementController extends Controller
 {
@@ -24,12 +26,11 @@ class EmployeeManagementController extends Controller
         return view('employee-management.roles-permissions', ['data' => $data]);
     }
 
-    public function store(Request $request)
+    public function storeEmployee(Request $request)
     {
         $validatedData = $request->validate([
-            'nik'          => 'required|min: 6',
+            'nik'          => 'required|min:6',
             'full_name'    => 'required',
-            'password'     => 'required',
             'regional_id'  => 'required',
             'witel_id'     => 'required',
             'mitra_id'     => 'required',
@@ -38,18 +39,22 @@ class EmployeeManagementController extends Controller
             'role_id'      => 'required',
             'is_active'    => 'required'
         ]);
+
+        if ($request->filled('password'))
+        {
+            $validatedData['password'] = Hash::make($request->password);
+        }
 
         EmployeeManagementModel::storeEmployee($validatedData);
 
-        return redirect()->back()->with('success', 'Employee added successfully');
+        return redirect()->back()->with('success', 'Employee berhasil ditambahkan.');
     }
 
-    public function update(Request $request, $id)
+    public function updateEmployee(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'nik'          => 'required|min: 6',
+            'nik'          => 'required|min:6',
             'full_name'    => 'required',
-            'password'     => 'required',
             'regional_id'  => 'required',
             'witel_id'     => 'required',
             'mitra_id'     => 'required',
@@ -59,8 +64,36 @@ class EmployeeManagementController extends Controller
             'is_active'    => 'required'
         ]);
 
+        if ($request->filled('password'))
+        {
+            $validatedData['password'] = Hash::make($request->password);
+        }
+
         EmployeeManagementModel::updateEmployee($id, $validatedData);
 
-        return redirect()->back()->with('success', 'Employee updated successfully');
+        return redirect()->back()->with('success', 'Employee berhasil diperbarui.');
+    }
+
+    public function storeRole(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        EmployeeManagementModel::storeRole($validatedData);
+
+        return redirect()->back()->with('success', 'Role berhasil ditambahkan.');
+    }
+
+    public function updateRole(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id'   => 'required|integer|exists:tb_roles_permissions,id',
+            'name' => 'required|string|max:255',
+        ]);
+
+        EmployeeManagementModel::updateRole($validatedData);
+
+        return redirect()->back()->with('success', 'Role berhasil diperbarui.');
     }
 }

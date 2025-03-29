@@ -25,14 +25,14 @@ class RegionalUnitController extends Controller
             RegionalUnitModel::insert_data('tb_regional', $data);
         }
 
-        return redirect()->back()->with('success', 'Regional saved successfully.');
+        return redirect()->back()->with('success', 'Regional berhasil disimpan.');
     }
 
     public function destroyRegional($id)
     {
         RegionalUnitModel::delete_data('tb_regional', $id);
 
-        return redirect()->back()->with('success', 'Regional deleted successfully.');
+        return redirect()->back()->with('success', 'Regional berhasil dihapus.');
     }
 
     public function witel()
@@ -55,14 +55,14 @@ class RegionalUnitController extends Controller
             RegionalUnitModel::insert_data('tb_witel', $data);
         }
 
-        return redirect()->back()->with('success', 'Witel saved successfully.');
+        return redirect()->back()->with('success', 'Witel berhasil disimpan.');
     }
 
     public function destroyWitel($id)
     {
         RegionalUnitModel::delete_data('tb_witel', $id);
 
-        return redirect()->back()->with('success', 'Witel deleted successfully.');
+        return redirect()->back()->with('success', 'Witel berhasil dihapus.');
     }
 
     public function subUnit()
@@ -85,14 +85,14 @@ class RegionalUnitController extends Controller
             RegionalUnitModel::insert_data('tb_sub_unit', $data);
         }
 
-        return redirect()->back()->with('success', 'Sub-Unit saved successfully.');
+        return redirect()->back()->with('success', 'Sub-Unit berhasil disimpan.');
     }
 
     public function destroySubUnit($id)
     {
         RegionalUnitModel::delete_data('tb_sub_unit', $id);
 
-        return redirect()->back()->with('success', 'Sub-Unit deleted successfully.');
+        return redirect()->back()->with('success', 'Sub-Unit berhasil dihapus.');
     }
 
     public function subGroup()
@@ -113,14 +113,14 @@ class RegionalUnitController extends Controller
             RegionalUnitModel::insert_data('tb_sub_group', $data);
         }
 
-        return redirect()->back()->with('success', 'Sub-Group saved successfully.');
+        return redirect()->back()->with('success', 'Sub-Group berhasil dihapus.');
     }
 
     public function destroySubGroup($id)
     {
         RegionalUnitModel::delete_data('tb_sub_group', $id);
 
-        return redirect()->back()->with('success', 'Sub-Group deleted successfully.');
+        return redirect()->back()->with('success', 'Sub-Group berhasil dihapus.');
     }
 
     public function mitra()
@@ -143,13 +143,13 @@ class RegionalUnitController extends Controller
             RegionalUnitModel::insert_data('tb_mitra', $data);
         }
 
-        return redirect()->back()->with('success', 'Mitra saved successfully.');
+        return redirect()->back()->with('success', 'Mitra berhasil disimpan.');
     }
 
     public function destroyMitra($id)
     {
         RegionalUnitModel::delete_data('tb_mitra', $id);
 
-        return redirect()->back()->with('success', 'Mitra deleted successfully.');
+        return redirect()->back()->with('success', 'Mitra berhasil dihapus.');
     }
 }

@@ -88,4 +88,20 @@ class EmployeeManagementModel extends Model
     {
         DB::table('tb_employee')->where('id', $id)->update($data);
     }
+
+    public static function storeRole($data)
+    {
+        DB::table('tb_roles_permissions')->insert([
+            'name' => $data['name']
+        ]);
+    }
+
+    public static function updateRole($data)
+    {
+        DB::table('tb_roles_permissions')
+            ->where('id', $data['id'])
+            ->update([
+                'name' => $data['name']
+            ]);
+    }
 }

@@ -1,8 +1,10 @@
 @extends('layouts')
 
 @section('styles')
-<link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" crossorigin href="/assets/compiled/css/table-datatable-jquery.css">
+<link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 <style>
     .modal-body {
         text-align: left;
@@ -17,7 +19,7 @@
     <div class="card-body">
         @include('partials.alerts')
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
-            <i class="bi bi-plus-circle"></i>&nbsp; Add Data
+            <i class="fas fa-plus-circle"></i>&nbsp; Add Data
         </button>
         <div class="table-responsive">
             <table class="table table-striped text-center detail-data-table">
@@ -51,7 +53,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save"></i>&nbsp; Save
+                            <i class="fas fa-save"></i>&nbsp; Save
                         </button>
                     </div>
                 </form>
@@ -62,8 +64,11 @@
 @endsection
 
 @section('scripts')
-<script src="/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="/assets/libs/select2/js/select2.min.js"></script>
+<script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script>
     $(document).ready(function() {
         let table = $(".detail-data-table").DataTable({
@@ -80,10 +85,10 @@
                     render: function(data, type, row) {
                         return `
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-${data}">
-                                <i class="bi bi-pencil"></i>
+                                <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
-                                <i class="bi bi-trash"></i>
+                                <i class="fas fa-trash"></i>
                             </button>
                             ${generateEditModal(row)}
                         `;
@@ -112,7 +117,7 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i>&nbsp; Save
+                                        <i class="fas fa-save"></i>&nbsp; Save
                                     </button>
                                 </div>
                             </form>

@@ -1,9 +1,10 @@
 @extends('layouts')
 
 @section('styles')
-<link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" crossorigin href="/assets/compiled/css/table-datatable-jquery.css">
+<link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 <style>
     .modal-body {
         text-align: left;
@@ -16,9 +17,8 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        @include('partials.alerts')
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
-            <i class="bi bi-plus-circle"></i>&nbsp; Add Data
+            <i class="fas fa-plus-circle"></i>&nbsp; Add Data
         </button>
         <div class="table-responsive">
             <table class="table table-striped text-center detail-data-table">
@@ -37,11 +37,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="modal-add-label" aria-hidden="true">
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label">Add Sub-Status</h5>
+                <h5 class="modal-title">Add Sub-Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -49,7 +49,7 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Status Name</label>
-                        <select class="choices form-select" name="order_status_id" required>
+                        <select class="form-control select2" name="order_status_id" required style="margin-top: 5px;">
                             <option value="" selected disabled>Silahkan Pilih Nama Status</option>
                             @foreach($get_order_status as $order_status)
                                 <option value="{{ $order_status->id }}">{{ $order_status->name }}</option>
@@ -58,11 +58,46 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Sub-Status Name</label>
-                        <input type="text" class="form-control" name="name" required>
+                        <input type="text" class="form-control" name="name" placeholder="Masukkan Nama Sub-Status" required>
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save"></i>&nbsp; Save
+                            <i class="fas fa-save"></i>&nbsp; Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Sub-Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/reporting-configuration/sub-status/store" method="POST">
+                    @csrf
+                    <input type="hidden" name="id">
+                    <div class="mb-3">
+                        <label class="form-label">Status Name</label>
+                        <select class="form-control select2" name="order_status_id" required>
+                            <option value="" disabled>Silahkan Pilih Nama Status</option>
+                            @foreach($get_order_status as $order_status)
+                                <option value="{{ $order_status->id }}">{{ $order_status->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sub-Status Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Masukkan Nama Sub-Status" required>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>&nbsp; Save
                         </button>
                     </div>
                 </form>
@@ -73,21 +108,16 @@
 @endsection
 
 @section('scripts')
-<script src="/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-<script src="/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="/assets/libs/select2/js/select2.min.js"></script>
+<script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $(".choices").each(function() {
-            if (!$(this).data("choices")) {
-                new Choices(this, {
-                    placeholder: true,
-                    allowHTML: true,
-                    removeItemButton: true,
-                    shouldSort: false
-                });
-                $(this).data("choices", true);
-            }
+        $(".select2").select2({
+            allowClear: true,
+            placeholder: "Silahkan Pilih Nama Status"
         });
 
         let table = $(".detail-data-table").DataTable({
@@ -104,80 +134,32 @@
                     data: 'id',
                     render: function(data, type, row) {
                         return `
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit-${data}">
-                                <i class="bi bi-pencil"></i>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-edit" onclick="openEditModal(${data}, '${row.order_status_id}', '${row.name}')">
+                                <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
-                                <i class="bi bi-trash"></i>
+                                <i class="fas fa-trash"></i>
                             </button>
-                            ${generateEditModal(row)}
                         `;
                     }
                 }
             ]
         });
+
+        $('#modal-add, #modal-edit').on('shown.bs.modal', function() {
+            $(this).find('.select2').select2({
+                dropdownParent: $(this),
+                allowClear: true,
+                placeholder: "Silahkan Pilih Nama Status"
+            });
+        });
     });
 
-    function generateOrderStatusOptions(selectedId) {
-        let options = `<option value="" disabled>Silahkan Pilih Nama Status</option>`;
-        @foreach($get_order_status as $order_status)
-            options += `<option value="{{ $order_status->id }}" ${selectedId == {{ $order_status->id }} ? 'selected' : ''}>
-                            {{ $order_status->name }}
-                        </option>`;
-        @endforeach
-        return options;
-    }
-
-    function generateEditModal(data) {
-        let modal = `
-            <div class="modal fade" id="modal-edit-${data.id}" tabindex="-1" aria-labelledby="modal-edit-label-${data.id}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modal-edit-label-${data.id}">Edit Sub-Status</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/reporting-configuration/sub-status/store" method="POST">
-                                @csrf
-                                <input type="hidden" name="id" value="${data.id}">
-                                <div class="mb-3">
-                                    <label class="form-label">Status Name</label>
-                                    <select class="choices form-select" name="order_status_id" id="select-edit-${data.id}" required>
-                                        ${generateOrderStatusOptions(data.order_status_id)}
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Sub-Status Name</label>
-                                    <input type="text" class="form-control" name="name" required value="${data.name}">
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i>&nbsp; Save
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        $("body").append(modal);
-
-        setTimeout(() => {
-            if (!document.querySelector(`#select-edit-${data.id}`).dataset.choicesInitialized) {
-                new Choices(`#select-edit-${data.id}`, {
-                    placeholder: true,
-                    allowHTML: true,
-                    removeItemButton: true,
-                    shouldSort: false
-                });
-                document.querySelector(`#select-edit-${data.id}`).dataset.choicesInitialized = true;
-            }
-        }, 500);
-
-        return modal;
+    function openEditModal(id, orderStatusId, name) {
+        $('#modal-edit input[name="id"]').val(id);
+        $('#modal-edit select[name="order_status_id"]').val(orderStatusId).trigger('change');
+        $('#modal-edit input[name="name"]').val(name);
+        $('#modal-edit').modal('show');
     }
 
     function confirmDelete(id) {

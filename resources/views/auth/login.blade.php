@@ -5,14 +5,15 @@
     <meta charset="utf-8" />
     <title>Login - Lentera</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Lentera" name="description" />
-    {{-- <meta content="" name="author" /> --}}
     <link rel="shortcut icon" href="/assets/images/lentera-light.ico">
 
     <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <script src="/assets/js/plugin.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/assets/libs/toastr/build/toastr.min.css">
+    <link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -39,14 +40,14 @@
                                 <a href="#" class="auth-logo-light">
                                     <div class="avatar-md profile-user-wid mb-4">
                                         <span class="avatar-title rounded-circle bg-light">
-                                            <img src="/assets/images/lentera-grey.svg" alt="" class="rounded-circle" height="80">
+                                            <img src="/assets/images/logo.svg" alt="" class="rounded-circle" height="60">
                                         </span>
                                     </div>
                                 </a>
                                 <a href="#" class="auth-logo-dark">
                                     <div class="avatar-md profile-user-wid mb-4">
                                         <span class="avatar-title rounded-circle bg-light">
-                                            <img src="/assets/images/lentera-dark.svg" alt="" class="rounded-circle" height="80">
+                                            <img src="/assets/images/logo-light.svg" alt="" class="rounded-circle" height="60">
                                         </span>
                                     </div>
                                 </a>
@@ -101,6 +102,10 @@
     <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
     <script src="/assets/libs/simplebar/simplebar.min.js"></script>
     <script src="/assets/libs/node-waves/waves.min.js"></script>
+
+    <script src="/assets/libs/toastr/build/toastr.min.js"></script>
+    <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
     <script>
         $(document).ready(function() {
             var interval;
@@ -136,6 +141,7 @@
             startTimer(60, $('#captcha-timer'));
         });
     </script>
+
     <script src="/assets/js/app.js"></script>
 </body>
 </html>

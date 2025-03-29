@@ -1,8 +1,15 @@
 @extends('layouts')
 
 @section('styles')
-<link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" crossorigin href="/assets/compiled/css/table-datatable-jquery.css">
+<link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+<style>
+    .modal-body {
+        text-align: left;
+    }
+</style>
 @endsection
 
 @section('title', 'Roles & Permissions')
@@ -11,15 +18,15 @@
 <div class="card">
     <div class="card-body">
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
-            <i class="bi bi-plus-circle"></i>&nbsp; Add Data
+            <i class="fas fa-plus-circle"></i>&nbsp; Add Role
         </button>
         <div class="table-responsive">
             <table class="table table-striped text-center detail-data-table">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th></th>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Role Name</th>
+                        <th class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,23 +36,50 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="modal-add-label" aria-hidden="true">
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-label">Add Role</h5>
+                <h5 class="modal-title">Add Role</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/employee-management/roles-permissions/store" method="POST">
+                <form action="{{ route('roles-permissions.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Role Name</label>
-                        <input type="text" class="form-control" name="name" required>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Role Name" required>
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save"></i>&nbsp; Save
+                            <i class="fas fa-save"></i>&nbsp; Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Role</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('roles-permissions.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id">
+                    <div class="mb-3">
+                        <label class="form-label">Role Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Role Name" required>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>&nbsp; Save
                         </button>
                     </div>
                 </form>
@@ -56,8 +90,11 @@
 @endsection
 
 @section('scripts')
-<script src="/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="/assets/libs/select2/js/select2.min.js"></script>
+<script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script>
     $(document).ready(function() {
         let table = $(".detail-data-table").DataTable({
@@ -73,11 +110,11 @@
                     data: 'id',
                     render: function(data, type, row) {
                         return `
-                            <button type="button" class="btn btn-sm btn-primary" onclick="loadEditModal(${data})">
-                                <i class="bi bi-pencil"></i>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal(${data}, '${row.name}')">
+                                <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
-                                <i class="bi bi-trash"></i>
+                                <i class="fas fa-trash"></i>
                             </button>
                         `;
                     }
@@ -86,48 +123,10 @@
         });
     });
 
-    function loadEditModal(id) {
-        $.ajax({
-            url: `/ajax/employee-management/roles-permissions/${id}`,
-            method: 'GET',
-            success: function(data) {
-                let modal = generateEditModal(data);
-                $("body").append(modal);
-                $(`#modal-edit-${data.id}`).modal('show');
-            }
-        });
-    }
-
-    function generateEditModal(data) {
-        let modal = `
-            <div class="modal fade" id="modal-edit-${data.id}" tabindex="-1" aria-labelledby="modal-edit-label-${data.id}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modal-edit-label-${data.id}">Edit Role</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/employee-management/roles-permissions/store" method="POST">
-                                @csrf
-                                <input type="hidden" name="id" value="${data.id}">
-                                <div class="mb-3">
-                                    <label class="form-label">Role Name</label>
-                                    <input type="text" class="form-control" name="name" required value="${data.name}">
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i>&nbsp; Save
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        return modal;
+    function openEditModal(id, name) {
+        $('#modal-edit input[name="id"]').val(id);
+        $('#modal-edit input[name="name"]').val(name);
+        $('#modal-edit').modal('show');
     }
 
     function confirmDelete(id) {

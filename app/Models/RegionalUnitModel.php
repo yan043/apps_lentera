@@ -10,9 +10,12 @@ class RegionalUnitModel extends Model
     public static function get_data($table, $id = null)
     {
         $query = DB::table($table);
-        if ($id) {
+
+        if ($id)
+        {
             return $query->where('id', $id)->first();
         }
+
         return $query->get();
     }
 
