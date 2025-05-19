@@ -29,10 +29,13 @@ CREATE TABLE IF NOT EXISTS `cache` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.cache: ~1 rows (approximately)
+-- Dumping data for table db_lentera.cache: ~4 rows (approximately)
 DELETE FROM `cache`;
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-	('laravel_cache_captcha_3a376d508c586cf0756ba76e290860dc', 'a:6:{i:0;s:1:"8";i:1;s:1:"z";i:2;s:1:"7";i:3;s:1:"x";i:4;s:1:"e";i:5;s:1:"n";}', 1743729622);
+	('laravel_cache_captcha_3a376d508c586cf0756ba76e290860dc', 'a:6:{i:0;s:1:"8";i:1;s:1:"z";i:2;s:1:"7";i:3;s:1:"x";i:4;s:1:"e";i:5;s:1:"n";}', 1743729622),
+	('laravel_cache_captcha_716bffebc867da9107aef722c404af5b', 'a:6:{i:0;s:1:"q";i:1;s:1:"e";i:2;s:1:"e";i:3;s:1:"a";i:4;s:1:"z";i:5;s:1:"j";}', 1747539093),
+	('laravel_cache_captcha_7ea001c410820f98259205c4dcfeef13', 'a:6:{i:0;s:1:"u";i:1;s:1:"d";i:2;s:1:"t";i:3;s:1:"c";i:4;s:1:"e";i:5;s:1:"r";}', 1747538929),
+	('laravel_cache_captcha_f540b09008ac910e4da06b44f16f960d', 'a:6:{i:0;s:1:"7";i:1;s:1:"y";i:2;s:1:"u";i:3;s:1:"u";i:4;s:1:"9";i:5;s:1:"h";}', 1747539032);
 
 -- Dumping structure for table db_lentera.cache_locks
 DROP TABLE IF EXISTS `cache_locks`;
@@ -178,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `tb_auth_storage` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_auth_storage: ~1 rows (approximately)
+-- Dumping data for table db_lentera.tb_auth_storage: ~0 rows (approximately)
 DELETE FROM `tb_auth_storage`;
 INSERT INTO `tb_auth_storage` (`id`, `apps`, `username`, `password`, `cookies`, `last_updated_at`) VALUES
 	(1, 'insera', '20981020', '403!@#InSeRa', 'JSESSIONID=prDPxae0IDnkByeUoZd70hXb7JLPO1cAZ5ncV-mv.cident-7784cbc4f9-zpvds; a10e07c589b0b6a4b246720bbb392af5=f63a3db26f22bc65aee5e7485fc12d69;', '2025-04-03 19:54:37');
@@ -203,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `tb_employee` (
   `place_of_birth` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `google2fa_secret` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'default : 12345678',
   `ip_address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `login_at` datetime DEFAULT NULL,
   `is_active` int DEFAULT NULL COMMENT '0 : deactive, 1 : active',
@@ -226,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `tb_employee` (
 -- Dumping data for table db_lentera.tb_employee: ~1 rows (approximately)
 DELETE FROM `tb_employee`;
 INSERT INTO `tb_employee` (`id`, `regional_id`, `witel_id`, `mitra_id`, `sub_unit_id`, `sub_group_id`, `role_id`, `nik`, `full_name`, `chat_id`, `number_phone`, `home_address`, `gender`, `date_of_birth`, `place_of_birth`, `remember_token`, `google2fa_secret`, `password`, `ip_address`, `login_at`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
-	(1, 4, 1, 2, 1, 2, 1, 981020, 'Mahdian', '401791818', 85156717117, 'Palam', 'Laki-Laki', '1998-10-26', 'Sebangau', 'GYjKtSDvsrxc0LRMtXoKjGD0cSGuLPLrZOAOgF7mfFBy2GxR4o8H0UylbQaW', NULL, '$2y$12$aU/DMYnrf2tA2wmQieCnfegrzjz1aAcB7FBZ.VtP1jrwp56v.OxDW', '127.0.0.1', '2025-05-16 14:28:20', 1, NULL, NULL, NULL, '2025-05-16 23:01:04');
+	(1, 4, 1, 2, 1, 2, 1, 981020, 'Mahdian', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, NULL, NULL, '$2y$12$ZAGm4XKSOQNhm9j4fK/fBeA.i5sxrsZwyi2sjj0mmueGTGDurKmBm', '127.0.0.1', '2025-05-18 03:35:22', 1, NULL, NULL, NULL, '2025-05-19 10:45:06');
 
 -- Dumping structure for table db_lentera.tb_inventory_reports
 DROP TABLE IF EXISTS `tb_inventory_reports`;
