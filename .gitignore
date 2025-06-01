@@ -31,7 +31,7 @@ Thumbs.db
 /.phpunit.result.cache
 
 
-# Dockerfile
-# docker-compose.yml
-# ./docker-compose.yml
-# docker/
+Dockerfile
+docker-compose.yml
+./docker-compose.yml
+docker/
