@@ -12,8 +12,8 @@ COPY . .
 
 RUN chown -R www-data:www-data /var/www/html
 
-RUN composer install --no-scripts --no-plugins -vvv \
-    && cp .env.example .env \
-    && php artisan key:generate
+RUN composer install --no-scripts --no-plugins -vvv
+RUN cp .env.example .env
+RUN php artisan key:generate
 
 EXPOSE 80
