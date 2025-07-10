@@ -1,13 +1,19 @@
 FROM php:8.2-apache
 
 RUN apt update && apt install -y \
-    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip mbstring gd
+    git unzip curl libzip-dev zip libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo_mysql zip
 
-COPY . /var/www/html
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 WORKDIR /var/www/html
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-scripts --no-plugins -vvv
+COPY . .
+
+RUN chown -R www-data:www-data /var/www/html
+
+RUN composer install --no-scripts --no-plugins -vvv \
+    && cp .env.example .env \
+    && php artisan key:generate
 
 EXPOSE 80
