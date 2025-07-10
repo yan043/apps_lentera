@@ -12,7 +12,7 @@ COPY . .
 
 RUN chown -R www-data:www-data /var/www/html
 
-RUN composer install --no-scripts --no-plugins -vvv
+RUN composer install --no-scripts --no-plugins --ignore-platform-req=ext-gd -vvv
 RUN cp .env.example .env
 RUN php artisan key:generate
 
