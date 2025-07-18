@@ -80,7 +80,7 @@ class TlkmLeakController extends Controller
                     'c_wonum_id'                 => preg_replace('/\D/', '', $value['c_wonum']),
                     'c_scorderno'                => $value['c_scorderno'],
                     'c_jmscorrelationid'         => $value['c_jmscorrelationid'],
-                    'c_servicenum'               => $value['c_servicenum'],
+                    'c_servicenum'               => $value['c_servicenum'] ? : 0,
                     'c_description'              => $value['c_description'],
                     'c_crmordertype'             => $value['c_crmordertype'],
                     'c_ownergroup'               => $value['c_ownergroup'],
@@ -93,7 +93,7 @@ class TlkmLeakController extends Controller
                     'c_siteid'                   => $value['c_siteid'],
                     'c_statusdate'               => empty($value['c_statusdate']) ? null : date('Y-m-d H:i:s', strtotime($value['c_statusdate'])),
                     'c_schedstart'               => empty($value['c_schedstart']) ? null : date('Y-m-d H:i:s', strtotime($value['c_schedstart'])),
-                    'c_contact_telephone_number' => $value['c_contact_telephone_number'],
+                    'c_contact_telephone_number' => $value['c_contact_telephone_number'] ? preg_replace('/[^0-9]/', '', $value['c_contact_telephone_number']) : 0,
                     'c_measurement'              => $value['c_measurement'],
                     'c_measurementdate'          => empty($value['c_measurementdate']) ? null : date('Y-m-d H:i:s', strtotime($value['c_measurementdate'])),
                     'c_measurementresult'        => $value['c_measurementresult'],
@@ -1038,7 +1038,7 @@ class TlkmLeakController extends Controller
 
         $caption = 'Kode Captcha Starclick One ' . date('Y-m-d H:i:s');
 
-        Telegram::sendPhoto($chatid, $caption, 'sc1.jpg');
+        Telegram::sendPhoto('7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8', $chatid, $caption, 'sc1.jpg');
 
         print_r("\nMasukan Captcha :\n");
 
@@ -1406,5 +1406,112 @@ class TlkmLeakController extends Controller
         $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
 
         return \DB::statement($sql);
+    }
+
+    public static function newscmt_location_id($type, $parent)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api-item-mgt-scm.telkom.co.id/product-by-location-id/?type_location_id=$type&parent_location_id=$parent&product_id=ALL",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDYwODEsInJvbGVfaWQiOjg0LCJ3YXJlaG91c2VfaWQiOjM4NzgsImJ1c2luZXNzX3VuaXRfaWQiOjEwNjksInNjaGVtYV9pZCI6MSwic2NoZW1lX2xvZ2luIjoic2NtdCIsImJ1X3JvbGVfaWQiOjkwMDc5LCJpYXQiOjE3MDAyNzc0ODN9.ZUPlXY4LBSDWjpv5AiNpCp-WXMKlKPiIBbMTYRgWYn8',
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $result = json_decode($response);
+
+        if ($result)
+        {
+            $total = count($result->body);
+
+            if ($total > 0)
+            {
+                DB::table('newscmt_location_id')->where('parent_location_id', $parent)->delete();
+
+                foreach ($result->body as $k => $v)
+                {
+                    $insert[] = [
+                        'parent_location_id'  => $parent,
+                        'product_id'          => $v->product_id,
+                        'product_code'        => $v->product_code,
+                        'product_description' => $v->product_description,
+                        'type_location_id'    => $v->type_location_id,
+                        'available'           => $v->available,
+                        'blocked'             => $v->blocked,
+                        'use_in_transaction'  => $v->use_in_transaction,
+                        'intransit'           => $v->intransit,
+                        'others'              => $v->others,
+                        'total'               => $v->total
+                    ];
+                }
+
+                DB::table('newscmt_location_id')->insert($insert);
+            }
+
+            print_r("\nsuccess saved data newscmt_location_id type $type parent $parent total $total\n");
+        }
+    }
+
+    public static function newscmt_detail_location_id($type, $parent)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api-item-mgt-scm.telkom.co.id/product-detail-by-location-id/?type_location_id=$type&parent_location_id=$parent&product_id=ALL",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDYwODEsInJvbGVfaWQiOjg0LCJ3YXJlaG91c2VfaWQiOjM4NzgsImJ1c2luZXNzX3VuaXRfaWQiOjEwNjksInNjaGVtYV9pZCI6MSwic2NoZW1lX2xvZ2luIjoic2NtdCIsImJ1X3JvbGVfaWQiOjkwMDc5LCJpYXQiOjE3MDAyNzc0ODN9.ZUPlXY4LBSDWjpv5AiNpCp-WXMKlKPiIBbMTYRgWYn8',
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $result = json_decode($response);
+
+        if ($result)
+        {
+            $total = count($result->body);
+
+            if ($total > 0)
+            {
+                DB::table('newscmt_detail_location_id')->where('parent_location_id', $parent)->delete();
+
+                foreach ($result->body as $k => $v)
+                {
+                    $insert[] = [
+                        'parent_location_id'  => $parent,
+                        'product_id'          => $v->product_id,
+                        'product_code'        => $v->product_code,
+                        'product_description' => $v->product_description,
+                        'serial_number'       => $v->serial_number,
+                        'sid'                 => $v->sid,
+                        'inventory_status'    => $v->inventory_status,
+                        'type_location_id'    => $v->type_location_id
+                    ];
+                }
+
+                DB::table('newscmt_detail_location_id')->insert($insert);
+            }
+
+            print_r("\nsuccess saved data newscmt_detail_location_id type $type parent $parent total $total\n");
+        }
     }
 }

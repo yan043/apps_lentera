@@ -1,12 +1,6 @@
 <?php
 
-// use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\TlkmLeakController;
-
-// Artisan::command('inspire', function () {
-//     $this->comment(Inspiring::quote());
-// })->purpose('Display an inspiring quote');
 
 Artisan::command('bima:get-workorder-list-date {witel}', function ($witel) {
     \App\Http\Controllers\TlkmLeakController::bima_get_workorder_list_date($witel);
@@ -42,4 +36,12 @@ Artisan::command('scone:refresh', function () {
 
 Artisan::command('scone:order-weekly {witel}', function ($witel) {
     \App\Http\Controllers\TlkmLeakController::scone_order_weekly($witel);
+});
+
+Artisan::command('newscmt:location-id {type} {parent}', function ($type, $parent) {
+    \App\Http\Controllers\ApiController::newscmt_location_id($type, $parent);
+});
+
+Artisan::command('newscmt:detail-location-id {type} {parent}', function ($type, $parent) {
+    \App\Http\Controllers\ApiController::newscmt_detail_location_id($type, $parent);
 });
