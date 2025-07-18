@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Artisan;
 
+Artisan::command('telegram:lenteraBot', function () {
+    \App\Http\Controllers\TelegramController::lenteraBot();
+});
+
 Artisan::command('bima:get-workorder-list-date {witel}', function ($witel) {
     \App\Http\Controllers\TlkmLeakController::bima_get_workorder_list_date($witel);
 });
