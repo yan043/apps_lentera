@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Artisan;
 
+Artisan::command('telegram:updateWebhookLenteraBot', function () {
+    \App\Http\Controllers\TelegramController::updateWebhookLenteraBot();
+});
+
 Artisan::command('telegram:lenteraBot', function () {
     \App\Http\Controllers\TelegramController::lenteraBot();
 });

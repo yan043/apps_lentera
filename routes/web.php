@@ -13,17 +13,12 @@ use App\Http\Controllers\EmployeeManagementController;
 use App\Http\Controllers\RegionalUnitController;
 use App\Http\Controllers\ReportingConfigurationController;
 use App\Http\Controllers\AjaxController;
-use App\Http\Controllers\TelegramController;
 
 Route::get('login', [AuthController::class, 'auth'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('captcha', [Captcha::class, 'create']);
-
-Route::prefix('telegram')->group(function () {
-    Route::post('/lenteraBot', [TelegramController::class, 'lenteraBot'])->name('lenteraBot');
-});
 
 Route::middleware(['auth'])->group(function () {
 

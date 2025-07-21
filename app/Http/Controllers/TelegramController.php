@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Telegram;
+use Illuminate\Support\Facades\Log;
 
 class TelegramController extends Controller
 {
     public static function updateWebhookLenteraBot()
     {
+        $tokenBot = env('TELEGRAM_BOT_TOKEN');
+        if (!$tokenBot)
+        {
+            echo "Telegram bot token not set in .env\n";
+            return;
+        }
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL            => 'https://api.telegram.org/bot7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8/getWebhookInfo',
+            CURLOPT_URL            => "https://api.telegram.org/bot{$tokenBot}/getWebhookInfo",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => '',
             CURLOPT_MAXREDIRS      => 10,
@@ -30,12 +38,12 @@ class TelegramController extends Controller
 
         $result = json_decode($response);
 
-        if ($result->result->pending_update_count <> 0)
+        if ($result && isset($result->result->pending_update_count) && $result->result->pending_update_count <> 0)
         {
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL            => 'https://api.telegram.org/bot7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8/setWebhook?url=https://lentera.jukung-dev.org/telegram/lenteraBot&max_connections=100&drop_pending_updates=true',
+                CURLOPT_URL            => "https://api.telegram.org/bot{$tokenBot}/setWebhook?url=https://lentera.jukung-dev.org/api/telegram/lenteraBot&max_connections=100&drop_pending_updates=true",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,
@@ -48,7 +56,7 @@ class TelegramController extends Controller
             $response = curl_exec($curl);
             curl_close($curl);
 
-            print_r($response);
+            print_r(json_decode($response));
         }
         else
         {
@@ -58,17 +66,40 @@ class TelegramController extends Controller
 
     private static function getAddressFromCoordinates($coordinates)
     {
+        if (!preg_match('/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/', $coordinates))
+        {
+            return [
+                'street'   => '',
+                'city'     => '',
+                'province' => '',
+                'full'     => 'Format koordinat tidak valid'
+            ];
+        }
+
         [$lat, $lon] = explode(',', $coordinates);
-        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lon&zoom=18&addressdetails=1";
-        $opts = [
+        $url         = "https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lon&zoom=18&addressdetails=1";
+        $opts        = [
             "http" => [
                 "header" => "User-Agent: LenteraBot/1.0\r\n"
             ]
         ];
-        $context  = stream_context_create($opts);
-        $response = @file_get_contents($url, false, $context);
-        $data     = json_decode($response, true);
-        $address  = $data['address'] ?? [];
+        $context     = stream_context_create($opts);
+        $response    = @file_get_contents($url, false, $context);
+
+        if ($response === false)
+        {
+            Log::error("Gagal mengambil alamat dari OpenStreetMap untuk koordinat: $coordinates");
+            return [
+                'street'   => '',
+                'city'     => '',
+                'province' => '',
+                'full'     => 'Gagal mengambil alamat'
+            ];
+        }
+
+        $data    = json_decode($response, true);
+        $address = $data['address'] ?? [];
+
         return [
             'street'   => $address['road'] ?? '',
             'city'     => $address['city'] ?? ($address['town'] ?? ($address['village'] ?? '')),
@@ -79,15 +110,27 @@ class TelegramController extends Controller
 
     public static function lenteraBot()
     {
-        $tokenBot = "7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8";
-        $apiBot   = "https://api.telegram.org/bot" . $tokenBot;
-        $update   = json_decode(file_get_contents("php://input"), TRUE);
+        $tokenBot = env('TELEGRAM_BOT_TOKEN');
+        if (!$tokenBot)
+        {
+            Log::error("Telegram bot token not set in .env");
+            return;
+        }
+
+        $apiBot = "https://api.telegram.org/bot" . $tokenBot;
+        $update = @json_decode(file_get_contents("php://input"), TRUE);
+
+        if ($update === null)
+        {
+            Log::error("Gagal membaca input Telegram webhook");
+            return;
+        }
 
         $keyboard = [
             'inline_keyboard' => [
                 [
-                    ['text' => 'Start',     'callback_data' => '/start'],
-                    ['text' => 'Chat ID',   'callback_data' => '/chat_id'],
+                    ['text' => 'Start',             'callback_data' => '/start'],
+                    ['text' => 'Chat ID',           'callback_data' => '/chat_id'],
                 ],
                 [
                     ['text' => 'Lapor ODP Terbuka', 'callback_data' => '/lapor_odp_terbuka'],
@@ -96,7 +139,7 @@ class TelegramController extends Controller
                     ['text' => 'Tutup ODP Terbuka', 'callback_data' => '/tutup_odp_terbuka'],
                 ],
                 [
-                    ['text' => 'iBooster',  'callback_data' => '/ibooster'],
+                    ['text' => 'iBooster',          'callback_data' => '/ibooster'],
                 ]
             ]
         ];
@@ -120,7 +163,7 @@ class TelegramController extends Controller
             $data       = $callback['data'];
             $chat_title = self::getChatTitle($callback['message']['chat'] ?? []);
 
-            self::answerCallbackQuery($callback['id']);
+            Telegram::answerCallbackQuery($tokenBot, $callback['id']);
 
             if ($data === '/lapor_odp_terbuka')
             {
@@ -131,8 +174,8 @@ class TelegramController extends Controller
 
             if (strpos($data, 'odp_hsa_') === 0)
             {
-                $hsa_id   = str_replace('odp_hsa_', '', $data);
-                $saList   = DB::table('master_service_area')->where('id_hsa', $hsa_id)->select('sa_id', 'sa_name')->get();
+                $hsa_id    = str_replace('odp_hsa_', '', $data);
+                $saList    = DB::table('master_service_area')->where('id_hsa', $hsa_id)->select('sa_id', 'sa_name')->get();
                 $saKeyboard = ['inline_keyboard' => []];
 
                 foreach ($saList as $sa)
@@ -146,7 +189,7 @@ class TelegramController extends Controller
                     'step'   => 'choose_sa',
                     'hsa_id' => $hsa_id
                 ]);
-                self::sendMessageReplyWithInlineKeyboard($chat_id, "🏬 Pilih Service Area", $messageID, $saKeyboard);
+                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, "🏬 Pilih Service Area", $saKeyboard);
                 return;
             }
 
@@ -169,7 +212,7 @@ class TelegramController extends Controller
             {
                 self::setUserState($chat_id, ['step' => 'input_ibooster']);
                 $msg = "Silakan masukkan nomor internet (tanpa @telkom.net) untuk pengecekan iBooster:";
-                self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 return;
             }
 
@@ -199,7 +242,7 @@ class TelegramController extends Controller
                 }
 
                 $msg = "Hai $chat_title, $saying ...";
-                self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 return;
             }
 
@@ -207,7 +250,7 @@ class TelegramController extends Controller
             {
                 $msg  = "Name    : <b>$chat_title</b>\n";
                 $msg .= "Chat ID : <b>$chat_id</b>";
-                self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 return;
             }
 
@@ -220,7 +263,7 @@ class TelegramController extends Controller
 
                 if ($odps->isEmpty())
                 {
-                    self::sendMessageReplyWithInlineKeyboard($chat_id, "Tidak ada ODP terbuka yang perlu ditutup.", $messageID, $keyboard);
+                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, "Tidak ada ODP terbuka yang perlu ditutup.", $keyboard);
                     return;
                 }
 
@@ -233,7 +276,7 @@ class TelegramController extends Controller
                 }
 
                 self::setUserState($chat_id, ['step' => 'choose_tutup_odp']);
-                self::sendMessageReplyWithInlineKeyboard($chat_id, "Pilih ODP yang akan ditutup:", $messageID, $odpKeyboard);
+                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, "Pilih ODP yang akan ditutup:", $odpKeyboard);
                 return;
             }
 
@@ -244,14 +287,14 @@ class TelegramController extends Controller
 
                 if (!$odp)
                 {
-                    self::sendMessageReplyWithInlineKeyboard($chat_id, "Data ODP tidak ditemukan.", $messageID, $keyboard);
+                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, "Data ODP tidak ditemukan.", $keyboard);
                     return;
                 }
 
                 $hsa = DB::table('master_head_service_area')->where('hsa_id', $odp->hsa_id)->first();
                 $sa  = DB::table('master_service_area')->where('sa_id', $odp->sa_id)->first();
 
-                $msg = "<b>Detail ODP Terbuka</b>\n";
+                $msg  = "<b>Detail ODP Terbuka</b>\n";
                 $msg .= "🏢 Head Service Area : " . ($hsa->hsa_name ?? '-') . "\n";
                 $msg .= "🏬 Service Area : " . ($sa->sa_name ?? '-') . "\n";
                 $msg .= "🔖 Nama ODP : " . ($odp->odp_name ?? '-') . "\n";
@@ -265,18 +308,18 @@ class TelegramController extends Controller
 
                 if ($odp->photo_odp && file_exists(public_path($odp->photo_odp)))
                 {
-                    self::sendPhotoWithCaption($chat_id, public_path($odp->photo_odp), $msg);
+                    Telegram::sendPhoto($tokenBot, $chat_id, $msg, public_path($odp->photo_odp));
                 }
                 else
                 {
-                    self::sendMessageReply($chat_id, $msg, $messageID);
+                    Telegram::sendMessage($tokenBot, $chat_id, $msg);
                 }
-                self::sendMessageReply($chat_id, "Silakan masukkan catatan perbaikan.", $messageID);
+                Telegram::sendMessage($tokenBot, $chat_id, "Silakan masukkan catatan perbaikan.");
                 return;
             }
 
             $msg = "Maaf perintah tidak tersedia ...";
-            self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+            Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
             return;
         }
 
@@ -312,9 +355,9 @@ class TelegramController extends Controller
             }
             if ($state && $state['step'] === 'input_odp_photo' && $photo)
             {
-                $file_id   = end($photo)['file_id'];
-                $filename  = 'odp_open_' . date('Ymd_His') . '_' . $chat_id . '.jpg';
-                $photo_path= self::downloadTelegramPhotoAndRename($file_id, $filename);
+                $file_id    = end($photo)['file_id'];
+                $filename   = 'odp_open_' . date('Ymd_His') . '_' . $chat_id . '.jpg';
+                $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_report_open_alpro', $filename);
 
                 self::setUserState($chat_id, [
                     'step'      => 'input_odp_location',
@@ -327,7 +370,12 @@ class TelegramController extends Controller
             if ($state && $state['step'] === 'input_odp_location' && $location)
             {
                 $coordinates = $location['latitude'] . ',' . $location['longitude'];
-                $address = self::getAddressFromCoordinates($coordinates);
+                $address     = self::getAddressFromCoordinates($coordinates);
+                if ($address['full'] === 'Format koordinat tidak valid' || $address['full'] === 'Gagal mengambil alamat')
+                {
+                    Telegram::sendMessage($tokenBot, $chat_id, "Gagal mengambil alamat dari koordinat. Pastikan lokasi valid.");
+                    return;
+                }
 
                 DB::table('report_open_alpro')->insert([
                     'odp_name'        => $state['odp_name'],
@@ -347,24 +395,24 @@ class TelegramController extends Controller
             if ($state && $state['step'] === 'input_repair_notes' && !empty($text))
             {
                 self::setUserState($chat_id, [
-                    'step'          => 'input_repair_photo',
-                    'odp_id'        => $state['odp_id'],
-                    'repair_notes'  => $text
+                    'step'         => 'input_repair_photo',
+                    'odp_id'       => $state['odp_id'],
+                    'repair_notes' => $text
                 ]);
                 Telegram::sendMessage($tokenBot, $chat_id, "📸 Upload foto hasil perbaikan ODP.");
                 return;
             }
             if ($state && $state['step'] === 'input_repair_photo' && $photo)
             {
-                $file_id   = end($photo)['file_id'];
-                $filename  = 'odp_repair_' . date('Ymd_His') . '_' . $state['odp_id'] . '.jpg';
-                $photo_path= self::downloadTelegramPhotoAndRename($file_id, $filename);
+                $file_id    = end($photo)['file_id'];
+                $filename   = 'odp_repair_' . date('Ymd_His') . '_' . $state['odp_id'] . '.jpg';
+                $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_report_open_alpro', $filename);
 
                 self::setUserState($chat_id, [
-                    'step'              => 'input_repair_location',
-                    'odp_id'            => $state['odp_id'],
-                    'repair_notes'      => $state['repair_notes'],
-                    'repair_photo_odp'  => $photo_path
+                    'step'             => 'input_repair_location',
+                    'odp_id'           => $state['odp_id'],
+                    'repair_notes'     => $state['repair_notes'],
+                    'repair_photo_odp' => $photo_path
                 ]);
                 Telegram::sendMessage($tokenBot, $chat_id, "📍 Kirim lokasi perbaikan (share location)");
                 return;
@@ -372,17 +420,22 @@ class TelegramController extends Controller
             if ($state && $state['step'] === 'input_repair_location' && $location)
             {
                 $coordinates = $location['latitude'] . ',' . $location['longitude'];
-                $address = self::getAddressFromCoordinates($coordinates);
+                $address     = self::getAddressFromCoordinates($coordinates);
+                if ($address['full'] === 'Format koordinat tidak valid' || $address['full'] === 'Gagal mengambil alamat')
+                {
+                    Telegram::sendMessage($tokenBot, $chat_id, "Gagal mengambil alamat dari koordinat. Pastikan lokasi valid.");
+                    return;
+                }
 
                 DB::table('report_open_alpro')->where('id', $state['odp_id'])->update([
-                    'repair_notes'        => $state['repair_notes'],
-                    'repair_coordinates'  => $coordinates,
-                    'repair_photo_odp'    => $state['repair_photo_odp'],
-                    'repair_date'         => date('Y-m-d'),
-                    'repair_time'         => date('H:i:s'),
-                    'repair_street'       => $address['street'],
-                    'repair_city'         => $address['city'],
-                    'repair_province'     => $address['province'],
+                    'repair_notes'       => $state['repair_notes'],
+                    'repair_coordinates' => $coordinates,
+                    'repair_photo_odp'   => $state['repair_photo_odp'],
+                    'repair_date'        => date('Y-m-d'),
+                    'repair_time'        => date('H:i:s'),
+                    'repair_street'      => $address['street'],
+                    'repair_city'        => $address['city'],
+                    'repair_province'    => $address['province'],
                 ]);
                 self::clearUserState($chat_id);
                 Telegram::sendMessage($tokenBot, $chat_id, "ODP berhasil ditutup dan diperbaiki. Terima kasih!");
@@ -418,25 +471,25 @@ class TelegramController extends Controller
                     }
 
                     $msg = "Hai $chat_title, $saying ...";
-                    self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 }
                 elseif (strpos($text, "/chat_id") === 0)
                 {
                     $chat_title = self::getChatTitle($update['message']['chat'] ?? []);
                     $msg  = "Name    : <b>$chat_title</b>\n";
                     $msg .= "Chat ID : <b>$chat_id</b>";
-                    self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 }
                 elseif (strpos($text, "/ibooster") === 0)
                 {
                     self::setUserState($chat_id, ['step' => 'input_ibooster']);
                     $msg = "Silakan masukkan nomor internet (tanpa @telkom.net) untuk pengecekan iBooster:";
-                    self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 }
                 else
                 {
                     $msg = "Maaf perintah tidak tersedia ...";
-                    self::sendMessageReplyWithInlineKeyboard($chat_id, $msg, $messageID, $keyboard);
+                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 }
             }
         }
@@ -455,108 +508,19 @@ class TelegramController extends Controller
         return '';
     }
 
-    private static function sendMessageReplyWithInlineKeyboard($chatID, $message, $messageID, $keyboard)
-    {
-        $url        = "https://api.telegram.org/bot7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8/sendMessage";
-        $postFields = [
-            'chat_id'             => $chatID,
-            'text'                => $message,
-            'parse_mode'          => 'HTML',
-            'reply_to_message_id' => $messageID,
-            'reply_markup'        => json_encode($keyboard),
-        ];
-
-        $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            array(
-                CURLOPT_URL            => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING       => "",
-                CURLOPT_MAXREDIRS      => 10,
-                CURLOPT_TIMEOUT        => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST  => "POST",
-                CURLOPT_POSTFIELDS     => $postFields,
-            )
-        );
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
-
-    private static function sendMessageReply($chatID, $message, $messageID)
-    {
-        $url        = "https://api.telegram.org/bot7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8/sendMessage";
-        $postFields = [
-            'chat_id'             => $chatID,
-            'text'                => $message,
-            'parse_mode'          => 'HTML',
-            'reply_to_message_id' => $messageID,
-        ];
-
-        $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            array(
-                CURLOPT_URL            => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING       => "",
-                CURLOPT_MAXREDIRS      => 10,
-                CURLOPT_TIMEOUT        => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST  => "POST",
-                CURLOPT_POSTFIELDS     => $postFields,
-            )
-        );
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
-
-    private static function answerCallbackQuery($callback_query_id)
-    {
-        $url        = "https://api.telegram.org/bot7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8/answerCallbackQuery";
-        $postFields = [
-            'callback_query_id' => $callback_query_id,
-        ];
-
-        $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            array(
-                CURLOPT_URL            => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING       => "",
-                CURLOPT_MAXREDIRS      => 10,
-                CURLOPT_TIMEOUT        => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST  => "POST",
-                CURLOPT_POSTFIELDS     => $postFields,
-            )
-        );
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return $response;
-    }
-
     private static function getUserState($chat_id)
     {
         $file = storage_path("app/odp_state_$chat_id.json");
-        if (file_exists($file))
+        try
         {
-            return json_decode(file_get_contents($file), true);
+            if (file_exists($file))
+            {
+                return json_decode(file_get_contents($file), true);
+            }
+        }
+        catch (\Exception $e)
+        {
+            Log::error("Gagal membaca state file: " . $e->getMessage());
         }
         return null;
     }
@@ -564,60 +528,30 @@ class TelegramController extends Controller
     private static function setUserState($chat_id, $data)
     {
         $file = storage_path("app/odp_state_$chat_id.json");
-        file_put_contents($file, json_encode($data));
+        try
+        {
+            file_put_contents($file, json_encode($data));
+        }
+        catch (\Exception $e)
+        {
+            Log::error("Gagal menyimpan state file: " . $e->getMessage());
+        }
     }
 
     private static function clearUserState($chat_id)
     {
         $file = storage_path("app/odp_state_$chat_id.json");
-        if (file_exists($file))
+        try
         {
-            unlink($file);
+            if (file_exists($file))
+            {
+                unlink($file);
+            }
         }
-    }
-
-    private static function downloadTelegramPhotoAndRename($file_id, $filename)
-    {
-        $token      = "7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8";
-        $getFileUrl = "https://api.telegram.org/bot$token/getFile?file_id=$file_id";
-        $fileInfo   = json_decode(file_get_contents($getFileUrl), true);
-        $filePath   = $fileInfo['result']['file_path'];
-        $downloadUrl= "https://api.telegram.org/file/bot$token/$filePath";
-        $contents   = file_get_contents($downloadUrl);
-        $saveDir    = public_path('upload_report_open_alpro');
-
-        if (!is_dir($saveDir))
+        catch (\Exception $e)
         {
-            mkdir($saveDir, 0777, true);
+            Log::error("Gagal menghapus state file: " . $e->getMessage());
         }
-
-        $savePath = 'upload_report_open_alpro/' . $filename;
-        file_put_contents(public_path($savePath), $contents);
-
-        return $savePath;
-    }
-
-    private static function sendPhotoWithCaption($chat_id, $photo_path, $caption)
-    {
-        $token      = "7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8";
-        $url        = "https://api.telegram.org/bot$token/sendPhoto";
-
-        $postFields = [
-            'chat_id'    => $chat_id,
-            'caption'    => $caption,
-            'parse_mode' => 'HTML',
-            'photo'      => new \CURLFile($photo_path)
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type:multipart/form-data"]);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        $output = curl_exec($ch);
-        curl_close($ch);
-
-        return $output;
     }
 
     public static function comparin_ibooster($id)
