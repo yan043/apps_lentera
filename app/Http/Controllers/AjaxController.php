@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\ReportingConfigurationModel;
+use Illuminate\Support\Facades\Session;
 use App\Models\RegionalUnitModel;
+use App\Models\OrderManagementModel;
 use App\Models\EmployeeManagementModel;
+use App\Models\ReportingConfigurationModel;
 
 class AjaxController extends Controller
 {
@@ -175,6 +175,36 @@ class AjaxController extends Controller
     public function get_sub_unit_by_regional($regional_id)
     {
         $data = EmployeeManagementModel::get_sub_unit_by_regional($regional_id);
+
+        return response()->json($data);
+    }
+
+    public function get_new_orders($witel, $sourcedata, $startdate, $enddate)
+    {
+        $data = OrderManagementModel::new_orders($witel, $sourcedata, $startdate, $enddate);
+
+        return response()->json($data);
+    }
+
+    public function get_new_orders_post(Request $request, $witel, $sourcedata)
+    {
+        $startdate = $request->input('startdate');
+        $enddate   = $request->input('enddate');
+
+        $data = OrderManagementModel::new_orders($witel, $sourcedata, $startdate, $enddate);
+
+        return response()->json($data);
+    }
+
+    public function get_new_order_details()
+    {
+        $sourcedata = request()->input('sourcedata');
+        $workzone   = request()->input('workzone');
+        $ttr        = request()->input('ttr');
+        $startdate  = request()->input('startdate');
+        $enddate    = request()->input('enddate');
+
+        $data = OrderManagementModel::new_order_details($sourcedata, $workzone, $ttr, $startdate, $enddate);
 
         return response()->json($data);
     }

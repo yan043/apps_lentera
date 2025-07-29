@@ -74,23 +74,31 @@ class AuthController extends Controller
 
             AuthModel::set_token($request->nik, $token, $ip_address);
 
+            $profile = AuthModel::profile($user->id);
+
             Session::put([
-                'employee_id'    => $user->id,
-                'regional_id'    => $user->regional_id,
-                'witel_id'       => $user->witel_id,
-                'mitra_id'       => $user->mitra_id,
-                'sub_unit_id'    => $user->sub_unit_id,
-                'sub_group_id'   => $user->sub_group_id,
-                'role_id'        => $user->role->id,
-                'role_name'      => $user->role->name,
-                'nik'            => $user->nik,
-                'full_name'      => $user->full_name,
-                'chat_id'        => $user->chat_id,
-                'number_phone'   => $user->number_phone,
-                'home_address'   => $user->home_address,
-                'gender'         => $user->gender,
-                'date_of_birth'  => $user->date_of_birth,
-                'place_of_birth' => $user->place_of_birth,
+                'employee_id'    => $profile->id,
+                'regional_id'    => $profile->regional_id,
+                'regional_name'  => $profile->regional_name,
+                'witel_id'       => $profile->witel_id,
+                'witel_name'     => $profile->witel_name,
+                'witel_alias'    => $profile->witel_alias,
+                'mitra_id'       => $profile->mitra_id,
+                'mitra_name'     => $profile->mitra_name,
+                'sub_unit_id'    => $profile->sub_unit_id,
+                'sub_unit_name'  => $profile->sub_unit_name,
+                'sub_group_id'   => $profile->sub_group_id,
+                'sub_group_name' => $profile->sub_group_name,
+                'role_id'        => $profile->role_id,
+                'role_name'      => $profile->role_name,
+                'nik'            => $profile->nik,
+                'full_name'      => $profile->full_name,
+                'chat_id'        => $profile->chat_id,
+                'number_phone'   => $profile->number_phone,
+                'home_address'   => $profile->home_address,
+                'gender'         => $profile->gender,
+                'date_of_birth'  => $profile->date_of_birth,
+                'place_of_birth' => $profile->place_of_birth,
                 'remember_token' => $token,
                 'is_logged_in'   => true
             ]);

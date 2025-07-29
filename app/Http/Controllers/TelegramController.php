@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Telegram;
 use Illuminate\Support\Facades\Log;
+use App\Models\Telegram;
+use App\Models\ApiModel;
 
 class TelegramController extends Controller
 {
@@ -175,7 +176,7 @@ class TelegramController extends Controller
             if (strpos($data, 'odp_hsa_') === 0)
             {
                 $hsa_id    = str_replace('odp_hsa_', '', $data);
-                $saList    = DB::table('master_service_area')->where('id_hsa', $hsa_id)->select('sa_id', 'sa_name')->get();
+                $saList    = DB::table('tb_service_area')->where('id_hsa', $hsa_id)->select('sa_id', 'sa_name')->get();
                 $saKeyboard = ['inline_keyboard' => []];
 
                 foreach ($saList as $sa)
@@ -205,14 +206,6 @@ class TelegramController extends Controller
                     'sa_id'     => $sa_id
                 ]);
                 Telegram::sendMessage($tokenBot, $chat_id, "🔖 Ketik nama ODP");
-                return;
-            }
-
-            if ($data === '/ibooster')
-            {
-                self::setUserState($chat_id, ['step' => 'input_ibooster']);
-                $msg = "Silakan masukkan nomor internet (tanpa @telkom.net) untuk pengecekan iBooster:";
-                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 return;
             }
 
@@ -256,7 +249,7 @@ class TelegramController extends Controller
 
             if ($data === '/tutup_odp_terbuka')
             {
-                $odps = DB::table('report_open_alpro')
+                $odps = DB::table('tb_alpro_open_reports')
                     ->whereNull('repair_notes')
                     ->orderBy('created_date', 'desc')
                     ->get();
@@ -283,7 +276,7 @@ class TelegramController extends Controller
             if (strpos($data, 'tutup_odp_') === 0)
             {
                 $id  = str_replace('tutup_odp_', '', $data);
-                $odp = DB::table('report_open_alpro')->where('id', $id)->first();
+                $odp = DB::table('tb_alpro_open_reports')->where('id', $id)->first();
 
                 if (!$odp)
                 {
@@ -291,8 +284,8 @@ class TelegramController extends Controller
                     return;
                 }
 
-                $hsa = DB::table('master_head_service_area')->where('hsa_id', $odp->hsa_id)->first();
-                $sa  = DB::table('master_service_area')->where('sa_id', $odp->sa_id)->first();
+                $hsa = DB::table('tb_head_service_area')->where('hsa_id', $odp->hsa_id)->first();
+                $sa  = DB::table('tb_service_area')->where('sa_id', $odp->sa_id)->first();
 
                 $msg  = "<b>Detail ODP Terbuka</b>\n";
                 $msg .= "🏢 Head Service Area : " . ($hsa->hsa_name ?? '-') . "\n";
@@ -315,6 +308,13 @@ class TelegramController extends Controller
                     Telegram::sendMessage($tokenBot, $chat_id, $msg);
                 }
                 Telegram::sendMessage($tokenBot, $chat_id, "Silakan masukkan catatan perbaikan.");
+                return;
+            }
+
+            if ($data === '/ibooster')
+            {
+                self::setUserState($chat_id, ['step' => 'input_ibooster_id']);
+                Telegram::sendMessage($tokenBot, $chat_id, "Silahkan Masukan Nomor Internet");
                 return;
             }
 
@@ -353,11 +353,12 @@ class TelegramController extends Controller
                 Telegram::sendMessage($tokenBot, $chat_id, "📸 Upload foto ODP");
                 return;
             }
+
             if ($state && $state['step'] === 'input_odp_photo' && $photo)
             {
                 $file_id    = end($photo)['file_id'];
                 $filename   = 'odp_open_' . date('Ymd_His') . '_' . $chat_id . '.jpg';
-                $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_report_open_alpro', $filename);
+                $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_open_alpro_reports', $filename);
 
                 self::setUserState($chat_id, [
                     'step'      => 'input_odp_location',
@@ -367,6 +368,7 @@ class TelegramController extends Controller
                 Telegram::sendMessage($tokenBot, $chat_id, "📍 Kirim lokasi ODP (share location)");
                 return;
             }
+
             if ($state && $state['step'] === 'input_odp_location' && $location)
             {
                 $coordinates = $location['latitude'] . ',' . $location['longitude'];
@@ -377,7 +379,7 @@ class TelegramController extends Controller
                     return;
                 }
 
-                DB::table('report_open_alpro')->insert([
+                DB::table('tb_alpro_open_reports')->insert([
                     'odp_name'        => $state['odp_name'],
                     'odp_coordinates' => $coordinates,
                     'photo_odp'       => $state['photo_odp'],
@@ -402,11 +404,12 @@ class TelegramController extends Controller
                 Telegram::sendMessage($tokenBot, $chat_id, "📸 Upload foto hasil perbaikan ODP.");
                 return;
             }
+
             if ($state && $state['step'] === 'input_repair_photo' && $photo)
             {
                 $file_id    = end($photo)['file_id'];
                 $filename   = 'odp_repair_' . date('Ymd_His') . '_' . $state['odp_id'] . '.jpg';
-                $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_report_open_alpro', $filename);
+                $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_open_alpro_reports', $filename);
 
                 self::setUserState($chat_id, [
                     'step'             => 'input_repair_location',
@@ -417,6 +420,7 @@ class TelegramController extends Controller
                 Telegram::sendMessage($tokenBot, $chat_id, "📍 Kirim lokasi perbaikan (share location)");
                 return;
             }
+
             if ($state && $state['step'] === 'input_repair_location' && $location)
             {
                 $coordinates = $location['latitude'] . ',' . $location['longitude'];
@@ -427,7 +431,7 @@ class TelegramController extends Controller
                     return;
                 }
 
-                DB::table('report_open_alpro')->where('id', $state['odp_id'])->update([
+                DB::table('tb_alpro_open_reports')->where('id', $state['odp_id'])->update([
                     'repair_notes'       => $state['repair_notes'],
                     'repair_coordinates' => $coordinates,
                     'repair_photo_odp'   => $state['repair_photo_odp'],
@@ -439,6 +443,19 @@ class TelegramController extends Controller
                 ]);
                 self::clearUserState($chat_id);
                 Telegram::sendMessage($tokenBot, $chat_id, "ODP berhasil ditutup dan diperbaiki. Terima kasih!");
+                return;
+            }
+
+            if ($state && $state['step'] === 'input_ibooster_id' && !empty($text))
+            {
+                if (!preg_match('/^\d+$/', $text))
+                {
+                    Telegram::sendMessage($tokenBot, $chat_id, "Nomor Internet harus berupa angka. Silakan masukkan ulang.");
+                    return;
+                }
+                $msg = self::comparin_ibooster($text);
+                self::clearUserState($chat_id);
+                Telegram::sendMessage($tokenBot, $chat_id, $msg);
                 return;
             }
 
@@ -478,12 +495,6 @@ class TelegramController extends Controller
                     $chat_title = self::getChatTitle($update['message']['chat'] ?? []);
                     $msg  = "Name    : <b>$chat_title</b>\n";
                     $msg .= "Chat ID : <b>$chat_id</b>";
-                    Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
-                }
-                elseif (strpos($text, "/ibooster") === 0)
-                {
-                    self::setUserState($chat_id, ['step' => 'input_ibooster']);
-                    $msg = "Silakan masukkan nomor internet (tanpa @telkom.net) untuk pengecekan iBooster:";
                     Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 }
                 else

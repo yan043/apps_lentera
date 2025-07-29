@@ -30,6 +30,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('order-management')->group(function () {
         Route::get('new', [OrderManagementController::class, 'newOrders']);
+        Route::get('new/details', [OrderManagementController::class, 'newOrderDetails']);
+
         Route::get('assigned', [OrderManagementController::class, 'assignedOrders']);
         Route::get('ongoing', [OrderManagementController::class, 'ongoingOrders']);
         Route::get('completed', [OrderManagementController::class, 'completedOrders']);
@@ -154,6 +156,15 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('actions', [AjaxController::class, 'get_order_actions']);
             Route::get('actions/{id}', [AjaxController::class, 'get_order_action_by_id']);
+        });
+
+        Route::prefix('order-management')->group(function () {
+            Route::prefix('new')->group(function () {
+                Route::post('{witel}/{sourcedata}', [AjaxController::class, 'get_new_orders_post']);
+                Route::get('{witel}/{sourcedata}/{startdate}/{enddate}', [AjaxController::class, 'get_new_orders']);
+
+                Route::get('details', [AjaxController::class, 'get_new_order_details']);
+            });
         });
     });
 });

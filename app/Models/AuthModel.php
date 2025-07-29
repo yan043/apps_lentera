@@ -98,6 +98,7 @@ class AuthModel extends Authenticatable
             'te.*',
             'tr.name AS regional_name',
             'tw.name AS witel_name',
+            'tw.alias AS witel_alias',
             'tm.name AS mitra_name',
             'tsu.name AS sub_unit_name',
             'tsg.name AS sub_group_name',
