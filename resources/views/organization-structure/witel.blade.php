@@ -12,21 +12,21 @@
 </style>
 @endsection
 
-@section('title', 'Data Mitra')
+@section('title', 'Data Witel')
 
 @section('content')
 <div class="card">
     <div class="card-body">
         <button type="button" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modal-add">
-            <i class="fas fa-plus-circle"></i>&nbsp; Add Data
+            <i class="fas fa-plus-circle"></i>&nbsp; Tambah Data
         </button>
         <div class="table-responsive">
             <table class="table table-striped text-center detail-data-table">
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
+                        <th class="text-center">Regional</th>
                         <th class="text-center">Witel</th>
-                        <th class="text-center">Mitra</th>
                         <th class="text-center">Alias</th>
                         <th class="text-center"></th>
                     </tr>
@@ -42,24 +42,24 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Mitra</h5>
+                <h5 class="modal-title">Add Witel</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/mitra/store" method="POST">
+                <form action="/organization-structure/witel/store" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label">Witel</label>
-                        <select class="form-control select2" name="witel_id" required>
-                            <option value="" selected disabled>Select Witel</option>
-                            @foreach($get_witel as $witel)
-                                <option value="{{ $witel->id }}">{{ $witel->name }}</option>
+                        <label class="form-label">Regional</label>
+                        <select class="form-control select2" name="regional_id" required>
+                            <option value="" selected disabled>Select Regional</option>
+                            @foreach($get_regional as $regional)
+                                <option value="{{ $regional->id }}">{{ $regional->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Mitra Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="Enter Mitra Name" required>
+                        <label class="form-label">Witel Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Witel Name" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Alias</label>
@@ -80,25 +80,25 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Mitra</h5>
+                <h5 class="modal-title">Edit Witel</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/mitra/store" method="POST">
+                <form action="/organization-structure/witel/store" method="POST">
                     @csrf
                     <input type="hidden" name="id">
                     <div class="mb-3">
-                        <label class="form-label">Witel</label>
-                        <select class="form-control select2" name="witel_id" required>
-                            <option value="" selected disabled>Select Witel</option>
-                            @foreach($get_witel as $witel)
-                                <option value="{{ $witel->id }}">{{ $witel->name }}</option>
+                        <label class="form-label">Regional</label>
+                        <select class="form-control select2" name="regional_id" required>
+                            <option value="" selected disabled>Select Regional</option>
+                            @foreach($get_regional as $regional)
+                                <option value="{{ $regional->id }}">{{ $regional->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Mitra Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="Enter Mitra Name" required>
+                        <label class="form-label">Witel Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Witel Name" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Alias</label>
@@ -126,7 +126,7 @@
     $(document).ready(function() {
         $(".select2").select2({
             allowClear: true,
-            placeholder: "Silahkan Pilih Witel"
+            placeholder: "Select Regional"
         });
 
         let table = $(".detail-data-table").DataTable({
@@ -134,19 +134,19 @@
             processing: true,
             serverSide: false,
             ajax: {
-                url: '/ajax/regional-unit/mitra',
+                url: '/ajax/organization-structure/witel',
                 dataSrc: ''
             },
             columns: [
                 { data: 'id' },
-                { data: 'witel_name' },
+                { data: 'regional_name' },
                 { data: 'name' },
                 { data: 'alias' },
                 {
                     data: 'id',
                     render: function(data, type, row) {
                         return `
-                            <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal(${data}, '${row.witel_id}', '${row.name}', '${row.alias}')">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal(${data}, '${row.regional_id}', '${row.name}', '${row.alias}')">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
@@ -162,14 +162,14 @@
             $(this).find('.select2').select2({
                 dropdownParent: $(this),
                 allowClear: true,
-                placeholder: "Silahkan Pilih Witel"
+                placeholder: "Silahkan Pilih Nama Segment"
             });
         });
     });
 
-    function openEditModal(id, witelId, name, alias) {
+    function openEditModal(id, regionalId, name, alias) {
         $('#modal-edit input[name="id"]').val(id);
-        $('#modal-edit select[name="witel_id"]').val(witelId).trigger('change');
+        $('#modal-edit select[name="regional_id"]').val(regionalId).trigger('change');
         $('#modal-edit input[name="name"]').val(name);
         $('#modal-edit input[name="alias"]').val(alias);
         $('#modal-edit').modal('show');
@@ -186,7 +186,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/regional-unit/mitra/destroy/' + id;
+                window.location.href = '/organization-structure/witel/destroy/' + id;
             }
         });
     }

@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               8.4.3 - MySQL Community Server - GPL
--- Server OS:                    Win64
--- HeidiSQL Version:             12.10.0.7000
+-- Versi server:                 8.4.3 - MySQL Community Server - GPL
+-- OS Server:                    Win64
+-- HeidiSQL Versi:               12.11.0.7065
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -15,12 +15,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for db_lentera
+-- Membuang struktur basisdata untuk db_lentera
 DROP DATABASE IF EXISTS `db_lentera`;
 CREATE DATABASE IF NOT EXISTS `db_lentera` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `db_lentera`;
 
--- Dumping structure for table db_lentera.cache
+-- membuang struktur untuk table db_lentera.cache
 DROP TABLE IF EXISTS `cache`;
 CREATE TABLE IF NOT EXISTS `cache` (
   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -29,15 +29,29 @@ CREATE TABLE IF NOT EXISTS `cache` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.cache: ~4 rows (approximately)
+-- Membuang data untuk tabel db_lentera.cache: ~18 rows (lebih kurang)
 DELETE FROM `cache`;
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-	('laravel_cache_captcha_3a376d508c586cf0756ba76e290860dc', 'a:6:{i:0;s:1:"8";i:1;s:1:"z";i:2;s:1:"7";i:3;s:1:"x";i:4;s:1:"e";i:5;s:1:"n";}', 1743729622),
-	('laravel_cache_captcha_716bffebc867da9107aef722c404af5b', 'a:6:{i:0;s:1:"q";i:1;s:1:"e";i:2;s:1:"e";i:3;s:1:"a";i:4;s:1:"z";i:5;s:1:"j";}', 1747539093),
-	('laravel_cache_captcha_7ea001c410820f98259205c4dcfeef13', 'a:6:{i:0;s:1:"u";i:1;s:1:"d";i:2;s:1:"t";i:3;s:1:"c";i:4;s:1:"e";i:5;s:1:"r";}', 1747538929),
-	('laravel_cache_captcha_f540b09008ac910e4da06b44f16f960d', 'a:6:{i:0;s:1:"7";i:1;s:1:"y";i:2;s:1:"u";i:3;s:1:"u";i:4;s:1:"9";i:5;s:1:"h";}', 1747539032);
+	('laravel_cache_captcha_025dbaa69f93090ab613bdde31c8ac8b', 'a:6:{i:0;s:1:"a";i:1;s:1:"a";i:2;s:1:"c";i:3;s:1:"f";i:4;s:1:"3";i:5;s:1:"r";}', 1753948720),
+	('laravel_cache_captcha_0a77180dfc21981eb83edffd7d2b060b', 'a:6:{i:0;s:1:"g";i:1;s:1:"q";i:2;s:1:"d";i:3;s:1:"y";i:4;s:1:"r";i:5;s:1:"b";}', 1753948711),
+	('laravel_cache_captcha_232ba70e858c48976e9822dd970a261f', 'a:6:{i:0;s:1:"p";i:1;s:1:"4";i:2;s:1:"b";i:3;s:1:"8";i:4;s:1:"j";i:5;s:1:"x";}', 1753948791),
+	('laravel_cache_captcha_2df5acfa61c059f1dd77b0274850aead', 'a:6:{i:0;s:1:"p";i:1;s:1:"g";i:2;s:1:"m";i:3;s:1:"r";i:4;s:1:"r";i:5;s:1:"y";}', 1753948819),
+	('laravel_cache_captcha_35609853bf0c63db50a984cfddf2786f', 'a:6:{i:0;s:1:"y";i:1;s:1:"y";i:2;s:1:"z";i:3;s:1:"r";i:4;s:1:"z";i:5;s:1:"d";}', 1753948705),
+	('laravel_cache_captcha_37ce738ce8f7b06767389f0decc09a53', 'a:6:{i:0;s:1:"7";i:1;s:1:"4";i:2;s:1:"e";i:3;s:1:"r";i:4;s:1:"2";i:5;s:1:"z";}', 1753948752),
+	('laravel_cache_captcha_37e86fd676d5a39f5b089d1f39cd87c9', 'a:6:{i:0;s:1:"e";i:1;s:1:"t";i:2;s:1:"r";i:3;s:1:"u";i:4;s:1:"e";i:5;s:1:"b";}', 1753948812),
+	('laravel_cache_captcha_3e9526880acd019664828c4348397871', 'a:6:{i:0;s:1:"p";i:1;s:1:"f";i:2;s:1:"c";i:3;s:1:"z";i:4;s:1:"8";i:5;s:1:"8";}', 1755101740),
+	('laravel_cache_captcha_45ac37de2c1237140340457180513897', 'a:6:{i:0;s:1:"z";i:1;s:1:"y";i:2;s:1:"8";i:3;s:1:"c";i:4;s:1:"u";i:5;s:1:"r";}', 1755610649),
+	('laravel_cache_captcha_5e5b8c62b3bb94ee63b2e27166923195', 'a:6:{i:0;s:1:"b";i:1;s:1:"7";i:2;s:1:"f";i:3;s:1:"r";i:4;s:1:"6";i:5;s:1:"p";}', 1755878291),
+	('laravel_cache_captcha_782ce45fb43e364c9ee38db71a87a647', 'a:6:{i:0;s:1:"x";i:1;s:1:"y";i:2;s:1:"h";i:3;s:1:"d";i:4;s:1:"j";i:5;s:1:"z";}', 1755588558),
+	('laravel_cache_captcha_833b75abf6db07c8f0edba3f9d87d47b', 'a:6:{i:0;s:1:"4";i:1;s:1:"q";i:2;s:1:"y";i:3;s:1:"7";i:4;s:1:"7";i:5;s:1:"u";}', 1753948709),
+	('laravel_cache_captcha_973cf86ebbc312c1fe0c9c5c8ae1929a', 'a:6:{i:0;s:1:"7";i:1;s:1:"e";i:2;s:1:"f";i:3;s:1:"m";i:4;s:1:"y";i:5;s:1:"m";}', 1755610892),
+	('laravel_cache_captcha_998aa078d78bf3b560356521271d8a04', 'a:6:{i:0;s:1:"h";i:1;s:1:"j";i:2;s:1:"4";i:3;s:1:"x";i:4;s:1:"d";i:5;s:1:"g";}', 1755610711),
+	('laravel_cache_captcha_d8669fd9a1fe1bf3f2883874f465f788', 'a:6:{i:0;s:1:"f";i:1;s:1:"y";i:2;s:1:"h";i:3;s:1:"e";i:4;s:1:"f";i:5;s:1:"f";}', 1755610776),
+	('laravel_cache_captcha_ddda213fbcf30dfc176d618615efc92b', 'a:6:{i:0;s:1:"r";i:1;s:1:"r";i:2;s:1:"a";i:3;s:1:"p";i:4;s:1:"j";i:5;s:1:"p";}', 1753948744),
+	('laravel_cache_captcha_e4ea89f74201742d69b0f30de2bdd052', 'a:6:{i:0;s:1:"n";i:1;s:1:"z";i:2;s:1:"x";i:3;s:1:"6";i:4;s:1:"a";i:5;s:1:"e";}', 1753948802),
+	('laravel_cache_captcha_f2334681e68169e8f38f4cfd9b634ca2', 'a:6:{i:0;s:1:"3";i:1;s:1:"n";i:2;s:1:"p";i:3;s:1:"x";i:4;s:1:"z";i:5;s:1:"h";}', 1755588553);
 
--- Dumping structure for table db_lentera.cache_locks
+-- membuang struktur untuk table db_lentera.cache_locks
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE IF NOT EXISTS `cache_locks` (
   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -46,10 +60,10 @@ CREATE TABLE IF NOT EXISTS `cache_locks` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.cache_locks: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.cache_locks: ~0 rows (lebih kurang)
 DELETE FROM `cache_locks`;
 
--- Dumping structure for table db_lentera.failed_jobs
+-- membuang struktur untuk table db_lentera.failed_jobs
 DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -63,10 +77,10 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.failed_jobs: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.failed_jobs: ~0 rows (lebih kurang)
 DELETE FROM `failed_jobs`;
 
--- Dumping structure for table db_lentera.jobs
+-- membuang struktur untuk table db_lentera.jobs
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE IF NOT EXISTS `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -80,10 +94,10 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   KEY `jobs_queue_index` (`queue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.jobs: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.jobs: ~0 rows (lebih kurang)
 DELETE FROM `jobs`;
 
--- Dumping structure for table db_lentera.job_batches
+-- membuang struktur untuk table db_lentera.job_batches
 DROP TABLE IF EXISTS `job_batches`;
 CREATE TABLE IF NOT EXISTS `job_batches` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -99,10 +113,10 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.job_batches: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.job_batches: ~0 rows (lebih kurang)
 DELETE FROM `job_batches`;
 
--- Dumping structure for table db_lentera.migrations
+-- membuang struktur untuk table db_lentera.migrations
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -111,10 +125,47 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.migrations: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.migrations: ~0 rows (lebih kurang)
 DELETE FROM `migrations`;
 
--- Dumping structure for table db_lentera.tb_assign_orders
+-- membuang struktur untuk table db_lentera.tb_alpro_open_reports
+DROP TABLE IF EXISTS `tb_alpro_open_reports`;
+CREATE TABLE IF NOT EXISTS `tb_alpro_open_reports` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `odp_name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `odp_coordinates` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` mediumtext COLLATE utf8mb4_general_ci,
+  `photo_odp` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `street` text COLLATE utf8mb4_general_ci,
+  `city` text COLLATE utf8mb4_general_ci,
+  `province` text COLLATE utf8mb4_general_ci,
+  `created_by` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'chat id telegram',
+  `created_by_username` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_by_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_date` date DEFAULT NULL,
+  `created_time` time DEFAULT NULL,
+  `repair_notes` mediumtext COLLATE utf8mb4_general_ci,
+  `repair_coordinates` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `repair_photo_odp` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `repair_date` date DEFAULT NULL,
+  `repair_time` time DEFAULT NULL,
+  `repair_street` text COLLATE utf8mb4_general_ci,
+  `repair_city` text COLLATE utf8mb4_general_ci,
+  `repair_province` text COLLATE utf8mb4_general_ci,
+  `updated_ by` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'chat id telegram',
+  `updated_by_username` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `updated_by_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `updated_date` date DEFAULT NULL,
+  `updated_time` time DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `created_by` (`created_by`),
+  KEY `updated_ by` (`updated_ by`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Membuang data untuk tabel db_lentera.tb_alpro_open_reports: ~7 rows (lebih kurang)
+DELETE FROM `tb_alpro_open_reports`;
+
+-- membuang struktur untuk table db_lentera.tb_assign_orders
 DROP TABLE IF EXISTS `tb_assign_orders`;
 CREATE TABLE IF NOT EXISTS `tb_assign_orders` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -125,10 +176,10 @@ CREATE TABLE IF NOT EXISTS `tb_assign_orders` (
   `assign_date` date DEFAULT NULL,
   `assign_labels` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `assign_notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `created_at` datetime DEFAULT NULL,
   `created_by` int DEFAULT NULL,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT NULL,
   `updated_by` int DEFAULT NULL,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `created_by` (`created_by`),
   KEY `updated_by` (`updated_by`),
@@ -137,10 +188,10 @@ CREATE TABLE IF NOT EXISTS `tb_assign_orders` (
   KEY `order_code` (`order_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_assign_orders: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_assign_orders: ~0 rows (lebih kurang)
 DELETE FROM `tb_assign_orders`;
 
--- Dumping structure for table db_lentera.tb_assign_order_reports
+-- membuang struktur untuk table db_lentera.tb_assign_order_reports
 DROP TABLE IF EXISTS `tb_assign_order_reports`;
 CREATE TABLE IF NOT EXISTS `tb_assign_order_reports` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -154,10 +205,10 @@ CREATE TABLE IF NOT EXISTS `tb_assign_order_reports` (
   `customer_phone_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `customer_home_latitude` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `customer_home_longitude` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT '0',
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT NULL,
   `updated_by` int NOT NULL DEFAULT '0',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `order_substatus_id` (`order_substatus_id`),
   KEY `team_id` (`team_id`),
@@ -166,10 +217,10 @@ CREATE TABLE IF NOT EXISTS `tb_assign_order_reports` (
   KEY `assign_order_id` (`assign_order_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_assign_order_reports: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_assign_order_reports: ~0 rows (lebih kurang)
 DELETE FROM `tb_assign_order_reports`;
 
--- Dumping structure for table db_lentera.tb_auth_storage
+-- membuang struktur untuk table db_lentera.tb_auth_storage
 DROP TABLE IF EXISTS `tb_auth_storage`;
 CREATE TABLE IF NOT EXISTS `tb_auth_storage` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -181,12 +232,12 @@ CREATE TABLE IF NOT EXISTS `tb_auth_storage` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_auth_storage: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_auth_storage: ~0 rows (lebih kurang)
 DELETE FROM `tb_auth_storage`;
 INSERT INTO `tb_auth_storage` (`id`, `apps`, `username`, `password`, `cookies`, `last_updated_at`) VALUES
-	(1, 'insera', '20981020', '403!@#InSeRa', 'JSESSIONID=prDPxae0IDnkByeUoZd70hXb7JLPO1cAZ5ncV-mv.cident-7784cbc4f9-zpvds; a10e07c589b0b6a4b246720bbb392af5=f63a3db26f22bc65aee5e7485fc12d69;', '2025-04-03 19:54:37');
+	(1, 'insera', '20981020', '403!@#InSeRa', 'JSESSIONID=NAkjtCtgWMrMOwgkh6Ut0daYWf9OkgDpZnyu01ko.cident-55b54f8748-cx548; a10e07c589b0b6a4b246720bbb392af5=ba1065ff57058dc656f4d742d1ab89e0;', '2025-07-28 20:07:04');
 
--- Dumping structure for table db_lentera.tb_employee
+-- membuang struktur untuk table db_lentera.tb_employee
 DROP TABLE IF EXISTS `tb_employee`;
 CREATE TABLE IF NOT EXISTS `tb_employee` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -209,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `tb_employee` (
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'default : 12345678',
   `ip_address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `login_at` datetime DEFAULT NULL,
-  `is_active` int DEFAULT NULL COMMENT '0 : deactive, 1 : active',
+  `is_active` int DEFAULT '0' COMMENT '0 : deactive, 1 : active',
   `created_by` int DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_by` int DEFAULT NULL,
@@ -226,12 +277,12 @@ CREATE TABLE IF NOT EXISTS `tb_employee` (
   KEY `unit_id` (`sub_group_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_employee: ~1 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_employee: ~1 rows (lebih kurang)
 DELETE FROM `tb_employee`;
 INSERT INTO `tb_employee` (`id`, `regional_id`, `witel_id`, `mitra_id`, `sub_unit_id`, `sub_group_id`, `role_id`, `nik`, `full_name`, `chat_id`, `number_phone`, `home_address`, `gender`, `date_of_birth`, `place_of_birth`, `remember_token`, `google2fa_secret`, `password`, `ip_address`, `login_at`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
-	(1, 4, 1, 2, 1, 2, 1, 981020, 'Mahdian', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, NULL, NULL, '$2y$12$ZAGm4XKSOQNhm9j4fK/fBeA.i5sxrsZwyi2sjj0mmueGTGDurKmBm', '127.0.0.1', '2025-05-18 03:35:22', 1, NULL, NULL, NULL, '2025-05-19 10:45:06');
+	(1, 4, 1, 2, 1, 2, 1, 981020, 'Mahdian', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, 'MoFoASmNsTLmBNP7AbG4b4E37lwZhTvWFZKWR0S8OgchcI18wuZ50bDy6vuy', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-08-23 03:52:24', 1, NULL, NULL, NULL, '2025-08-23 03:52:24');
 
--- Dumping structure for table db_lentera.tb_inventory_reports
+-- membuang struktur untuk table db_lentera.tb_inventory_reports
 DROP TABLE IF EXISTS `tb_inventory_reports`;
 CREATE TABLE IF NOT EXISTS `tb_inventory_reports` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -240,10 +291,10 @@ CREATE TABLE IF NOT EXISTS `tb_inventory_reports` (
   `order_code` int NOT NULL DEFAULT '0',
   `inventory_material_id` int NOT NULL DEFAULT '0',
   `qty` int NOT NULL DEFAULT '0',
-  `created_at` datetime DEFAULT NULL,
   `created_by` int NOT NULL DEFAULT '0',
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT NULL,
   `updated_by` int NOT NULL DEFAULT '0',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `transaction_reports_Id` (`transaction_reports_Id`),
   KEY `order_code` (`order_code`),
@@ -252,10 +303,10 @@ CREATE TABLE IF NOT EXISTS `tb_inventory_reports` (
   KEY `updated_by` (`updated_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_inventory_reports: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_inventory_reports: ~0 rows (lebih kurang)
 DELETE FROM `tb_inventory_reports`;
 
--- Dumping structure for table db_lentera.tb_mitra
+-- membuang struktur untuk table db_lentera.tb_mitra
 DROP TABLE IF EXISTS `tb_mitra`;
 CREATE TABLE IF NOT EXISTS `tb_mitra` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -266,14 +317,14 @@ CREATE TABLE IF NOT EXISTS `tb_mitra` (
   KEY `witel_id` (`witel_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_mitra: ~3 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_mitra: ~3 rows (lebih kurang)
 DELETE FROM `tb_mitra`;
 INSERT INTO `tb_mitra` (`id`, `witel_id`, `name`, `alias`) VALUES
 	(1, 1, 'PT Telkom Indonesia', 'TI'),
 	(2, 1, 'PT Telkom Akses', 'TA'),
 	(3, 1, 'PT Upaya Tehnik', 'UPATEK');
 
--- Dumping structure for table db_lentera.tb_order_action
+-- membuang struktur untuk table db_lentera.tb_order_action
 DROP TABLE IF EXISTS `tb_order_action`;
 CREATE TABLE IF NOT EXISTS `tb_order_action` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -283,10 +334,10 @@ CREATE TABLE IF NOT EXISTS `tb_order_action` (
   KEY `order_segment_id` (`order_segment_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_action: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_order_action: ~0 rows (lebih kurang)
 DELETE FROM `tb_order_action`;
 
--- Dumping structure for table db_lentera.tb_order_segment
+-- membuang struktur untuk table db_lentera.tb_order_segment
 DROP TABLE IF EXISTS `tb_order_segment`;
 CREATE TABLE IF NOT EXISTS `tb_order_segment` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -294,13 +345,13 @@ CREATE TABLE IF NOT EXISTS `tb_order_segment` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_segment: ~2 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_order_segment: ~2 rows (lebih kurang)
 DELETE FROM `tb_order_segment`;
 INSERT INTO `tb_order_segment` (`id`, `name`) VALUES
 	(1, 'CPE'),
 	(2, 'ONT');
 
--- Dumping structure for table db_lentera.tb_order_status
+-- membuang struktur untuk table db_lentera.tb_order_status
 DROP TABLE IF EXISTS `tb_order_status`;
 CREATE TABLE IF NOT EXISTS `tb_order_status` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -308,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `tb_order_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_status: ~6 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_order_status: ~6 rows (lebih kurang)
 DELETE FROM `tb_order_status`;
 INSERT INTO `tb_order_status` (`id`, `name`) VALUES
 	(1, 'READY'),
@@ -318,7 +369,7 @@ INSERT INTO `tb_order_status` (`id`, `name`) VALUES
 	(5, 'TECH-ISSUE'),
 	(6, 'EXTERNAL-ISSUE');
 
--- Dumping structure for table db_lentera.tb_order_sub_status
+-- membuang struktur untuk table db_lentera.tb_order_sub_status
 DROP TABLE IF EXISTS `tb_order_sub_status`;
 CREATE TABLE IF NOT EXISTS `tb_order_sub_status` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -328,13 +379,13 @@ CREATE TABLE IF NOT EXISTS `tb_order_sub_status` (
   KEY `order_status_id` (`order_status_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_order_sub_status: ~2 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_order_sub_status: ~2 rows (lebih kurang)
 DELETE FROM `tb_order_sub_status`;
 INSERT INTO `tb_order_sub_status` (`id`, `order_status_id`, `name`) VALUES
 	(1, 1, 'NEED-PROGRESS'),
 	(2, 2, 'BERANGKAT');
 
--- Dumping structure for table db_lentera.tb_regional
+-- membuang struktur untuk table db_lentera.tb_regional
 DROP TABLE IF EXISTS `tb_regional`;
 CREATE TABLE IF NOT EXISTS `tb_regional` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -343,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `tb_regional` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_regional: ~5 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_regional: ~5 rows (lebih kurang)
 DELETE FROM `tb_regional`;
 INSERT INTO `tb_regional` (`id`, `name`, `alias`) VALUES
 	(1, 'Regional 1', NULL),
@@ -352,7 +403,7 @@ INSERT INTO `tb_regional` (`id`, `name`, `alias`) VALUES
 	(4, 'Regional 4', 'Kalimantan'),
 	(5, 'Regional 5', NULL);
 
--- Dumping structure for table db_lentera.tb_roles_permissions
+-- membuang struktur untuk table db_lentera.tb_roles_permissions
 DROP TABLE IF EXISTS `tb_roles_permissions`;
 CREATE TABLE IF NOT EXISTS `tb_roles_permissions` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -360,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `tb_roles_permissions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_roles_permissions: ~16 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_roles_permissions: ~16 rows (lebih kurang)
 DELETE FROM `tb_roles_permissions`;
 INSERT INTO `tb_roles_permissions` (`id`, `name`) VALUES
 	(1, 'Developer'),
@@ -380,34 +431,45 @@ INSERT INTO `tb_roles_permissions` (`id`, `name`) VALUES
 	(15, 'Helpdesk'),
 	(16, 'Technician');
 
--- Dumping structure for table db_lentera.tb_sector
-DROP TABLE IF EXISTS `tb_sector`;
-CREATE TABLE IF NOT EXISTS `tb_sector` (
+-- membuang struktur untuk table db_lentera.tb_service_area
+DROP TABLE IF EXISTS `tb_service_area`;
+CREATE TABLE IF NOT EXISTS `tb_service_area` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `mitra_id` int NOT NULL DEFAULT '0',
-  `chat_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `regional_id` int DEFAULT NULL,
+  `witel_id` int DEFAULT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `team_leader1` int DEFAULT '0',
-  `team_leader2` int DEFAULT '0',
-  `team_leader3` int DEFAULT '0',
-  `is_active` int DEFAULT '0' COMMENT '0 : deactive, 1 : active',
-  `created_by` int DEFAULT '0',
+  `chat_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `head_service_area` int NOT NULL DEFAULT '0',
+  `officer_service_area` int NOT NULL DEFAULT '0',
+  `kordinator_lapangan1` int NOT NULL DEFAULT '0',
+  `kordinator_lapangan2` int NOT NULL DEFAULT '0',
+  `is_active` int NOT NULL DEFAULT (0),
+  `created_by` int DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
-  `updated_by` int DEFAULT '0',
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `mitra_id` (`mitra_id`),
-  KEY `team_leader1` (`team_leader1`),
-  KEY `team_leader2` (`team_leader2`),
-  KEY `team_leader3` (`team_leader3`),
+  `updated_by` int DEFAULT NULL,
+  `updated_at` datetime DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `head_service_area` (`head_service_area`),
+  KEY `officer_service_area` (`officer_service_area`),
+  KEY `kordinator_lapangan1` (`kordinator_lapangan1`),
+  KEY `kordinator_lapangan2` (`kordinator_lapangan2`),
+  KEY `regional_id` (`regional_id`),
+  KEY `witel_id` (`witel_id`),
   KEY `created_by` (`created_by`),
   KEY `updated_by` (`updated_by`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_sector: ~0 rows (approximately)
-DELETE FROM `tb_sector`;
+-- Membuang data untuk tabel db_lentera.tb_service_area: ~7 rows (lebih kurang)
+DELETE FROM `tb_service_area`;
+INSERT INTO `tb_service_area` (`id`, `regional_id`, `witel_id`, `name`, `chat_id`, `head_service_area`, `officer_service_area`, `kordinator_lapangan1`, `kordinator_lapangan2`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
+	(1, 4, 1, 'BANJARBARU', '0', 0, 0, 0, 0, 1, 981020, NULL, NULL, '2025-07-31 15:02:11'),
+	(2, 4, 1, 'BANJARMASIN', '0', 0, 0, 0, 0, 1, 981020, NULL, NULL, '2025-07-31 15:02:12'),
+	(3, 4, 1, 'BATULICIN', '0', 0, 0, 0, 0, 1, 981020, NULL, NULL, '2025-07-31 15:02:12'),
+	(4, 4, 1, 'PLEIHARI', '0', 0, 0, 0, 0, 1, 981020, NULL, NULL, '2025-07-31 15:02:12'),
+	(5, 4, 1, 'TANJUNG TABALONG', '0', 0, 0, 0, 0, 1, 981020, NULL, NULL, '2025-07-31 15:02:12'),
+	(6, 4, 1, 'ULIN', '0', 0, 0, 0, 0, 1, 981020, NULL, NULL, '2025-07-31 15:02:12');
 
--- Dumping structure for table db_lentera.tb_source_bima
+-- membuang struktur untuk table db_lentera.tb_source_bima
 DROP TABLE IF EXISTS `tb_source_bima`;
 CREATE TABLE IF NOT EXISTS `tb_source_bima` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -418,7 +480,7 @@ CREATE TABLE IF NOT EXISTS `tb_source_bima` (
   `c_wonum` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `c_scorderno` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `c_jmscorrelationid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `c_servicenum` bigint NOT NULL DEFAULT 0,
+  `c_servicenum` bigint NOT NULL DEFAULT (0),
   `c_description` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `c_crmordertype` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `c_ownergroup` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -431,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `tb_source_bima` (
   `c_siteid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `c_statusdate` datetime DEFAULT NULL,
   `c_schedstart` datetime DEFAULT NULL,
-  `c_contact_telephone_number` bigint NOT NULL DEFAULT 0,
+  `c_contact_telephone_number` bigint NOT NULL DEFAULT (0),
   `c_measurement` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `c_measurementdate` datetime DEFAULT NULL,
   `c_measurementresult` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
@@ -444,77 +506,78 @@ CREATE TABLE IF NOT EXISTS `tb_source_bima` (
   PRIMARY KEY (`id`),
   KEY `c_wonum_id` (`c_wonum_id`),
   KEY `c_workzone` (`c_workzone`),
-  KEY `c_wonum` (`c_wonum`)
+  KEY `c_wonum` (`c_wonum`),
+  KEY `c_servicenum` (`c_servicenum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_source_bima: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_source_bima: ~424 rows (lebih kurang)
 DELETE FROM `tb_source_bima`;
 
--- Dumping structure for table db_lentera.tb_source_insera
+-- membuang struktur untuk table db_lentera.tb_source_insera
 DROP TABLE IF EXISTS `tb_source_insera`;
 CREATE TABLE IF NOT EXISTS `tb_source_insera` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `parent_id` varchar(50) DEFAULT NULL,
+  `parent_id` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `incident_id` bigint NOT NULL DEFAULT '0',
-  `incident` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `incident` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `ttr_customer` time DEFAULT NULL,
-  `summary` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
+  `summary` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `reported_date` datetime DEFAULT NULL,
   `date_reported` date DEFAULT NULL,
   `time_reported` time DEFAULT NULL,
-  `owner_group` varchar(100) DEFAULT NULL,
-  `owner` varchar(100) DEFAULT NULL,
-  `customer_segment` varchar(100) DEFAULT NULL,
-  `service_type` varchar(100) DEFAULT NULL,
-  `witel` varchar(100) DEFAULT NULL,
-  `workzone` varchar(3) DEFAULT NULL,
-  `status` varchar(100) DEFAULT NULL,
+  `owner_group` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `owner` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_segment` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_type` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `witel` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `workzone` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status_date` datetime DEFAULT NULL,
-  `ticket_id_gamas` varchar(100) DEFAULT NULL,
-  `reported_by` varchar(100) DEFAULT NULL,
-  `contact_phone` varchar(100) DEFAULT NULL,
-  `contact_name` varchar(100) DEFAULT NULL,
-  `contact_email` varchar(100) DEFAULT NULL,
+  `ticket_id_gamas` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reported_by` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_phone` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `booking_date` datetime DEFAULT NULL,
-  `description_assigment` varchar(100) DEFAULT NULL,
-  `reported_priority` varchar(100) DEFAULT NULL,
-  `source_ticket` varchar(100) DEFAULT NULL,
-  `subsidiary` varchar(100) DEFAULT NULL,
-  `external_ticket_id` varchar(100) DEFAULT NULL,
+  `description_assigment` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reported_priority` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `source_ticket` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `subsidiary` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `external_ticket_id` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `channel` int NOT NULL DEFAULT '0',
-  `customer_type` varchar(100) DEFAULT NULL,
-  `closed_by` varchar(50) DEFAULT NULL,
-  `closed_reopen_by` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `customer_id` varchar(100) DEFAULT NULL,
-  `customer_name` varchar(100) DEFAULT NULL,
-  `service_id` varchar(100) DEFAULT NULL,
-  `service_no2` varchar(50) DEFAULT NULL,
+  `customer_type` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `closed_by` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `closed_reopen_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_id` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_id` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_no2` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `service_no` bigint NOT NULL DEFAULT '0',
-  `slg` varchar(100) DEFAULT NULL,
-  `technology` varchar(100) DEFAULT NULL,
-  `lapul` int NOT NULL DEFAULT 0,
-  `gaul` int NOT NULL DEFAULT 0,
-  `onu_rx` varchar(100) DEFAULT NULL,
-  `pending_reason` varchar(100) DEFAULT NULL,
+  `slg` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `technology` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `lapul` int NOT NULL DEFAULT '0',
+  `gaul` int NOT NULL DEFAULT '0',
+  `onu_rx` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pending_reason` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `datemodified` datetime DEFAULT NULL,
-  `incident_domain` varchar(100) DEFAULT NULL,
-  `region` varchar(100) DEFAULT NULL,
-  `symptom` varchar(100) DEFAULT NULL,
-  `hierarchy_path` varchar(100) DEFAULT NULL,
-  `solution` varchar(100) DEFAULT NULL,
-  `description_actual_solution` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `kode_produk` varchar(100) DEFAULT NULL,
-  `perangkat` varchar(100) DEFAULT NULL,
-  `odp_name` varchar(100) DEFAULT NULL,
-  `technician` varchar(100) DEFAULT NULL,
-  `device_name` varchar(100) DEFAULT NULL,
-  `worklog_summary` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `last_update_worklog` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `classification_flag` varchar(100) DEFAULT NULL,
-  `realm` varchar(100) DEFAULT NULL,
-  `related_to_gamas` varchar(100) DEFAULT NULL,
-  `tsc_result` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `scc_result` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
+  `incident_domain` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `region` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `symptom` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `hierarchy_path` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `solution` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description_actual_solution` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `kode_produk` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `perangkat` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `odp_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `technician` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `device_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `worklog_summary` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `last_update_worklog` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `classification_flag` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `realm` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `related_to_gamas` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tsc_result` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `scc_result` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `ttr_agent` time DEFAULT NULL,
   `ttr_mitra` time DEFAULT NULL,
   `ttr_nasional` time DEFAULT NULL,
@@ -522,36 +585,137 @@ CREATE TABLE IF NOT EXISTS `tb_source_insera` (
   `ttr_region` time DEFAULT NULL,
   `ttr_witel` time DEFAULT NULL,
   `ttr_end_to_end` time DEFAULT NULL,
-  `note` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `guarante_status` varchar(100) DEFAULT NULL,
+  `note` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `guarante_status` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `resolve_date` datetime DEFAULT NULL,
-  `sn_ont` varchar(100) DEFAULT NULL,
-  `tipe_ont` varchar(100) DEFAULT NULL,
-  `manufacture_ont` varchar(100) DEFAULT NULL,
-  `impacted_site` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `cause` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `resolution` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
-  `notes_eskalasi` text,
-  `rk_information` varchar(50) DEFAULT NULL,
-  `external_ticket_tier_3` varchar(50) DEFAULT NULL,
-  `customer_category` varchar(50) DEFAULT NULL,
-  `classification_path` varchar(50) DEFAULT NULL,
-  `teritory_near_end` varchar(50) DEFAULT NULL,
-  `teritory_far_end` varchar(50) DEFAULT NULL,
-  `urgency` varchar(50) DEFAULT NULL,
-  `urgency_description` text,
+  `sn_ont` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tipe_ont` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `manufacture_ont` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `impacted_site` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `cause` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `resolution` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `notes_eskalasi` mediumtext COLLATE utf8mb4_general_ci,
+  `rk_information` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `external_ticket_tier_3` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_category` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `classification_path` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teritory_near_end` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teritory_far_end` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `urgency` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `urgency_description` mediumtext COLLATE utf8mb4_general_ci,
   `last_updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `incident_id` (`incident_id`),
   KEY `incident` (`incident`),
   KEY `service_no` (`service_no`),
   KEY `workzone` (`workzone`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_source_insera: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_source_insera: ~0 rows (lebih kurang)
 DELETE FROM `tb_source_insera`;
 
--- Dumping structure for table db_lentera.tb_sub_group
+-- membuang struktur untuk table db_lentera.tb_source_manuals
+DROP TABLE IF EXISTS `tb_source_manuals`;
+CREATE TABLE IF NOT EXISTS `tb_source_manuals` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `parent_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `incident_id` bigint NOT NULL DEFAULT '0',
+  `incident` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ttr_customer` time DEFAULT NULL,
+  `summary` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `reported_date` datetime DEFAULT NULL,
+  `date_reported` date DEFAULT NULL,
+  `time_reported` time DEFAULT NULL,
+  `owner_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `owner` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_segment` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `witel` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `workzone` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status_date` datetime DEFAULT NULL,
+  `ticket_id_gamas` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reported_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_phone` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `contact_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `booking_date` datetime DEFAULT NULL,
+  `description_assigment` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reported_priority` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `source_ticket` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `subsidiary` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `external_ticket_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `channel` int NOT NULL DEFAULT '0',
+  `customer_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `closed_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `closed_reopen_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_no2` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `service_no` bigint NOT NULL DEFAULT '0',
+  `slg` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `technology` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `lapul` int NOT NULL DEFAULT '0',
+  `gaul` int NOT NULL DEFAULT '0',
+  `onu_rx` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pending_reason` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `datemodified` datetime DEFAULT NULL,
+  `incident_domain` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `region` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `symptom` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `hierarchy_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `solution` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description_actual_solution` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `kode_produk` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `perangkat` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `odp_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `technician` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `device_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `worklog_summary` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `last_update_worklog` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `classification_flag` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `realm` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `related_to_gamas` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tsc_result` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `scc_result` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `ttr_agent` time DEFAULT NULL,
+  `ttr_mitra` time DEFAULT NULL,
+  `ttr_nasional` time DEFAULT NULL,
+  `ttr_pending` time DEFAULT NULL,
+  `ttr_region` time DEFAULT NULL,
+  `ttr_witel` time DEFAULT NULL,
+  `ttr_end_to_end` time DEFAULT NULL,
+  `note` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `guarante_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `resolve_date` datetime DEFAULT NULL,
+  `sn_ont` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tipe_ont` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `manufacture_ont` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `impacted_site` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `cause` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `resolution` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `notes_eskalasi` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `rk_information` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `external_ticket_tier_3` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `customer_category` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `classification_path` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teritory_near_end` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teritory_far_end` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `urgency` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `urgency_description` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `last_updated_at` datetime NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `incident_id` (`incident_id`) USING BTREE,
+  KEY `incident` (`incident`) USING BTREE,
+  KEY `service_no` (`service_no`) USING BTREE,
+  KEY `workzone` (`workzone`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- Membuang data untuk tabel db_lentera.tb_source_manuals: ~0 rows (lebih kurang)
+DELETE FROM `tb_source_manuals`;
+
+-- membuang struktur untuk table db_lentera.tb_sub_group
 DROP TABLE IF EXISTS `tb_sub_group`;
 CREATE TABLE IF NOT EXISTS `tb_sub_group` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -559,7 +723,7 @@ CREATE TABLE IF NOT EXISTS `tb_sub_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_sub_group: ~40 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_sub_group: ~40 rows (lebih kurang)
 DELETE FROM `tb_sub_group`;
 INSERT INTO `tb_sub_group` (`id`, `name`) VALUES
 	(2, 'ASSURANCE & MAINTENANCE'),
@@ -603,7 +767,7 @@ INSERT INTO `tb_sub_group` (`id`, `name`) VALUES
 	(40, 'WIFI'),
 	(41, 'WILSUS');
 
--- Dumping structure for table db_lentera.tb_sub_unit
+-- membuang struktur untuk table db_lentera.tb_sub_unit
 DROP TABLE IF EXISTS `tb_sub_unit`;
 CREATE TABLE IF NOT EXISTS `tb_sub_unit` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -613,7 +777,7 @@ CREATE TABLE IF NOT EXISTS `tb_sub_unit` (
   KEY `regional_id` (`regional_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_sub_unit: ~9 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_sub_unit: ~9 rows (lebih kurang)
 DELETE FROM `tb_sub_unit`;
 INSERT INTO `tb_sub_unit` (`id`, `regional_id`, `name`) VALUES
 	(1, 4, 'Operation Regional IV'),
@@ -626,31 +790,31 @@ INSERT INTO `tb_sub_unit` (`id`, `regional_id`, `name`) VALUES
 	(8, 4, 'Shared Service Balikpapan'),
 	(9, 4, 'TA Area Balikpapan');
 
--- Dumping structure for table db_lentera.tb_team
+-- membuang struktur untuk table db_lentera.tb_team
 DROP TABLE IF EXISTS `tb_team`;
 CREATE TABLE IF NOT EXISTS `tb_team` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `sector_id` int DEFAULT '0',
+  `service_area_id` int DEFAULT '0',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `technician1` int DEFAULT '0',
   `technician2` int DEFAULT '0',
-  `is_active` int DEFAULT '0' COMMENT '0 : deactive, 1 : active',
+  `is_active` enum('0','1') COLLATE utf8mb4_general_ci DEFAULT '0' COMMENT '0 : deactive, 1 : active',
   `created_by` int DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_by` int DEFAULT '0',
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `sector_id` (`sector_id`),
   KEY `technician1` (`technician1`),
   KEY `technician2` (`technician2`),
   KEY `created_by` (`created_by`),
-  KEY `updated_by` (`updated_by`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `updated_by` (`updated_by`),
+  KEY `sector_id` (`service_area_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_team: ~0 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_team: ~0 rows (lebih kurang)
 DELETE FROM `tb_team`;
 
--- Dumping structure for table db_lentera.tb_witel
+-- membuang struktur untuk table db_lentera.tb_witel
 DROP TABLE IF EXISTS `tb_witel`;
 CREATE TABLE IF NOT EXISTS `tb_witel` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -661,7 +825,7 @@ CREATE TABLE IF NOT EXISTS `tb_witel` (
   KEY `regional_id` (`regional_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table db_lentera.tb_witel: ~6 rows (approximately)
+-- Membuang data untuk tabel db_lentera.tb_witel: ~6 rows (lebih kurang)
 DELETE FROM `tb_witel`;
 INSERT INTO `tb_witel` (`id`, `regional_id`, `name`, `alias`) VALUES
 	(1, 4, 'Banjarmasin', 'Kalsel'),

@@ -174,7 +174,7 @@
                             <li class="menu-title">Administrator</li>
                             <li class="{{ Request::is('employee-management/*') ? 'active' : '' }}">
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="bx bx-group"></i>
+                                    <i class="bx bxs-user-circle"></i>
                                     <span>Employee Management</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -182,17 +182,20 @@
                                     <li class="{{ Request::is('employee-management/roles-permissions') ? 'active' : '' }}"><a href="/employee-management/roles-permissions">Employee Roles & Permissions</a></li>
                                 </ul>
                             </li>
-                            <li class="{{ Request::is('regional-unit/*') ? 'active' : '' }}">
+                            <li class="{{ Request::is('organization-structure/*') ? 'active' : '' }}">
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="bx bx-world"></i>
-                                    <span>Regional & Unit</span>
+                                    <i class="bx bxs-user-detail"></i>
+                                    <span>Organization Structure</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li class="{{ Request::is('regional-unit/regional') ? 'active' : '' }}"><a href="/regional-unit/regional">Regional</a></li>
-                                    <li class="{{ Request::is('regional-unit/witel') ? 'active' : '' }}"><a href="/regional-unit/witel">Witel</a></li>
-                                    <li class="{{ Request::is('regional-unit/sub-unit') ? 'active' : '' }}"><a href="/regional-unit/sub-unit">Sub Unit</a></li>
-                                    <li class="{{ Request::is('regional-unit/sub-group') ? 'active' : '' }}"><a href="/regional-unit/sub-group">Sub-Group</a></li>
-                                    <li class="{{ Request::is('regional-unit/mitra') ? 'active' : '' }}"><a href="/regional-unit/mitra">Mitra</a></li>
+                                    <li class="{{ Request::is('organization-structure/regional') ? 'active' : '' }}"><a href="/organization-structure/regional">Regional</a></li>
+                                    <li class="{{ Request::is('organization-structure/witel') ? 'active' : '' }}"><a href="/organization-structure/witel">Witel</a></li>
+                                    <li class="{{ Request::is('organization-structure/sub-unit') ? 'active' : '' }}"><a href="/organization-structure/sub-unit">Sub Unit</a></li>
+                                    <li class="{{ Request::is('organization-structure/sub-group') ? 'active' : '' }}"><a href="/organization-structure/sub-group">Sub-Group</a></li>
+                                    <li class="{{ Request::is('organization-structure/mitra') ? 'active' : '' }}"><a href="/organization-structure/mitra">Mitra</a></li>
+                                    <li class="{{ Request::is('organization-structure/service-area') ? 'active' : '' }}"><a href="/organization-structure/service-area">Service Area</a></li>
+                                    <li class="{{ Request::is('organization-structure/team') ? 'active' : '' }}"><a href="/organization-structure/team">Team</a></li>
+
                                 </ul>
                             </li>
                             <li class="{{ Request::is('reporting-configuration/*') ? 'active' : '' }}">

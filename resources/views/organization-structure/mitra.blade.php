@@ -12,7 +12,7 @@
 </style>
 @endsection
 
-@section('title', 'Data Sub-Group')
+@section('title', 'Data Mitra')
 
 @section('content')
 <div class="card">
@@ -25,7 +25,9 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
-                        <th class="text-center">Sub-Group</th>
+                        <th class="text-center">Witel</th>
+                        <th class="text-center">Mitra</th>
+                        <th class="text-center">Alias</th>
                         <th class="text-center"></th>
                     </tr>
                 </thead>
@@ -40,15 +42,28 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Sub-Group</h5>
+                <h5 class="modal-title">Add Mitra</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/sub-group/store" method="POST">
+                <form action="/organization-structure/mitra/store" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label">Sub-Group Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="Enter Sub-Group Name" required>
+                        <label class="form-label">Witel</label>
+                        <select class="form-control select2" name="witel_id" required>
+                            <option value="" selected disabled>Select Witel</option>
+                            @foreach($get_witel as $witel)
+                                <option value="{{ $witel->id }}">{{ $witel->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mitra Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Mitra Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Alias</label>
+                        <input type="text" class="form-control" name="alias" placeholder="Enter Alias" required>
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
@@ -65,16 +80,29 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Sub-Group</h5>
+                <h5 class="modal-title">Edit Mitra</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/sub-group/store" method="POST">
+                <form action="/organization-structure/mitra/store" method="POST">
                     @csrf
                     <input type="hidden" name="id">
                     <div class="mb-3">
-                        <label class="form-label">Sub-Group Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="Enter Sub-Group Name" required>
+                        <label class="form-label">Witel</label>
+                        <select class="form-control select2" name="witel_id" required>
+                            <option value="" selected disabled>Select Witel</option>
+                            @foreach($get_witel as $witel)
+                                <option value="{{ $witel->id }}">{{ $witel->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mitra Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Mitra Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Alias</label>
+                        <input type="text" class="form-control" name="alias" placeholder="Enter Alias" required>
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
@@ -96,22 +124,29 @@
 <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script>
     $(document).ready(function() {
+        $(".select2").select2({
+            allowClear: true,
+            placeholder: "Silahkan Pilih Witel"
+        });
+
         let table = $(".detail-data-table").DataTable({
             responsive: true,
             processing: true,
             serverSide: false,
             ajax: {
-                url: '/ajax/regional-unit/sub-group',
+                url: '/ajax/organization-structure/mitra',
                 dataSrc: ''
             },
             columns: [
                 { data: 'id' },
+                { data: 'witel_name' },
                 { data: 'name' },
+                { data: 'alias' },
                 {
                     data: 'id',
                     render: function(data, type, row) {
                         return `
-                            <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal(${data}, '${row.name}')">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal(${data}, '${row.witel_id}', '${row.name}', '${row.alias}')">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(${data})">
@@ -122,11 +157,21 @@
                 }
             ]
         });
+
+        $('#modal-add, #modal-edit').on('shown.bs.modal', function() {
+            $(this).find('.select2').select2({
+                dropdownParent: $(this),
+                allowClear: true,
+                placeholder: "Silahkan Pilih Witel"
+            });
+        });
     });
 
-    function openEditModal(id, name) {
+    function openEditModal(id, witelId, name, alias) {
         $('#modal-edit input[name="id"]').val(id);
+        $('#modal-edit select[name="witel_id"]').val(witelId).trigger('change');
         $('#modal-edit input[name="name"]').val(name);
+        $('#modal-edit input[name="alias"]').val(alias);
         $('#modal-edit').modal('show');
     }
 
@@ -141,7 +186,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/regional-unit/sub-group/destroy/' + id;
+                window.location.href = '/organization-structure/mitra/destroy/' + id;
             }
         });
     }

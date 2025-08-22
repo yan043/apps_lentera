@@ -45,7 +45,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/regional/store" method="POST">
+                <form action="/organization-structure/regional/store" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Regional Name</label>
@@ -74,7 +74,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/regional-unit/regional/store" method="POST">
+                <form action="/organization-structure/regional/store" method="POST">
                     @csrf
                     <input type="hidden" name="id">
                     <div class="mb-3">
@@ -110,7 +110,7 @@
             processing: true,
             serverSide: false,
             ajax: {
-                url: '/ajax/regional-unit/regional',
+                url: '/ajax/organization-structure/regional',
                 dataSrc: ''
             },
             columns: [
@@ -152,7 +152,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/regional-unit/regional/destroy/' + id;
+                window.location.href = '/organization-structure/regional/destroy/' + id;
             }
         });
     }

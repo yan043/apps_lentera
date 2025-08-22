@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Models\RegionalUnitModel;
 use App\Models\OrderManagementModel;
 use App\Models\EmployeeManagementModel;
+use App\Models\OrganizationStructureModel;
 use App\Models\ReportingConfigurationModel;
 
 class AjaxController extends Controller
@@ -69,70 +68,99 @@ class AjaxController extends Controller
 
     public function get_regional()
     {
-        $data = RegionalUnitModel::get_data('tb_regional');
+        $data = OrganizationStructureModel::get_data('tb_regional');
 
         return response()->json($data);
     }
 
     public function get_regional_by_id($id)
     {
-        $data = RegionalUnitModel::get_data('tb_regional', $id);
+        $data = OrganizationStructureModel::get_data('tb_regional', $id);
 
         return response()->json($data);
     }
 
     public function get_witel()
     {
-        $data = RegionalUnitModel::get_witel();
+        $data = OrganizationStructureModel::get_witel();
 
         return response()->json($data);
     }
 
     public function get_witel_by_id($id)
     {
-        $data = RegionalUnitModel::get_witel_by_id($id);
+        $data = OrganizationStructureModel::get_witel_by_id($id);
 
         return response()->json($data);
     }
 
     public function get_sub_unit()
     {
-        $data = RegionalUnitModel::get_sub_unit();
+        $data = OrganizationStructureModel::get_sub_unit();
 
         return response()->json($data);
     }
 
     public function get_sub_unit_by_id($id)
     {
-        $data = RegionalUnitModel::get_sub_unit_by_id($id);
+        $data = OrganizationStructureModel::get_sub_unit_by_id($id);
 
         return response()->json($data);
     }
 
     public function get_sub_group()
     {
-        $data = RegionalUnitModel::get_data('tb_sub_group');
+        $data = OrganizationStructureModel::get_data('tb_sub_group');
 
         return response()->json($data);
     }
 
     public function get_sub_group_by_id($id)
     {
-        $data = RegionalUnitModel::get_data('tb_sub_group', $id);
+        $data = OrganizationStructureModel::get_data('tb_sub_group', $id);
 
         return response()->json($data);
     }
 
     public function get_mitra()
     {
-        $data = RegionalUnitModel::get_mitra();
+        $data = OrganizationStructureModel::get_mitra();
 
         return response()->json($data);
     }
 
     public function get_mitra_by_id($id)
     {
-        $data = RegionalUnitModel::get_mitra_by_id($id);
+        $data = OrganizationStructureModel::get_mitra_by_id($id);
+
+        return response()->json($data);
+    }
+
+
+    public function get_service_area()
+    {
+        $data = OrganizationStructureModel::get_service_area();
+
+        return response()->json($data);
+    }
+
+    public function get_service_area_by_id($id)
+    {
+        $data = OrganizationStructureModel::get_service_area_by_id($id);
+
+        return response()->json($data);
+    }
+
+    public function get_team()
+    {
+        $data = OrganizationStructureModel::get_team();
+
+        return response()->json($data);
+    }
+
+    public function get_team_by_id($id)
+    {
+        $data = OrganizationStructureModel::get_team_by_id($id);
 
         return response()->json($data);
     }

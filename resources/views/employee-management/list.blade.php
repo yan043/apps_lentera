@@ -250,7 +250,7 @@
         });
 
         $.ajax({
-            url: '/ajax/regional-unit/regional',
+            url: '/ajax/organization-structure/regional',
             method: 'GET',
             success: function(data) {
                 let regionalSelect = $('#regional_id_add');
@@ -262,7 +262,7 @@
         });
 
         $.ajax({
-            url: '/ajax/regional-unit/sub-group',
+            url: '/ajax/organization-structure/sub-group',
             method: 'GET',
             success: function(data) {
                 let subGroupSelect = $('#sub_group_id_add');
@@ -383,7 +383,7 @@
                 $('#password_edit').val('');
 
                 $.ajax({
-                    url: '/ajax/regional-unit/regional',
+                    url: '/ajax/organization-structure/regional',
                     method: 'GET',
                     success: function(regionalData) {
                         let regionalSelect = $('#regional_id_edit');
@@ -435,7 +435,7 @@
                 });
 
                 $.ajax({
-                    url: '/ajax/regional-unit/sub-group',
+                    url: '/ajax/organization-structure/sub-group',
                     method: 'GET',
                     success: function(subGroupData) {
                         let subGroupSelect = $('#sub_group_id_edit');

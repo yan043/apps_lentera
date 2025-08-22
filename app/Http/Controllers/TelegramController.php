@@ -112,6 +112,7 @@ class TelegramController extends Controller
     public static function lenteraBot()
     {
         $tokenBot = env('TELEGRAM_BOT_TOKEN');
+
         if (!$tokenBot)
         {
             Log::error("Telegram bot token not set in .env");
@@ -169,42 +170,6 @@ class TelegramController extends Controller
             if ($data === '/lapor_odp_terbuka')
             {
                 self::setUserState($chat_id, ['step' => 'input_odp_name']);
-                Telegram::sendMessage($tokenBot, $chat_id, "🔖 Ketik nama ODP");
-                return;
-            }
-
-            if (strpos($data, 'odp_hsa_') === 0)
-            {
-                $hsa_id    = str_replace('odp_hsa_', '', $data);
-                $saList    = DB::table('tb_service_area')->where('id_hsa', $hsa_id)->select('sa_id', 'sa_name')->get();
-                $saKeyboard = ['inline_keyboard' => []];
-
-                foreach ($saList as $sa)
-                {
-                    $saKeyboard['inline_keyboard'][] = [
-                        ['text' => $sa->sa_name, 'callback_data' => 'odp_sa_' . $hsa_id . '_' . $sa->sa_id]
-                    ];
-                }
-
-                self::setUserState($chat_id, [
-                    'step'   => 'choose_sa',
-                    'hsa_id' => $hsa_id
-                ]);
-                Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, "🏬 Pilih Service Area", $saKeyboard);
-                return;
-            }
-
-            if (strpos($data, 'odp_sa_') === 0)
-            {
-                $parts  = explode('_', $data);
-                $hsa_id = $parts[2];
-                $sa_id  = $parts[3];
-
-                self::setUserState($chat_id, [
-                    'step'      => 'input_odp_name',
-                    'hsa_id'    => $hsa_id,
-                    'sa_id'     => $sa_id
-                ]);
                 Telegram::sendMessage($tokenBot, $chat_id, "🔖 Ketik nama ODP");
                 return;
             }
@@ -284,19 +249,17 @@ class TelegramController extends Controller
                     return;
                 }
 
-                $hsa = DB::table('tb_head_service_area')->where('hsa_id', $odp->hsa_id)->first();
-                $sa  = DB::table('tb_service_area')->where('sa_id', $odp->sa_id)->first();
-
                 $msg  = "<b>Detail ODP Terbuka</b>\n";
-                $msg .= "🏢 Head Service Area : " . ($hsa->hsa_name ?? '-') . "\n";
-                $msg .= "🏬 Service Area : " . ($sa->sa_name ?? '-') . "\n";
+                $msg .= "<i>";
                 $msg .= "🔖 Nama ODP : " . ($odp->odp_name ?? '-') . "\n";
-                $msg .= "📍 Koordinat ODP : " . ($odp->odp_coordinates ?? '-') . "\n";
+                $msg .= "📍 Koordinat ODP : <code>" . ($odp->odp_coordinates ?? '-') . "</code>\n";
                 $msg .= "📝 Catatan : " . ($odp->note ?? '-') . "\n";
+                $msg .= "</i>";
 
                 self::setUserState($chat_id, [
                     'step'   => 'input_repair_notes',
-                    'odp_id' => $odp->id
+                    'odp_id' => $odp->id,
+                    'odp_name' => $odp->odp_name
                 ]);
 
                 if ($odp->photo_odp && file_exists(public_path($odp->photo_odp)))
@@ -373,6 +336,7 @@ class TelegramController extends Controller
             {
                 $coordinates = $location['latitude'] . ',' . $location['longitude'];
                 $address     = self::getAddressFromCoordinates($coordinates);
+
                 if ($address['full'] === 'Format koordinat tidak valid' || $address['full'] === 'Gagal mengambil alamat')
                 {
                     Telegram::sendMessage($tokenBot, $chat_id, "Gagal mengambil alamat dari koordinat. Pastikan lokasi valid.");
@@ -380,17 +344,46 @@ class TelegramController extends Controller
                 }
 
                 DB::table('tb_alpro_open_reports')->insert([
-                    'odp_name'        => $state['odp_name'],
+                    'odp_name'        => $state['odp_name']        ?? '',
                     'odp_coordinates' => $coordinates,
-                    'photo_odp'       => $state['photo_odp'],
-                    'street'          => $address['street'],
-                    'city'            => $address['city'],
-                    'province'        => $address['province'],
+                    'photo_odp'       => $state['photo_odp']       ?? '',
+                    'street'          => $address['street']        ?? '',
+                    'city'            => $address['city']          ?? '',
+                    'province'        => $address['province']      ?? '',
                     'created_date'    => date('Y-m-d'),
                     'created_time'    => date('H:i:s'),
                 ]);
                 self::clearUserState($chat_id);
-                Telegram::sendMessage($tokenBot, $chat_id, "ODP berhasil dilaporkan. Terima kasih!");
+
+                $group_chat_id = '-1002820428025';
+
+                $pelapor  = $update['message']['from']['first_name'] ?? '';
+                if (isset($update['message']['from']['last_name']))
+                {
+                    $pelapor .= ' ' . $update['message']['from']['last_name'];
+                }
+                $username = $update['message']['from']['username'] ?? '';
+                $user_id  = $update['message']['from']['id'] ?? '';
+
+                $caption  = "<b>📢 Laporan ODP Terbuka</b>\n\n";
+                $caption .= "<i>";
+                $caption .= "🔖 Nama ODP : " . ($state['odp_name'] ?? '-') . "\n";
+                $caption .= "📍 Koordinat ODP : <code>" . $coordinates . "</code>\n";
+                $caption .= "📝 Catatan : \n\n";
+                $caption .= "🙋 Pelapor : " . $pelapor . " | " . $user_id . ($username ? " (@$username)" : "") . "\n";
+                $caption .= "🗓️ Tanggal : " . date('Y-m-d H:i:s') . "\n";
+                $caption .= "</i>";
+
+                if (!empty($state['photo_odp']) && file_exists(public_path($state['photo_odp'])))
+                {
+                    Telegram::sendPhoto($tokenBot, $group_chat_id, $caption, public_path($state['photo_odp']));
+                    Telegram::sendPhoto($tokenBot, $chat_id, $caption, public_path($state['photo_odp']));
+                }
+                else
+                {
+                    Telegram::sendMessage($tokenBot, $group_chat_id, $caption);
+                    Telegram::sendMessage($tokenBot, $chat_id, $caption);
+                }
                 return;
             }
 
@@ -425,6 +418,7 @@ class TelegramController extends Controller
             {
                 $coordinates = $location['latitude'] . ',' . $location['longitude'];
                 $address     = self::getAddressFromCoordinates($coordinates);
+
                 if ($address['full'] === 'Format koordinat tidak valid' || $address['full'] === 'Gagal mengambil alamat')
                 {
                     Telegram::sendMessage($tokenBot, $chat_id, "Gagal mengambil alamat dari koordinat. Pastikan lokasi valid.");
@@ -442,7 +436,36 @@ class TelegramController extends Controller
                     'repair_province'    => $address['province'],
                 ]);
                 self::clearUserState($chat_id);
-                Telegram::sendMessage($tokenBot, $chat_id, "ODP berhasil ditutup dan diperbaiki. Terima kasih!");
+
+                $group_chat_id = '-1002820428025';
+
+                $pelapor  = $update['message']['from']['first_name'] ?? '';
+                if (isset($update['message']['from']['last_name']))
+                {
+                    $pelapor .= ' ' . $update['message']['from']['last_name'];
+                }
+                $username = $update['message']['from']['username'] ?? '';
+                $user_id  = $update['message']['from']['id'] ?? '';
+
+                $caption  = "<b>✅ ODP Berhasil Ditutup & Diperbaiki</b>\n\n";
+                $caption .= "<i>";
+                $caption .= "🔖 Nama ODP : " . ($state['odp_name'] ?? '-') . "\n";
+                $caption .= "📍 Koordinat Perbaikan : <code>" . $coordinates . "</code>\n";
+                $caption .= "📝 Catatan Perbaikan : \n\n" . ($state['repair_notes'] ?? '-') . "\n";
+                $caption .= "🙋 Pelapor : " . $pelapor . " | " . $user_id . ($username ? " (@$username)" : "") . "\n";
+                $caption .= "🗓️ Tanggal : " . date('Y-m-d H:i:s') . "\n";
+                $caption .= "</i>";
+
+                if (!empty($state['repair_photo_odp']) && file_exists(public_path($state['repair_photo_odp'])))
+                {
+                    Telegram::sendPhoto($tokenBot, $group_chat_id, $caption, public_path($state['repair_photo_odp']));
+                    Telegram::sendPhoto($tokenBot, $chat_id, $caption, public_path($state['repair_photo_odp']));
+                }
+                else
+                {
+                    Telegram::sendMessage($tokenBot, $group_chat_id, $caption);
+                    Telegram::sendMessage($tokenBot, $chat_id, $caption);
+                }
                 return;
             }
 

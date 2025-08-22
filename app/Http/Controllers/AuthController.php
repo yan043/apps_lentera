@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
 use App\Models\AuthModel;
 use App\Models\EmployeeManagementModel;
-use App\Models\RegionalUnitModel;
+use App\Models\OrganizationStructureModel;
 
 class AuthController extends Controller
 {
@@ -143,10 +143,10 @@ class AuthController extends Controller
 
     public function profile()
     {
-        $get_regional  = RegionalUnitModel::get_data('tb_regional');
-        $get_witel     = RegionalUnitModel::get_witel();
-        $get_mitra     = RegionalUnitModel::get_mitra();
-        $get_sub_unit  = RegionalUnitModel::get_sub_unit();
+        $get_regional  = OrganizationStructureModel::get_data('tb_regional');
+        $get_witel     = OrganizationStructureModel::get_witel();
+        $get_mitra     = OrganizationStructureModel::get_mitra();
+        $get_sub_unit  = OrganizationStructureModel::get_sub_unit();
         $get_sub_group = EmployeeManagementModel::get_sub_group();
         $get_role      = EmployeeManagementModel::get_role();
 
