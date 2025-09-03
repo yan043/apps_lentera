@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ReportingConfigurationModel;
 use Illuminate\Http\Request;
+use App\Models\ReportingConfigurationModel;
 
 class ReportingConfigurationController extends Controller
 {

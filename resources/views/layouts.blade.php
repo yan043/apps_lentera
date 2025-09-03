@@ -103,17 +103,17 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li class="{{ Request::is('order-management/*') ? 'active' : '' }}">
+                            <li class="{{ Request::is('work-order-management/*') ? 'active' : '' }}">
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="bx bx-list-check"></i>
-                                    <span>Order Management</span>
+                                    <span>Work Order Management</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li class="{{ Request::is('order-management/new') ? 'active' : '' }}"><a href="/order-management/new">New Orders</a></li>
-                                    <li class="{{ Request::is('order-management/assigned') ? 'active' : '' }}"><a href="/order-management/assigned">Assigned Orders</a></li>
-                                    <li class="{{ Request::is('order-management/ongoing') ? 'active' : '' }}"><a href="/order-management/ongoing">Ongoing Orders</a></li>
-                                    <li class="{{ Request::is('order-management/completed') ? 'active' : '' }}"><a href="/order-management/completed">Completed Orders</a></li>
-                                    <li class="{{ Request::is('order-management/cancel') ? 'active' : '' }}"><a href="/order-management/cancel">Cancel Orders</a></li>
+                                    <li class="{{ Request::is('work-order-management/new') ? 'active' : '' }}"><a href="/work-order-management/new">New Orders</a></li>
+                                    <li class="{{ Request::is('work-order-management/assigned') ? 'active' : '' }}"><a href="/work-order-management/assigned">Assigned Orders</a></li>
+                                    <li class="{{ Request::is('work-order-management/in-progress') ? 'active' : '' }}"><a href="/work-order-management/in-progress">In Progress</a></li>
+                                    <li class="{{ Request::is('work-order-management/completed') ? 'active' : '' }}"><a href="/work-order-management/completed">Completed Orders</a></li>
+                                    <li class="{{ Request::is('work-order-management/cancelled') ? 'active' : '' }}"><a href="/work-order-management/cancelled">Cancelled Orders</a></li>
                                 </ul>
                             </li>
                             <li class="{{ Request::is('support/order-tracking') ? 'active' : '' }}">

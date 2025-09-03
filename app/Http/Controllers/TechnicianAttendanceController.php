@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TechnicianAttendanceModel;
 use Illuminate\Http\Request;
+use App\Models\TechnicianAttendanceModel;
 
 class TechnicianAttendanceController extends Controller
 {

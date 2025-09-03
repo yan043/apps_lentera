@@ -5,7 +5,7 @@
 <link rel="stylesheet" crossorigin href="/assets/compiled/css/table-datatable-jquery.css">
 @endsection
 
-@section('title', 'Ongoing Orders')
+@section('title', 'In-Progress Orders')
 
 @section('content')
 <div class="card">

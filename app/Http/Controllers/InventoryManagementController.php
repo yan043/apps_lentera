@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InventoryManagementModel;
 use Illuminate\Http\Request;
+use App\Models\InventoryManagementModel;
 
 class InventoryManagementController extends Controller
 {

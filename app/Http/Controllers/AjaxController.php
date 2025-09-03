@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\OrderManagementModel;
+use App\Models\SupportModel;
 use App\Models\EmployeeManagementModel;
+use App\Models\WorkOrderManagementModel;
 use App\Models\OrganizationStructureModel;
 use App\Models\ReportingConfigurationModel;
 
@@ -62,6 +63,13 @@ class AjaxController extends Controller
     public function get_order_action_by_id($id)
     {
         $data = ReportingConfigurationModel::get_order_action_by_id($id);
+
+        return response()->json($data);
+    }
+
+    public function get_order_labels()
+    {
+        $data = ReportingConfigurationModel::get_order_labels();
 
         return response()->json($data);
     }
@@ -151,6 +159,20 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
+    public function get_work_zone()
+    {
+        $data = OrganizationStructureModel::get_work_zone();
+
+        return response()->json($data);
+    }
+
+    public function get_work_zone_by_id($id)
+    {
+        $data = OrganizationStructureModel::get_work_zone_by_id($id);
+
+        return response()->json($data);
+    }
+
     public function get_team()
     {
         $data = OrganizationStructureModel::get_team();
@@ -207,21 +229,62 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_new_orders($witel, $sourcedata, $startdate, $enddate)
+    public function get_new_order_charts()
     {
-        $data = OrderManagementModel::new_orders($witel, $sourcedata, $startdate, $enddate);
+        $type       = request()->input('type');
+        $startdate  = request()->input('startdate');
+        $enddate    = request()->input('enddate');
 
-        return response()->json($data);
-    }
+        $data = WorkOrderManagementModel::get_new_order_charts($type, $startdate, $enddate);
 
-    public function get_new_orders_post(Request $request, $witel, $sourcedata)
-    {
-        $startdate = $request->input('startdate');
-        $enddate   = $request->input('enddate');
+        if ($type == 'bar')
+        {
+            $labels = [];
+            $values = [];
 
-        $data = OrderManagementModel::new_orders($witel, $sourcedata, $startdate, $enddate);
+            foreach ($data as $row)
+            {
+                $labels[] = $row['workzone'];
+                $values[] = $row['jumlah'];
+            }
 
-        return response()->json($data);
+            return response()->json([
+                "labels" => $labels,
+                "datasets" => [
+                    [
+                        "label"           => "Orders by Zone",
+                        "data"            => $values,
+                        "backgroundColor" => "#3b82f6"
+                    ]
+                ]
+            ]);
+        }
+        elseif ($type == 'pie')
+        {
+            $sla = [
+                "0-2"   => 0,
+                "2-3"   => 0,
+                "3-12"  => 0,
+                "12-24" => 0,
+                "24+"   => 0
+            ];
+
+            $sla["0-2"]   += $data['ttr0to2'];
+            $sla["2-3"]   += $data['ttr2to3'];
+            $sla["3-12"]  += $data['ttr3to12'];
+            $sla["12-24"] += $data['ttr12to24'];
+            $sla["24+"]   += $data['ttr24'];
+
+            return response()->json([
+                "labels" => array_keys($sla),
+                "datasets" => [
+                    [
+                        "data"            => array_values($sla),
+                        "backgroundColor" => ["#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"]
+                    ]
+                ]
+            ]);
+        }
     }
 
     public function get_new_order_details()
@@ -232,7 +295,25 @@ class AjaxController extends Controller
         $startdate  = request()->input('startdate');
         $enddate    = request()->input('enddate');
 
-        $data = OrderManagementModel::new_order_details($sourcedata, $workzone, $ttr, $startdate, $enddate);
+        $data = WorkOrderManagementModel::new_order_details($sourcedata, $workzone, $ttr, $startdate, $enddate);
+
+        return response()->json($data);
+    }
+
+    public function get_assigned_order_details()
+    {
+        $sourcedata = request()->input('sourcedata');
+        $startdate  = request()->input('startdate');
+        $enddate    = request()->input('enddate');
+
+        $data = WorkOrderManagementModel::assigned_order_details($sourcedata, $startdate, $enddate);
+
+        return response()->json($data);
+    }
+
+    public function get_search_order($id)
+    {
+        $data = SupportModel::get_search_order($id);
 
         return response()->json($data);
     }

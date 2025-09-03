@@ -120,4 +120,9 @@ class ReportingConfigurationModel extends Model
     {
         return DB::table('tb_order_action')->where('id', $id)->delete();
     }
+
+    public static function get_order_labels()
+    {
+        return DB::table('tb_order_labels')->get();
+    }
 }

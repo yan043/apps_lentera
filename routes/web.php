@@ -1,18 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Mews\Captcha\Captcha;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\OrderManagementController;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\SupportController;
-use App\Http\Controllers\TechnicianAttendanceController;
-use App\Http\Controllers\InventoryManagementController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportsPaymentController;
 use App\Http\Controllers\EmployeeManagementController;
+use App\Http\Controllers\InventoryManagementController;
+use App\Http\Controllers\WorkOrderManagementController;
+use App\Http\Controllers\TechnicianAttendanceController;
 use App\Http\Controllers\OrganizationStructureController;
 use App\Http\Controllers\ReportingConfigurationController;
-use App\Http\Controllers\AjaxController;
 
 Route::get('login', [AuthController::class, 'auth'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->middleware('guest')->name('login.post');
@@ -28,14 +28,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('profile/store', [AuthController::class, 'storeProfile'])->name('profile.store');
     Route::get('profile/deactivate', [AuthController::class, 'deactivateAccount'])->name('profile.deactivate');
 
-    Route::prefix('order-management')->group(function () {
-        Route::get('new', [OrderManagementController::class, 'newOrders'])->name('order-management.new');
-        Route::get('new/details', [OrderManagementController::class, 'newOrderDetails'])->name('order-management.new.details');
+    Route::prefix('work-order-management')->group(function () {
+        Route::post('updateOrInsertOrder', [WorkOrderManagementController::class, 'updateOrInsertOrder'])->name('work-order-management.updateOrInsertOrder');
 
-        Route::get('assigned', [OrderManagementController::class, 'assignedOrders'])->name('order-management.assigned');
-        Route::get('ongoing', [OrderManagementController::class, 'ongoingOrders'])->name('order-management.ongoing');
-        Route::get('completed', [OrderManagementController::class, 'completedOrders'])->name('order-management.completed');
-        Route::get('cancel', [OrderManagementController::class, 'cancelOrders'])->name('order-management.cancel');
+        Route::get('new', [WorkOrderManagementController::class, 'newOrders'])->name('work-order-management.new');
+        Route::get('new/details', [WorkOrderManagementController::class, 'newOrderDetails'])->name('work-order-management.new.details');
+
+        Route::get('assigned', [WorkOrderManagementController::class, 'assignedOrders'])->name('work-order-management.assigned');
+        Route::get('assigned/details', [WorkOrderManagementController::class, 'assignedOrderDetail'])->name('work-order-management.assigned.detail');
+
+        Route::get('in-progress', [WorkOrderManagementController::class, 'inProgressOrders'])->name('work-order-management.in-progress');
+        Route::get('in-progress/details', [WorkOrderManagementController::class, 'inProgressOrderDetail'])->name('work-order-management.in-progress.detail');
+
+        Route::get('completed', [WorkOrderManagementController::class, 'completedOrders'])->name('work-order-management.completed');
+        Route::get('completed/details', [WorkOrderManagementController::class, 'completedOrderDetail'])->name('work-order-management.completed.detail');
+
+        Route::get('cancelled', [WorkOrderManagementController::class, 'cancelledOrders'])->name('work-order-management.cancelled');
+        Route::get('cancelled/details', [WorkOrderManagementController::class, 'cancelledOrderDetail'])->name('work-order-management.cancelled.detail');
     });
 
     Route::prefix('support')->group(function () {
@@ -154,6 +163,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('service-area', [AjaxController::class, 'get_service_area'])->name('ajax.organization-structure.service-area');
             Route::get('service-area/{id}', [AjaxController::class, 'get_service_area_by_id'])->name('ajax.organization-structure.service-area.id');
 
+            Route::get('work-zone', [AjaxController::class, 'get_work_zone'])->name('ajax.organization-structure.work-zone');
+            Route::get('work-zone/{id}', [AjaxController::class, 'get_work_zone_by_id'])->name('ajax.organization-structure.work-zone.id');
+
             Route::get('team', [AjaxController::class, 'get_team'])->name('ajax.organization-structure.team');
             Route::get('team/{id}', [AjaxController::class, 'get_team_by_id'])->name('ajax.organization-structure.team.id');
         });
@@ -170,15 +182,19 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('actions', [AjaxController::class, 'get_order_actions'])->name('ajax.reporting-configuration.actions');
             Route::get('actions/{id}', [AjaxController::class, 'get_order_action_by_id'])->name('ajax.reporting-configuration.actions.id');
+
+            Route::get('labels', [AjaxController::class, 'get_order_labels'])->name('ajax.reporting-configuration.labels');
         });
 
-        Route::prefix('order-management')->group(function () {
-            Route::prefix('new')->group(function () {
-                Route::post('{witel}/{sourcedata}', [AjaxController::class, 'get_new_orders_post'])->name('ajax.order-management.new.post');
-                Route::get('{witel}/{sourcedata}/{startdate}/{enddate}', [AjaxController::class, 'get_new_orders'])->name('ajax.order-management.new.get');
+        Route::prefix('work-order-management')->group(function () {
+            Route::get('new/charts', [AjaxController::class, 'get_new_order_charts'])->name('ajax.work-order-management.new.charts');
+            Route::get('new/details', [AjaxController::class, 'get_new_order_details'])->name('ajax.work-order-management.new.details');
 
-                Route::get('details', [AjaxController::class, 'get_new_order_details'])->name('ajax.order-management.new.details');
-            });
+            Route::get('assigned/details', [AjaxController::class, 'get_assigned_order_details'])->name('ajax.work-order-management.assigned.details');
+        });
+
+        Route::prefix('support')->group(function () {
+            Route::get('order-tracking/search/{id}', [AjaxController::class, 'get_search_order'])->name('ajax.support.search');
         });
     });
 });

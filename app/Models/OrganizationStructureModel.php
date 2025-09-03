@@ -103,6 +103,7 @@ class OrganizationStructureModel extends Model
                 DB::raw('te3.full_name AS kordinator_lapangan1_name'),
                 DB::raw('te4.full_name AS kordinator_lapangan2_name')
             )
+            ->where('tsa.is_active', 1)
             ->get();
     }
 
@@ -124,8 +125,48 @@ class OrganizationStructureModel extends Model
                 DB::raw('te3.full_name AS kordinator_lapangan1_name'),
                 DB::raw('te4.full_name AS kordinator_lapangan2_name')
             )
-            ->where('tsa.id', $id)
+            ->where([
+                'tsa.id' => $id,
+                'tsa.is_active' => 1
+            ])
             ->first();
+    }
+
+    public static function get_work_zone()
+    {
+        return DB::table('tb_work_zone AS wz')
+        ->leftJoin('tb_service_area AS ta', 'wz.service_area_id', '=', 'ta.id')
+        ->leftJoin('tb_regional AS tr', 'ta.regional_id', '=', 'tr.id')
+        ->leftJoin('tb_witel AS tw', 'ta.witel_id', '=', 'tw.id')
+        ->select(
+            'wz.*',
+            'ta.id AS service_area_id',
+            'ta.name AS service_area_name',
+            'tr.id AS regional_id',
+            'tr.name AS regional_name',
+            'tw.id AS witel_id',
+            'tw.name AS witel_name'
+        )
+        ->get();
+    }
+
+    public static function get_work_zone_by_id($id)
+    {
+        return DB::table('tb_work_zone AS wz')
+        ->leftJoin('tb_service_area AS ta', 'wz.service_area_id', '=', 'ta.id')
+        ->leftJoin('tb_regional AS tr', 'ta.regional_id', '=', 'tr.id')
+        ->leftJoin('tb_witel AS tw', 'ta.witel_id', '=', 'tw.id')
+        ->select(
+            'wz.*',
+            'ta.id AS service_area_id',
+            'ta.name AS service_area_name',
+            'tr.id AS regional_id',
+            'tr.name AS regional_name',
+            'tw.id AS witel_id',
+            'tw.name AS witel_name'
+        )
+        ->where('wz.id', $id)
+        ->first();
     }
 
     public static function get_team()
@@ -141,6 +182,7 @@ class OrganizationStructureModel extends Model
                 DB::raw('te.full_name AS technician1_name'),
                 DB::raw('te2.full_name AS technician2_name')
             )
+            ->where('tt.is_active', 1)
             ->get();
     }
 
@@ -157,7 +199,10 @@ class OrganizationStructureModel extends Model
                 DB::raw('te.full_name AS technician1_name'),
                 DB::raw('te2.full_name AS technician2_name')
             )
-            ->where('tt.id', $id)
+            ->where([
+                'tt.id' => $id,
+                'tt.is_active' => 1
+            ])
             ->first();
     }
 }

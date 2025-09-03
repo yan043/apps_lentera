@@ -8,6 +8,16 @@ use App\Models\Telegram;
 
 class TlkmLeakController extends Controller
 {
+    public static function bima_all_workorder_list()
+    {
+        $witels = ['KALSEL', 'BALIKPAPAN', 'KALBAR', 'KALTENG', 'KALTARA', 'SAMARINDA'];
+
+        foreach ($witels as $witel)
+        {
+            self::bima_get_workorder_list_date($witel);
+        }
+    }
+
     public static function bima_get_workorder_list_date($witel)
     {
         $total            = 0;
@@ -80,7 +90,7 @@ class TlkmLeakController extends Controller
                     'c_wonum_id'                 => preg_replace('/\D/', '', $value['c_wonum']),
                     'c_scorderno'                => $value['c_scorderno'],
                     'c_jmscorrelationid'         => $value['c_jmscorrelationid'],
-                    'c_servicenum'               => $value['c_servicenum'] ? : 0,
+                    'c_servicenum'               => $value['c_servicenum'] ? preg_replace('/\D/', '', explode(' ', trim($value['c_servicenum']))[0]) : 0,
                     'c_description'              => $value['c_description'],
                     'c_crmordertype'             => $value['c_crmordertype'],
                     'c_ownergroup'               => $value['c_ownergroup'],
@@ -115,7 +125,13 @@ class TlkmLeakController extends Controller
         }
         else
         {
-            DB::table('tb_source_bima')->whereBetween('c_datecreated', [date('Y-m-d 00:00:00', strtotime($datecreated_from)), date('Y-m-d 23:59:59', strtotime($datecreated_to))])->delete();
+            DB::table('tb_source_bima')
+            ->where('c_tk_subregion', $witel)
+            ->whereBetween('c_datecreated', [
+                date('Y-m-d 00:00:00', strtotime($datecreated_from)),
+                date('Y-m-d 23:59:59', strtotime($datecreated_to))
+            ])
+            ->delete();
         }
 
         foreach (array_chunk($insert, 500) as $numb => $data)
@@ -627,7 +643,7 @@ class TlkmLeakController extends Controller
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['perangkat']);
                         }
-                        else if ($data['device_name'] != '')
+                        elseif ($data['device_name'] != '')
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['device_name']);
                         }
@@ -915,7 +931,7 @@ class TlkmLeakController extends Controller
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['perangkat']);
                         }
-                        else if ($data['device_name'] != '')
+                        elseif ($data['device_name'] != '')
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['device_name']);
                         }

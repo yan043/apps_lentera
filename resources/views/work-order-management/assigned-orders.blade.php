@@ -11,7 +11,45 @@
     .detail-data-table td {
         text-align: center !important;
         vertical-align: middle !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
         font-size: 12px !important;
+    }
+    .detail-data-table tr {
+        height: 22px
+    }
+    .detail-data-table a {
+        color: inherit !important;
+        text-decoration: none !important;
+        cursor: pointer;
+    }
+    .detail-data-table a:hover {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto;
+    }
+    #filter-form .form-control,
+    #filter-form .select2-container .select2-selection--single {
+        height: 38px !important;
+        min-height: 38px !important;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+    #filter-form .input-group-text {
+        height: 38px !important;
+        min-height: 38px !important;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+    #filter-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px !important;
+    }
+    #filter-form .select2-container--default .select2-selection--single {
+        line-height: 38px !important;
     }
     .card-body {
         border-radius: 50px / 25px !important;
@@ -19,31 +57,53 @@
 </style>
 @endsection
 
-@section('title', 'Order Tracking')
+@section('title', 'Assigned Orders')
 
 @section('content')
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Order Tracking</h5>
-        <p class="card-text">Cari Order Number atau Payment Number untuk tracking status order.</p>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" id="searchOrderInput" placeholder="Search Order Number or Payment Number" aria-label="Search" minlength="10">
-        </div>
+        <form class="row g-3 align-items-end" id="filter-form">
+            <div class="col-md-4">
+                <label for="start_date" class="form-label fw-bold">Start Date</label>
+                <div class="input-group" id="start_date">
+                    <input type="text" class="form-control" id="start_date_input" name="start_date" placeholder="yyyy-mm-dd"
+                        data-date-format="yyyy-mm-dd" data-date-container='#start_date' data-provide="datepicker" data-date-autoclose="true" value="{{ old('start_date') ?: date('Y-m-01') }}">
+                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="end_date" class="form-label fw-bold">End Date</label>
+                <div class="input-group" id="end_date">
+                    <input type="text" class="form-control" id="end_date_input" name="end_date" placeholder="yyyy-mm-dd"
+                        data-date-format="yyyy-mm-dd" data-date-container='#end_date' data-provide="datepicker" data-date-autoclose="true" value="{{ old('end_date') ?: date('Y-m-d') }}">
+                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="sourcedata" class="form-label fw-bold">Source Data</label>
+                <select class="form-control select2" id="sourcedata" name="sourcedata" style="width: 100%">
+                    <option value="">All Source</option>
+                    <option value="insera">Insera</option>
+                    <option value="manual">Manual</option>
+                    <option value="bima">Bima</option>
+                </select>
+            </div>
+        </form>
     </div>
 </div>
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped text-center detail-data-table" id="orderTrackingTable">
+            <table class="table table-striped text-center detail-data-table" id="assignedOrdersTable">
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Order Code</th>
-                        <th>Service NO</th>
                         <th>Assign Date</th>
+                        <th>Sub Status</th>
                         <th>Service Area</th>
                         <th>Team</th>
-                        <th>Assign Labels</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -124,7 +184,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i>&nbsp; Assign</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i>&nbsp; Re-Assign</button>
             </div>
         </form>
     </div>
@@ -156,11 +216,62 @@
     $(document).ready(function() {
         $('.select2').select2();
 
-        $('#assign_date').datepicker({
+        $('#start_date_input, #end_date_input').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true,
-            todayHighlight: true,
-            orientation: "top"
+            todayHighlight: true
+        });
+
+        let table = $('#assignedOrdersTable').DataTable({
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: '/ajax/work-order-management/assigned/details',
+                type: 'GET',
+                data: function(d) {
+                    d.sourcedata = $('#sourcedata').val() || null;
+                    d.startdate = $('#start_date_input').val() || "{{ date('Y-m-01') }}";
+                    d.enddate = $('#end_date_input').val() || "{{ date('Y-m-d') }}";
+                },
+                dataSrc: ''
+            },
+            columns: [
+                { data: null, render: (data, type, row, meta) => meta.row + 1 },
+                { data: 'order_code' },
+                { data: 'assign_date', defaultContent: '-' },
+                { data: 'order_substatus_name', defaultContent: '-' },
+                { data: 'service_area_name' },
+                { data: 'team_name' },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        return `
+                            <button type="button" class="btn btn-sm btn-warning btn-reassign"
+                                data-order_code="${row.order_code}"
+                                data-order_id="${row.order_id}"
+                                data-team_id="${row.team_id}"
+                                data-team_name="${row.team_name || ''}"
+                                data-service_area_id="${row.service_area_id}"
+                                data-service_area_name="${row.service_area_name || ''}"
+                                data-assign_labels='${row.assign_labels}'
+                                data-assign_date="${row.assign_date}"
+                                data-assign_notes="${row.assign_notes || ''}"
+                                data-service_no="${row.service_no || ''}"
+                                data-customer_name="${row.customer_name || ''}"
+                                data-contact_phone="${row.contact_phone || ''}"
+                                data-odp_name="${row.odp_name || ''}"
+                                data-bs-toggle="modal" data-bs-target="#modal-reassign">
+                                <i class="fas fa-sync-alt"></i> Re-Assign
+                            </button>
+                        `;
+                    }
+                }
+            ],
+            responsive: true
+        });
+
+        $('#filter-form').on('change', 'input, select', function() {
+            table.ajax.reload();
         });
 
         $('#service_area_id').select2({
@@ -226,137 +337,7 @@
             }
         });
 
-        let table = $("#orderTrackingTable").DataTable({
-            responsive: true,
-            searching: false,
-            paging: true,
-            pageLength: 10,
-            lengthChange: true,
-            info: false,
-            data: [],
-            columns: [
-                { data: null, render: (data, type, row, meta) => meta.row + 1 },
-                { data: 'order_code', defaultContent: '-' },
-                { data: 'service_no', defaultContent: '-' },
-                { data: 'assign_date', defaultContent: '-' },
-                { data: 'service_area_name', defaultContent: '-' },
-                { data: 'team_name', defaultContent: '-' },
-                { data: 'assign_labels', render: function(data) {
-                    if (!data) return '-';
-                    try {
-                        let arr = typeof data === 'string' ? JSON.parse(data) : data;
-                        if (Array.isArray(arr)) return arr.join(', ');
-                        return data;
-                    } catch { return data; }
-                }, defaultContent: '-' },
-                {
-                    data: null,
-                    render: function(data, type, row) {
-                        // Jika belum di-assign (kategori New), tombol Assign biru
-                        if (!row.assign_date || !row.order_code || !row.order_id) {
-                            return `
-                                <button type="button" class="btn btn-sm btn-primary btn-assign"
-                                    data-order_code="${row.order_code || ''}"
-                                    data-order_id="${row.order_id || ''}"
-                                    data-team_id="${row.team_id || ''}"
-                                    data-team_name="${row.team_name || ''}"
-                                    data-service_area_id="${row.service_area_id || ''}"
-                                    data-service_area_name="${row.service_area_name || ''}"
-                                    data-assign_labels='${row.assign_labels ? JSON.stringify(row.assign_labels) : "[]"}'
-                                    data-assign_date="${row.assign_date || ''}"
-                                    data-assign_notes="${row.assign_notes || row.notes || ''}"
-                                    data-service_no="${row.service_no || ''}"
-                                    data-customer_name="${row.customer_name || ''}"
-                                    data-contact_phone="${row.contact_phone || ''}"
-                                    data-odp_name="${row.odp_name || ''}"
-                                    data-bs-toggle="modal" data-bs-target="#modal-reassign">
-                                    <i class="fas fa-paper-plane"></i> Assign
-                                </button>
-                            `;
-                        }
-                        // Jika sudah di-assign, tombol Re-Assign kuning
-                        return `
-                            <button type="button" class="btn btn-sm btn-warning btn-reassign"
-                                data-order_code="${row.order_code}"
-                                data-order_id="${row.order_id}"
-                                data-team_id="${row.team_id || ''}"
-                                data-team_name="${row.team_name || ''}"
-                                data-service_area_id="${row.service_area_id || ''}"
-                                data-service_area_name="${row.service_area_name || ''}"
-                                data-assign_labels='${row.assign_labels ? JSON.stringify(row.assign_labels) : "[]"}'
-                                data-assign_date="${row.assign_date || ''}"
-                                data-assign_notes="${row.assign_notes || row.notes || ''}"
-                                data-service_no="${row.service_no || ''}"
-                                data-customer_name="${row.customer_name || ''}"
-                                data-contact_phone="${row.contact_phone || ''}"
-                                data-odp_name="${row.odp_name || ''}"
-                                data-bs-toggle="modal" data-bs-target="#modal-reassign">
-                                <i class="fas fa-sync-alt"></i> Re-Assign
-                            </button>
-                        `;
-                    }
-                }
-            ]
-        });
-
-        function renderResult(data) {
-            if (!data || !Array.isArray(data) || data.length === 0) {
-                table.clear().draw();
-                return;
-            }
-            let rows = data.map(function(item) {
-                return {
-                    order_code: item.order_code ?? '-',
-                    order_id: item.order_id ?? '-',
-                    team_id: item.team_id ?? '',
-                    team_name: item.team_name ?? '',
-                    service_area_id: item.service_area_id ?? '',
-                    service_area_name: item.service_area_name ?? '',
-                    assign_labels: item.assign_labels ?? '',
-                    assign_date: item.assign_date ?? '',
-                    assign_notes: item.assign_notes ?? item.notes ?? '',
-                    service_no: item.service_no ?? '',
-                    customer_name: item.customer_name ?? '',
-                    contact_phone: item.contact_phone ?? '',
-                    odp_name: item.odp_name ?? '',
-                };
-            });
-            table.clear().rows.add(rows).draw();
-        }
-
-        function searchOrder() {
-            let id = $('#searchOrderInput').val().trim();
-            if (!id || id.length < 10) {
-                table.clear().draw();
-                return;
-            }
-            $.ajax({
-                url: '/ajax/support/order-tracking/search/' + encodeURIComponent(id),
-                method: 'GET',
-                success: function(res) {
-                    renderResult(res);
-                },
-                error: function() {
-                    table.clear().draw();
-                }
-            });
-        }
-
-        let debounceTimer;
-        $('#searchOrderInput').on('input', function() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(function() {
-                searchOrder();
-            }, 400);
-        });
-
-        $('#searchOrderInput').on('keypress', function(e) {
-            if (e.which === 13) {
-                searchOrder();
-            }
-        });
-
-        $(document).on('click', '.btn-reassign, .btn-assign', function () {
+        $(document).on('click', '.btn-reassign', function () {
             let serviceAreaId = $(this).data('service_area_id') || null;
             let teamId = $(this).data('team_id') || null;
             let serviceAreaText = $(this).data('service_area_name') || '';
@@ -384,44 +365,14 @@
                 $('#team_id').val(null).trigger('change');
             }
 
-            let rawLabels = $(this).data('assign_labels');
             let labels = [];
-            if (Array.isArray(rawLabels)) {
+            let rawLabels = $(this).data('assign_labels');
+            if (typeof rawLabels === 'string' && rawLabels.length > 0) {
+                try { labels = JSON.parse(rawLabels); } catch { labels = [rawLabels]; }
+            } else if (Array.isArray(rawLabels)) {
                 labels = rawLabels;
-            } else if (typeof rawLabels === 'string') {
-                try {
-                    let parsed = JSON.parse(rawLabels);
-                    if (Array.isArray(parsed)) {
-                        labels = parsed;
-                    } else if (parsed && typeof parsed === 'string') {
-                        labels = [parsed];
-                    } else {
-                        labels = [];
-                    }
-                } catch {
-                    if (rawLabels.trim() !== '') {
-                        labels = [rawLabels];
-                    } else {
-                        labels = [];
-                    }
-                }
-            } else if (rawLabels && typeof rawLabels === 'object') {
-                labels = Object.values(rawLabels);
-            } else {
-                labels = [];
             }
-            labels.forEach(function(label, idx) {
-                if (Array.isArray(label)) {
-                    label = label.join(', ');
-                    labels[idx] = label;
-                }
-                if (typeof label !== 'string') {
-                    label = String(label);
-                }
-
-                label = label.replace(/^\[+|]+$/g, '').replace(/^"+|"+$/g, '').trim();
-                labels[idx] = label;
-
+            labels.forEach(function(label) {
                 if ($('#assign_labels option[value="' + label + '"]').length === 0) {
                     let newOption = new Option(label, label, true, true);
                     $('#assign_labels').append(newOption);
@@ -432,14 +383,13 @@
             $('#reassign-form input[name="order_code"]').val($(this).data('order_code'));
             $('#reassign-form input[name="order_id"]').val($(this).data('order_id'));
             $('#reassign-form input[name="assign_notes"]').val($(this).data('assign_notes'));
+            $('#assign_date').val($(this).data('assign_date'));
 
-            $('#order_code').val($(this).data('order_code') || '');
             $('#service_no').val($(this).data('service_no') || '');
             $('#customer_name').val(maskText($(this).data('customer_name') || ''));
             $('#contact_phone').val(maskText($(this).data('contact_phone') || ''));
             $('#odp_name').val($(this).data('odp_name') || '');
-            $('#notes').val($(this).data('assign_notes') || $(this).data('notes') || '');
-            $('#assign_date').val($(this).data('assign_date'));
+            $('#notes').val($(this).data('assign_notes') || '');
         });
 
         let today = new Date();
@@ -448,6 +398,13 @@
         let dd = String(today.getDate()).padStart(2, '0');
         let formattedToday = yyyy + '-' + mm + '-' + dd;
         $('#assign_date').val(formattedToday);
+
+        $('#assign_date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            orientation: "top"
+        });
     });
 </script>
 @endsection

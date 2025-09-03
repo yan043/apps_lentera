@@ -111,7 +111,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Technician 2</label>
-                        <select class="form-control select2" id="technician2_id_edit" name="technician2" required>
+                        <select class="form-control select2" id="technician2_id_edit" name="technician2">
                             <option value="" selected disabled>Pilih Technician 2</option>
                         </select>
                     </div>
