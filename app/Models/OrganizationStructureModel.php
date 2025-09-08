@@ -103,7 +103,10 @@ class OrganizationStructureModel extends Model
                 DB::raw('te3.full_name AS kordinator_lapangan1_name'),
                 DB::raw('te4.full_name AS kordinator_lapangan2_name')
             )
-            ->where('tsa.is_active', 1)
+            ->where([
+                'tsa.is_active' => 1,
+                'tsa.witel_id'  => Session()->get('witel_id')
+            ])
             ->get();
     }
 
@@ -126,8 +129,9 @@ class OrganizationStructureModel extends Model
                 DB::raw('te4.full_name AS kordinator_lapangan2_name')
             )
             ->where([
-                'tsa.id' => $id,
-                'tsa.is_active' => 1
+                'tsa.id'        => $id,
+                'tsa.is_active' => 1,
+                'tsa.witel_id'  => Session()->get('witel_id')
             ])
             ->first();
     }
@@ -147,6 +151,7 @@ class OrganizationStructureModel extends Model
             'tw.id AS witel_id',
             'tw.name AS witel_name'
         )
+        ->where('ta.witel_id', Session()->get('witel_id'))
         ->get();
     }
 
@@ -165,7 +170,10 @@ class OrganizationStructureModel extends Model
             'tw.id AS witel_id',
             'tw.name AS witel_name'
         )
-        ->where('wz.id', $id)
+        ->where([
+            'wz.id'       => $id,
+            'ta.witel_id' => Session()->get('witel_id')
+        ])
         ->first();
     }
 

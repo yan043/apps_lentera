@@ -171,7 +171,7 @@
                 let tech1Select = $('#technician1_id_add');
                 tech1Select.empty().append('<option value="" selected disabled>Pilih Technician 1</option>');
                 data.forEach(function(item) {
-                    tech1Select.append(`<option value="${item.nik}">${item.full_name}</option>`);
+                    tech1Select.append(`<option value="${item.nik}">${item.full_name} (${item.nik})</option>`);
                 });
             }
         });
@@ -183,7 +183,7 @@
                 let tech2Select = $('#technician2_id_add');
                 tech2Select.empty().append('<option value="" selected disabled>Pilih Technician 2</option>');
                 data.forEach(function(item) {
-                    tech2Select.append(`<option value="${item.nik}">${item.full_name}</option>`);
+                    tech2Select.append(`<option value="${item.nik}">${item.full_name} (${item.nik})</option>`);
                 });
             }
         });
@@ -200,8 +200,26 @@
                 { data: 'id' },
                 { data: 'service_area_name' },
                 { data: 'name' },
-                { data: 'technician1_name' },
-                { data: 'technician2_name' },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        if (row.technician1) {
+                            return row.technician1_name + ' (' + row.technician1 + ')';
+                        } else {
+                            return row.technician1_name || '';
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        if (row.technician2) {
+                            return row.technician2_name + ' (' + row.technician2 + ')';
+                        } else {
+                            return row.technician2_name || '';
+                        }
+                    }
+                },
                 {
                     data: 'id',
                     render: function(data, type, row) {
@@ -249,7 +267,7 @@
                         let tech1Select = $('#technician1_id_edit');
                         tech1Select.empty().append('<option value="" selected disabled>Pilih Technician 1</option>');
                         tech1Data.forEach(function(item) {
-                            tech1Select.append(`<option value="${item.nik}">${item.full_name}</option>`);
+                            tech1Select.append(`<option value="${item.nik}">${item.full_name} (${item.nik})</option>`);
                         });
                         tech1Select.val(data.technician1).trigger('change');
                     }
@@ -262,7 +280,7 @@
                         let tech2Select = $('#technician2_id_edit');
                         tech2Select.empty().append('<option value="" selected disabled>Pilih Technician 2</option>');
                         tech2Data.forEach(function(item) {
-                            tech2Select.append(`<option value="${item.nik}">${item.full_name}</option>`);
+                            tech2Select.append(`<option value="${item.nik}">${item.full_name} (${item.nik})</option>`);
                         });
                         tech2Select.val(data.technician2).trigger('change');
                     }

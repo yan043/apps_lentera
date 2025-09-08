@@ -52,7 +52,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="add-form" action="{{ route('profile.store') }}" method="POST">
+                <form id="add-form" action="{{ route('employee.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">NIK</label>

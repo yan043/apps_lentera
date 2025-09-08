@@ -9,6 +9,163 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkOrderManagementModel extends Model
 {
+    public static function view($id)
+    {
+        $witel = strtoupper(Session::get('witel_alias'));
+
+        $inseraQuery = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_source_insera AS tsi', 'tao.order_id', '=', 'tsi.incident_id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
+            ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
+            ->select(
+                'tao.*',
+
+                'tsi.incident AS order_code',
+                'tsi.incident_id AS order_id',
+                'tsi.service_no',
+                'tsi.customer_name',
+                'tsi.contact_phone',
+                'tsi.summary AS notes',
+                DB::raw('NULL as customer_coordinates'),
+                'tsi.odp_name',
+                'tsi.reported_date AS order_date',
+                'tsi.region AS region_name',
+                'tsi.witel',
+                'tsi.workzone',
+
+                'tt.name AS team_name',
+                'tsa.name AS service_area_name',
+
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
+                'tss.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
+                'tos.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
+                'toa.name AS order_action_name'
+            )
+            ->where([
+                'tao.id'    => $id,
+                'tsi.witel' => $witel
+            ]);
+
+        $manualQuery = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_source_manuals AS tsm', 'tao.order_id', '=', 'tsm.incident_id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
+            ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
+            ->select(
+                'tao.*',
+
+                'tsm.incident AS order_code',
+                'tsm.incident_id AS order_id',
+                'tsm.service_no',
+                'tsm.customer_name',
+                'tsm.contact_phone',
+                'tsm.summary AS notes',
+                DB::raw('NULL as customer_coordinates'),
+                'tsm.odp_name',
+                'tsm.reported_date AS order_date',
+                'tsm.region AS region_name',
+                'tsm.witel',
+                'tsm.workzone',
+
+                'tt.name AS team_name',
+                'tsa.name AS service_area_name',
+
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
+                'tss.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
+                'tos.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
+                'toa.name AS order_action_name'
+            )
+            ->where([
+                'tao.id'    => $id,
+                'tsm.witel' => $witel
+            ]);
+
+        $bimaQuery = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_source_bima AS tbm', 'tao.order_id', '=', 'tbm.c_wonum_id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
+            ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
+            ->select(
+                'tao.*',
+
+                'tbm.c_wonum AS order_code',
+                'tbm.c_wonum_id AS order_id',
+                'tbm.c_servicenum AS service_no',
+                'tbm.c_customer_name AS customer_name',
+                'tbm.c_contact_telephone_number AS contact_phone',
+                'tbm.c_serviceaddress AS notes',
+                DB::raw('NULL as customer_coordinates'),
+                DB::raw('NULL as odp_name'),
+                'tbm.c_datemodified AS order_date',
+                'tbm.c_siteid AS region_name',
+                'tbm.c_tk_subregion AS witel',
+                'tbm.c_workzone AS workzone',
+
+                'tt.name AS team_name',
+                'tsa.name AS service_area_name',
+
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
+                'tss.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
+                'tos.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
+                'toa.name AS order_action_name'
+            )
+            ->where([
+                'tao.id' => $id,
+                'tbm.c_tk_subregion' => $witel
+            ]);
+
+        $insera = $inseraQuery->first();
+        if ($insera) {
+            return $insera;
+        }
+
+        $manual = $manualQuery->first();
+        if ($manual) {
+            return $manual;
+        }
+
+        $bima = $bimaQuery->first();
+        if ($bima) {
+            return $bima;
+        }
+
+        return null;
+    }
+
     public static function updateOrInsertOrder($data)
     {
         DB::table('tb_assign_orders')->updateOrInsert(
@@ -17,7 +174,6 @@ class WorkOrderManagementModel extends Model
             ],
             [
                 'order_code'      => $data['order_code'],
-                'service_area_id' => $data['service_area_id'],
                 'team_id'         => $data['team_id'],
                 'team_name'       => $data['team_name'],
                 'assign_date'     => $data['assign_date'],
@@ -302,6 +458,7 @@ class WorkOrderManagementModel extends Model
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
             ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -313,16 +470,26 @@ class WorkOrderManagementModel extends Model
                 'tsi.customer_name',
                 'tsi.contact_phone',
                 'tsi.summary AS notes',
+                DB::raw('NULL as customer_coordinates'),
                 'tsi.odp_name',
                 'tsi.reported_date AS order_date',
-                'tsi.workzone',
+                'tsi.region AS region_name',
                 'tsi.witel',
+                'tsi.workzone',
 
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
                 'tss.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
                 'tos.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
                 'toa.name AS order_action_name'
             )
             ->whereNotNull('tao.order_code')
@@ -335,6 +502,7 @@ class WorkOrderManagementModel extends Model
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
             ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -346,16 +514,26 @@ class WorkOrderManagementModel extends Model
                 'tsm.customer_name',
                 'tsm.contact_phone',
                 'tsm.summary AS notes',
+                DB::raw('NULL as customer_coordinates'),
                 'tsm.odp_name',
                 'tsm.reported_date AS order_date',
-                'tsm.workzone',
+                'tsm.region AS region_name',
                 'tsm.witel',
+                'tsm.workzone',
 
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
                 'tss.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
                 'tos.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
                 'toa.name AS order_action_name'
             )
             ->whereNotNull('tao.order_code')
@@ -368,6 +546,7 @@ class WorkOrderManagementModel extends Model
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
             ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -379,16 +558,26 @@ class WorkOrderManagementModel extends Model
                 'tbm.c_customer_name AS customer_name',
                 'tbm.c_contact_telephone_number AS contact_phone',
                 'tbm.c_serviceaddress AS notes',
+                DB::raw('NULL as customer_coordinates'),
                 DB::raw('NULL as odp_name'),
                 'tbm.c_datemodified AS order_date',
-                'tbm.c_workzone AS workzone',
+                'tbm.c_siteid AS region_name',
                 'tbm.c_tk_subregion AS witel',
+                'tbm.c_workzone AS workzone',
 
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
                 'tss.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
                 'tos.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
                 'toa.name AS order_action_name'
             )
             ->whereNotNull('tao.order_code')

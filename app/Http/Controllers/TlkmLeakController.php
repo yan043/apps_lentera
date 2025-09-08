@@ -82,6 +82,18 @@ class TlkmLeakController extends Controller
         {
             if (!in_array($value['c_description'], ['Pasang ONT', 'Remove STB', 'Cabut ONT']))
             {
+                $servicenum = trim($value['c_servicenum'] ?? '');
+
+                if ($servicenum === '' || $servicenum === null)
+                {
+                    $servicenum = 0;
+                }
+                else
+                {
+                    $servicenum = preg_replace('/\D/', '', explode(' ', $servicenum)[0]);
+                    $servicenum = $servicenum !== '' ? $servicenum : 0;
+                }
+
                 $insert[] = [
                     'parent_id'                  => $value['id'],
                     'c_datecreated'              => empty($value['datecreated']) ? null : date('Y-m-d H:i:s', strtotime($value['datecreated'])),
@@ -90,7 +102,7 @@ class TlkmLeakController extends Controller
                     'c_wonum_id'                 => preg_replace('/\D/', '', $value['c_wonum']),
                     'c_scorderno'                => $value['c_scorderno'],
                     'c_jmscorrelationid'         => $value['c_jmscorrelationid'],
-                    'c_servicenum'               => $value['c_servicenum'] ? preg_replace('/\D/', '', explode(' ', trim($value['c_servicenum']))[0]) : 0,
+                    'c_servicenum'               => $servicenum,
                     'c_description'              => $value['c_description'],
                     'c_crmordertype'             => $value['c_crmordertype'],
                     'c_ownergroup'               => $value['c_ownergroup'],

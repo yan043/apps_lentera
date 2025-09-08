@@ -122,4 +122,32 @@ class ReportingConfigurationController extends Controller
 
         return redirect()->back()->with('success', 'Action berhasil dihapus.');
     }
+
+    public function labels()
+    {
+        return view('reporting-configuration.labels');
+    }
+
+    public function storeLabel(Request $request)
+    {
+        $data = $request->only(['id', 'name']);
+
+        if (isset($data['id']) && $data['id'])
+        {
+            ReportingConfigurationModel::update_order_label($data['id'], ['name' => $data['name']]);
+        }
+        else
+        {
+            ReportingConfigurationModel::insert_order_label(['name' => $data['name']]);
+        }
+
+        return redirect()->back()->with('success', 'Label berhasil disimpan.');
+    }
+
+    public function destroyLabel($id)
+    {
+        ReportingConfigurationModel::delete_order_label($id);
+
+        return redirect()->back()->with('success', 'Label berhasil dihapus.');
+    }
 }

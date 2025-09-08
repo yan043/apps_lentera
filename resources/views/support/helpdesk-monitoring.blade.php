@@ -7,10 +7,34 @@
 <link href="/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
 <link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 <style>
+    .detail-data-table th,
+    .detail-data-table td {
+        text-align: center !important;
+        vertical-align: middle !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        font-size: 12px !important;
+    }
+    .detail-data-table tr {
+        height: 22px
+    }
+    .detail-data-table a {
+        color: inherit !important;
+        text-decoration: none !important;
+        cursor: pointer;
+    }
+    .detail-data-table a:hover {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto;
+    }
     .dashboard-header {
         margin-bottom: 1.5rem;
     }
-
     .summary-card {
         border-radius: 1rem;
         padding: 1rem;
@@ -24,24 +48,17 @@
         font-size: 2rem;
         opacity: 0.8;
     }
-    .bg-gradient-blue { background: linear-gradient(45deg,#4e73df,#224abe); }
-    .bg-gradient-green { background: linear-gradient(45deg,#1cc88a,#0f9d58); }
-    .bg-gradient-orange { background: linear-gradient(45deg,#f6c23e,#e59400); }
-    .bg-gradient-red { background: linear-gradient(45deg,#e74a3b,#be2617); }
-
-    .table-modern thead {
-        background-color: #f8f9fc;
-    }
-    .table-modern tbody tr:hover {
-        background-color: #f1f5fb;
-        transition: 0.2s;
-    }
-
     .badge-status {
         padding: 0.4em 0.8em;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
+    .bg-gradient-ready { background: linear-gradient(45deg,#bdbdbd,#757575); }
+    .bg-gradient-onprogress { background: linear-gradient(45deg,#4e73df,#224abe); }
+    .bg-gradient-custissue { background: linear-gradient(45deg,#f6c23e,#e59400); }
+    .bg-gradient-techissue { background: linear-gradient(45deg,#36b9cc,#178ca4); }
+    .bg-gradient-externalissue { background: linear-gradient(45deg,#fd7e14,#b85c00); }
+    .bg-gradient-done { background: linear-gradient(45deg,#1cc88a,#0f9d58); }
 </style>
 @endsection
 
@@ -49,98 +66,193 @@
 
 @section('content')
 <div class="row mb-4">
-    <div class="col-md-3">
-        <div class="summary-card bg-gradient-blue">
+    <div class="col-md-2">
+        <div class="summary-card bg-gradient-ready">
             <div>
-                <h6>Total Active</h6>
-                <h4>120</h4>
+                <h6 class="mb-1">READY</h6>
+                <h4 class="mb-0">{{ $summary['READY'] ?? 0 }}</h4>
             </div>
-            <div class="icon"><i class="bi bi-check-circle"></i></div>
+            <div class="icon"><i class="fas fa-bolt"></i></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="summary-card bg-gradient-green">
+    <div class="col-md-2">
+        <div class="summary-card bg-gradient-onprogress">
             <div>
-                <h6>Processing</h6>
-                <h4>80</h4>
+                <h6 class="mb-1">ON-PROGRESS</h6>
+                <h4 class="mb-0">{{ $summary['ON-PROGRESS'] ?? 0 }}</h4>
             </div>
-            <div class="icon"><i class="bi bi-hourglass-split"></i></div>
+            <div class="icon"><i class="fas fa-spinner"></i></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="summary-card bg-gradient-orange">
+    <div class="col-md-2">
+        <div class="summary-card bg-gradient-custissue">
             <div>
-                <h6>Pending</h6>
-                <h4>45</h4>
+                <h6 class="mb-1">CUST-ISSUE</h6>
+                <h4 class="mb-0">{{ $summary['CUST-ISSUE'] ?? 0 }}</h4>
             </div>
-            <div class="icon"><i class="bi bi-exclamation-triangle"></i></div>
+            <div class="icon"><i class="fas fa-user-times"></i></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="summary-card bg-gradient-red">
+    <div class="col-md-2">
+        <div class="summary-card bg-gradient-techissue">
             <div>
-                <h6>On Hold</h6>
-                <h4>25</h4>
+                <h6 class="mb-1">TECH-ISSUE</h6>
+                <h4 class="mb-0">{{ $summary['TECH-ISSUE'] ?? 0 }}</h4>
             </div>
-            <div class="icon"><i class="bi bi-pause-circle"></i></div>
+            <div class="icon"><i class="fas fa-tools"></i></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="summary-card bg-gradient-externalissue">
+            <div>
+                <h6 class="mb-1">EXTERNAL-ISSUE</h6>
+                <h4 class="mb-0">{{ $summary['EXTERNAL-ISSUE'] ?? 0 }}</h4>
+            </div>
+            <div class="icon"><i class="fas fa-network-wired"></i></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="summary-card bg-gradient-done">
+            <div>
+                <h6 class="mb-1">DONE</h6>
+                <h4 class="mb-0">{{ $summary['DONE'] ?? 0 }}</h4>
+            </div>
+            <div class="icon"><i class="fas fa-check-circle"></i></div>
         </div>
     </div>
 </div>
 
-<div class="card shadow-sm border-0">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-modern table-hover align-middle text-center detail-data-table">
-                <thead>
-                    <tr>
-                        <th>Field 1</th>
-                        <th>Field 2</th>
-                        <th>Field 3</th>
-                        <th>Field 4</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Isi Field 1</td>
-                        <td>Isi Field 2</td>
-                        <td>Isi Field 3</td>
-                        <td>Isi Field 4</td>
-                        <td><span class="badge-status bg-danger text-white">Inactive</span></td>
-                    </tr>
-                    <tr>
-                        <td>Isi Field 1</td>
-                        <td>Isi Field 2</td>
-                        <td>Isi Field 3</td>
-                        <td>Isi Field 4</td>
-                        <td><span class="badge-status bg-success">Active</span></td>
-                    </tr>
-                    <tr>
-                        <td>Isi Field 1</td>
-                        <td>Isi Field 2</td>
-                        <td>Isi Field 3</td>
-                        <td>Isi Field 4</td>
-                        <td><span class="badge-status bg-warning text-dark">Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>Isi Field 1</td>
-                        <td>Isi Field 2</td>
-                        <td>Isi Field 3</td>
-                        <td>Isi Field 4</td>
-                        <td><span class="badge-status bg-info text-dark">Processing</span></td>
-                    </tr>
-                    <tr>
-                        <td>Isi Field 1</td>
-                        <td>Isi Field 2</td>
-                        <td>Isi Field 3</td>
-                        <td>Isi Field 4</td>
-                        <td><span class="badge-status bg-secondary">On Hold</span></td>
-                    </tr>
-                </tbody>
-            </table>
+@if (isset($data))
+    @foreach ($data as $s => $t)
+    <div class="d-flex align-items-center mb-0">
+        <div style="height:32px;width:6px;background:#4e73df;border-radius:3px;margin-right:12px;"></div>
+        <h5 class="mb-0 fw-bold">{{ $s }}</h5>
+    </div>
+    <div class="card shadow-sm border-0 rounded mb-4" style="margin-top:0;">
+        <div class="card-body p-2">
+            <div class="table-responsive">
+                <table class="table text-center detail-data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">TEAM</th>
+                            <th rowspan="2">ORDER</th>
+                            <th colspan="6">STATUS</th>
+                            <th rowspan="2">TOTAL</th>
+                        </tr>
+                        <tr>
+                            <th>READY</th>
+                            <th>ON-PROGRESS</th>
+                            <th>CUST-ISSUE</th>
+                            <th>TECH-ISSUE</th>
+                            <th>EXTERNAL-ISSUE</th>
+                            <th>DONE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $total_status_ready = $total_status_on_progress = $total_status_cust_issue = $total_status_tech_issue = $total_status_external_issue = $total_status_done = $total_order = 0;
+                        @endphp
+                        @foreach ($t as $team => $list_order)
+                        <tr>
+                            <td>{{ $team }}</td>
+                            <td>
+                                @php
+                                    $amount_status_ready = $amount_status_on_progress = $amount_status_cust_issue = $amount_status_tech_issue = $amount_status_external_issue = $amount_status_done = $amount_order = 0;
+                                @endphp
+                                @foreach ($list_order as $order)
+                                    @php
+                                        $amount_order++;
+                                        $badgeClass = 'badge bg-gradient-ready text-black';
+                                        if ($order->order_status_name == 'ON-PROGRESS')
+                                        {
+                                            $badgeClass = 'badge bg-gradient-onprogress text-white';
+                                        }
+                                        elseif ($order->order_status_name == 'CUST-ISSUE')
+                                        {
+                                            $badgeClass = 'badge bg-gradient-custissue text-white';
+                                        }
+                                        elseif ($order->order_status_name == 'TECH-ISSUE')
+                                        {
+                                            $badgeClass = 'badge bg-gradient-techissue text-white';
+                                        }
+                                        elseif ($order->order_status_name == 'EXTERNAL-ISSUE')
+                                        {
+                                            $badgeClass = 'badge bg-gradient-externalissue text-white';
+                                        }
+                                        elseif ($order->order_status_name == 'DONE')
+                                        {
+                                            $badgeClass = 'badge bg-gradient-done text-white';
+                                        }
+
+                                        if ($order->order_status_name == 'READY' || $order->order_status_name == null)
+                                        {
+                                            $amount_status_ready++;
+                                        }
+                                        elseif ($order->order_status_name == 'ON-PROGRESS')
+                                        {
+                                            $amount_status_on_progress++;
+                                        }
+                                        elseif ($order->order_status_name == 'CUST-ISSUE')
+                                        {
+                                            $amount_status_cust_issue++;
+                                        }
+                                        elseif ($order->order_status_name == 'TECH-ISSUE')
+                                        {
+                                            $amount_status_tech_issue++;
+                                        }
+                                        elseif ($order->order_status_name == 'EXTERNAL-ISSUE')
+                                        {
+                                            $amount_status_external_issue++;
+                                        }
+                                        elseif ($order->order_status_name == 'DONE')
+                                        {
+                                            $amount_status_done++;
+                                        }
+                                    @endphp
+                                    <span class="badge-status {{ $badgeClass }} mb-1 d-inline-block" style="min-width:60px;">
+                                        {{ $order->order_code }}
+                                    </span>
+                                    <br>
+                                @endforeach
+                            </td>
+                            <td>{{ $amount_status_ready }}</td>
+                            <td>{{ $amount_status_on_progress }}</td>
+                            <td>{{ $amount_status_cust_issue }}</td>
+                            <td>{{ $amount_status_tech_issue }}</td>
+                            <td>{{ $amount_status_external_issue }}</td>
+                            <td>{{ $amount_status_done }}</td>
+                            <td>{{ $amount_order }}</td>
+                            @php
+                                $total_status_ready          += $amount_status_ready;
+                                $total_status_on_progress    += $amount_status_on_progress;
+                                $total_status_cust_issue     += $amount_status_cust_issue;
+                                $total_status_tech_issue     += $amount_status_tech_issue;
+                                $total_status_external_issue += $amount_status_external_issue;
+                                $total_status_done           += $amount_status_done;
+                                $total_order                 += $amount_order;
+                            @endphp
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">TOTAL</td>
+                            <td>{{ $total_status_ready }}</td>
+                            <td>{{ $total_status_on_progress }}</td>
+                            <td>{{ $total_status_cust_issue }}</td>
+                            <td>{{ $total_status_tech_issue }}</td>
+                            <td>{{ $total_status_external_issue }}</td>
+                            <td>{{ $total_status_done }}</td>
+                            <td>{{ $total_order }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+    @endforeach
+@endif
+
 @endsection
 
 @section('scripts')
@@ -151,17 +263,25 @@
 <script src="/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script>
-    $(document).ready(function()
-    {
-        let jquery_datatable = $(".detail-data-table").DataTable({
+    $(document).ready(function() {
+        $('.detail-data-table').DataTable({
+            paging: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            lengthChange: false,
             responsive: true,
-            pageLength: 5,
-            language: {
-                searchPlaceholder: "Cari data...",
-                search: "",
-                lengthMenu: "_MENU_ data per halaman",
-                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data"
-            }
+            autoWidth: false,
+        });
+
+        $('.select2').select2({
+            width: '100%'
+        });
+
+        $('#date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
         });
     });
 </script>

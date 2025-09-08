@@ -31,9 +31,9 @@ class SupportModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->select(
+                'tao.id',
                 'tao.order_code',
                 'tao.order_id',
-                'tao.service_area_id',
                 'tao.team_id',
                 'tao.team_name',
                 'tao.assign_date',
@@ -49,6 +49,7 @@ class SupportModel extends Model
                 'tsi.workzone',
                 'tsi.witel',
                 'tt.name AS team_name',
+                'tt.service_area_id',
                 'tsa.name AS service_area_name'
             )
             ->whereNotNull('tao.order_code')
@@ -72,9 +73,9 @@ class SupportModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->select(
+                'tao.id',
                 'tao.order_code',
                 'tao.order_id',
-                'tao.service_area_id',
                 'tao.team_id',
                 'tao.team_name',
                 'tao.assign_date',
@@ -90,6 +91,7 @@ class SupportModel extends Model
                 'tsm.workzone',
                 'tsm.witel',
                 'tt.name AS team_name',
+                'tt.service_area_id',
                 'tsa.name AS service_area_name'
             )
             ->whereNotNull('tao.order_code')
@@ -113,9 +115,9 @@ class SupportModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->select(
+                'tao.id',
                 'tao.order_code',
                 'tao.order_id',
-                'tao.service_area_id',
                 'tao.team_id',
                 'tao.team_name',
                 'tao.assign_date',
@@ -130,6 +132,7 @@ class SupportModel extends Model
                 'tbm.c_workzone AS workzone',
                 'tbm.c_tk_subregion AS witel',
                 'tt.name AS team_name',
+                'tt.service_area_id',
                 'tsa.name AS service_area_name'
             )
             ->whereNotNull('tao.order_code')
@@ -153,6 +156,7 @@ class SupportModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->select(
+                'tao.id',
                 'tsi.incident AS order_code',
                 'tsi.incident_id AS order_id',
                 'tsi.service_no',
@@ -164,6 +168,7 @@ class SupportModel extends Model
                 'tsi.workzone',
                 'tsi.witel',
                 'tt.name AS team_name',
+                'tt.service_area_id',
                 'tsa.name AS service_area_name'
             )
             ->whereNull('tao.order_code')
@@ -187,6 +192,7 @@ class SupportModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->select(
+                'tao.id',
                 'tsm.incident AS order_code',
                 'tsm.incident_id AS order_id',
                 'tsm.service_no',
@@ -198,6 +204,7 @@ class SupportModel extends Model
                 'tsm.workzone',
                 'tsm.witel',
                 'tt.name AS team_name',
+                'tt.service_area_id',
                 'tsa.name AS service_area_name'
             )
             ->whereNull('tao.order_code')
@@ -221,6 +228,7 @@ class SupportModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->select(
+                'tao.id',
                 'tbm.c_wonum AS order_code',
                 'tbm.c_wonum_id AS order_id',
                 'tbm.c_servicenum AS service_no',
@@ -232,6 +240,7 @@ class SupportModel extends Model
                 'tbm.c_workzone AS workzone',
                 'tbm.c_tk_subregion AS witel',
                 'tt.name AS team_name',
+                'tt.service_area_id',
                 'tsa.name AS service_area_name'
             )
             ->whereNull('tao.order_code')
@@ -264,5 +273,254 @@ class SupportModel extends Model
         }
 
         return $assigned->take(1)->values();
+    }
+
+    public static function get_service_area_order($service_area_id, $sourcedata, $date)
+    {
+        $data = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
+            ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->select('tsa.id', 'tsa.name')
+            ->whereNotNull('tao.order_code')
+            ->where([
+                'tao.assign_date' => $date,
+                'tsa.witel_id'    => Session::get('witel_id'),
+                'tt.is_active'    => 1,
+                'tsa.is_active'   => 1
+            ])
+            ->groupBy('tsa.id');
+
+        if ($service_area_id != 'ALL')
+        {
+            $data->where('tt.service_area_id', $service_area_id);
+        }
+
+        if ($sourcedata != 'ALL')
+        {
+            $data->where('tao.sourcedata', $sourcedata);
+        }
+
+        return $data->orderBy('tsa.sort_id', 'ASC')->get();
+    }
+
+    public static function get_service_area_order_to_team($service_area_id, $sourcedata, $date)
+    {
+        $data = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
+            ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->select('tt.id', 'tt.name')
+            ->whereNotNull('tao.order_code')
+            ->where([
+                'tt.service_area_id' => $service_area_id,
+                'tao.assign_date'    => $date,
+                'tt.is_active'       => 1,
+                'tsa.is_active'      => 1
+            ]);
+
+        if ($sourcedata != 'ALL')
+        {
+            $data->where('tao.sourcedata', $sourcedata);
+        }
+
+        return $data->groupBy('tt.id')->get();
+    }
+
+    public static function get_order_team($team_id, $sourcedata, $date)
+    {
+        $witel = strtoupper(Session::get('witel_alias'));
+
+        $inseraQuery = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_source_insera AS tsi', 'tao.order_id', '=', 'tsi.incident_id')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_status AS tst', 'tos.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
+            ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->select(
+                'tao.*',
+
+                'tsi.incident AS order_code',
+                'tsi.incident_id AS order_id',
+                'tsi.service_no',
+                'tsi.customer_name',
+                'tsi.contact_phone',
+                'tsi.summary AS notes',
+                'tsi.odp_name',
+                'tsi.reported_date AS order_date',
+                'tsi.workzone',
+                'tsi.witel',
+
+                'tt.name AS team_name',
+                'tsa.name AS service_area_name',
+
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
+                'tos.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
+                'tseg.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
+                'toa.name AS order_action_name'
+            )
+            ->whereNotNull('tao.order_code')
+            ->where([
+                'tao.team_id'     => $team_id,
+                'tao.assign_date' => $date,
+                'tsi.witel'       => $witel,
+                'tt.is_active'    => 1,
+                'tsa.is_active'   => 1
+            ]);
+
+        $manualQuery = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_source_manuals AS tsm', 'tao.order_id', '=', 'tsm.incident_id')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_status AS tst', 'tos.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
+            ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->select(
+                'tao.*',
+
+                'tsm.incident AS order_code',
+                'tsm.incident_id AS order_id',
+                'tsm.service_no',
+                'tsm.customer_name',
+                'tsm.contact_phone',
+                'tsm.summary AS notes',
+                'tsm.odp_name',
+                'tsm.reported_date AS order_date',
+                'tsm.workzone',
+                'tsm.witel',
+
+                'tt.name AS team_name',
+                'tsa.name AS service_area_name',
+
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
+                'tos.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
+                'tseg.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
+                'toa.name AS order_action_name'
+            )
+            ->whereNotNull('tao.order_code')
+            ->where([
+                'tao.team_id'     => $team_id,
+                'tao.assign_date' => $date,
+                'tsm.witel'       => $witel,
+                'tt.is_active'    => 1,
+                'tsa.is_active'   => 1
+            ]);
+
+        $bimaQuery = DB::table('tb_assign_orders AS tao')
+            ->leftJoin('tb_source_bima AS tbm', 'tao.order_id', '=', 'tbm.c_wonum_id')
+            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_status AS tst', 'tos.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
+            ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
+            ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
+            ->select(
+                'tao.*',
+
+                'tbm.c_wonum AS order_code',
+                'tbm.c_wonum_id AS order_id',
+                'tbm.c_servicenum AS service_no',
+                'tbm.c_customer_name AS customer_name',
+                'tbm.c_contact_telephone_number AS contact_phone',
+                'tbm.c_serviceaddress AS notes',
+                DB::raw('NULL as odp_name'),
+                'tbm.c_datemodified AS order_date',
+                'tbm.c_workzone AS workzone',
+                'tbm.c_tk_subregion AS witel',
+
+                'tt.name AS team_name',
+                'tsa.name AS service_area_name',
+
+                'tst.step AS order_step',
+                'tst.name AS order_status_name',
+
+                'tar.order_substatus_id AS order_substatus_id',
+                'tos.name AS order_substatus_name',
+
+                'tar.order_segment_id AS order_segment_id',
+                'tseg.name AS order_segment_name',
+
+                'tar.order_action_id AS order_action_id',
+                'toa.name AS order_action_name'
+            )
+            ->whereNotNull('tao.order_code')
+            ->where([
+                'tao.team_id'         => $team_id,
+                'tao.assign_date'     => $date,
+                'tbm.c_tk_subregion'  => $witel,
+                'tt.is_active'        => 1,
+                'tsa.is_active'       => 1
+            ]);
+
+        if ($sourcedata == 'insera')
+        {
+            return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
+        }
+        elseif ($sourcedata == 'manual')
+        {
+            return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
+        }
+        elseif ($sourcedata == 'bima')
+        {
+            return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
+        }
+        else
+        {
+            $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
+            $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');
+            $bimaSql   = $bimaQuery->orderBy('tao.updated_at', 'DESC');
+
+            return $inseraSql->unionAll($manualSql)->unionAll($bimaSql)->get();
+        }
+    }
+
+    public static function helpdesk_monitoring($service_area_id, $sourcedata, $date)
+    {
+        $order = [];
+
+        $service_area = self::get_service_area_order($service_area_id, $sourcedata, $date);
+
+        foreach ($service_area as $s)
+        {
+            $team = self::get_service_area_order_to_team($s->id, $sourcedata, $date);
+
+            foreach ($team as $t)
+            {
+                $list_order = self::get_order_team($t->id, $sourcedata, $date);
+
+                foreach ($list_order as $k2 => $v2)
+                {
+                    $order[$s->name][$t->name][$k2] = $v2;
+                }
+            }
+        }
+
+        return $order;
     }
 }

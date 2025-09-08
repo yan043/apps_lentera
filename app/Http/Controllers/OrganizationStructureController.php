@@ -181,6 +181,36 @@ class OrganizationStructureController extends Controller
         return redirect()->back()->with('success', 'Service Area berhasil dihapus.');
     }
 
+    public function workZone()
+    {
+        $get_service_area = OrganizationStructureModel::get_service_area();
+
+        return view('organization-structure.work-zone', ['get_service_area' => $get_service_area]);
+    }
+
+    public function storeWorkZone(Request $request)
+    {
+        $data = $request->only(['id', 'service_area_id', 'name']);
+
+        if (isset($data['id']) && $data['id'])
+        {
+            OrganizationStructureModel::update_data('tb_work_zone', $data['id'], $data);
+        }
+        else
+        {
+            OrganizationStructureModel::insert_data('tb_work_zone', $data);
+        }
+
+        return redirect()->back()->with('success', 'Work Zone berhasil disimpan.');
+    }
+
+    public function destroyWorkZone($id)
+    {
+        OrganizationStructureModel::delete_data('tb_work_zone', $id);
+
+        return redirect()->back()->with('success', 'Work Zone berhasil dihapus.');
+    }
+
     public function team()
     {
         return view('organization-structure.team');

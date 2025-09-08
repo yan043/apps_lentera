@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SupportModel;
 use App\Models\EmployeeManagementModel;
 use App\Models\WorkOrderManagementModel;
+use App\Models\InventoryManagementModel;
 use App\Models\OrganizationStructureModel;
 use App\Models\ReportingConfigurationModel;
 
@@ -39,6 +40,13 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
+    public function get_order_sub_status_by_status_id($id)
+    {
+        $data = ReportingConfigurationModel::get_order_sub_status_by_status_id($id);
+
+        return response()->json($data);
+    }
+
     public function get_order_segments()
     {
         $data = ReportingConfigurationModel::get_order_segments();
@@ -60,9 +68,9 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_order_action_by_id($id)
+    public function get_order_action_by_segment_id($id)
     {
-        $data = ReportingConfigurationModel::get_order_action_by_id($id);
+        $data = ReportingConfigurationModel::get_order_action_by_segment_id($id);
 
         return response()->json($data);
     }
@@ -316,5 +324,58 @@ class AjaxController extends Controller
         $data = SupportModel::get_search_order($id);
 
         return response()->json($data);
+    }
+
+    public function get_view_order($id)
+    {
+        $data = WorkOrderManagementModel::view($id);
+
+        return response()->json($data);
+    }
+
+    public function get_inventory_material()
+    {
+        $data = InventoryManagementModel::get_inventory_material();
+
+        return response()->json($data);
+    }
+
+    public function get_inventory_nte($type)
+    {
+        $data = InventoryManagementModel::get_inventory_nte($type);
+
+        return response()->json($data);
+    }
+
+    public function get_photo_list($sourcedata, $id = 0)
+    {
+        if (in_array($sourcedata, ['insera', 'manuals']))
+        {
+            $order_segment_id = $id;
+
+            $photo_list = json_decode(ReportingConfigurationModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
+        }
+        elseif ($sourcedata == 'bima')
+        {
+            $order_substatus_id = $id;
+
+            $photo_list = json_decode(ReportingConfigurationModel::get_photo_list($sourcedata, $order_substatus_id)->photo_list);
+        }
+        else
+        {
+            $photo_list = [
+                'Lokasi_Rumah',
+                'Kondisi_Dalam_ODP',
+                'Hasil_Ukur_Power_IN',
+                'Hasil_Ukur_Power_OUT'
+            ];
+        }
+
+        if(!isset($photo_list))
+        {
+            $photo_list = [];
+        }
+
+        return response()->json($photo_list);
     }
 }

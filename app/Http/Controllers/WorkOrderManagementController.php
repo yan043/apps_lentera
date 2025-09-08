@@ -8,12 +8,33 @@ use App\Models\WorkOrderManagementModel;
 
 class WorkOrderManagementController extends Controller
 {
+    public function view($id)
+    {
+        return view('work-order-management.view', ['id' => $id]);
+    }
+
+    public function viewPost(Request $request)
+    {
+        $validateData = $request->validate([
+            'order_code'    => 'required',
+            'order_id'      => 'required',
+            'team_id'       => 'required',
+            'team_name'     => 'required',
+            'assign_date'   => 'required',
+            'assign_labels' => 'required',
+            'assign_notes'  => 'required',
+        ]);
+
+        WorkOrderManagementModel::updateOrder($validateData);
+
+        return redirect()->back()->with('success', 'Successfully Updated Work Order!');
+    }
+
     public function updateOrInsertOrder(Request $request)
     {
         $validateData = $request->validate([
             'order_code'      => 'required',
             'order_id'        => 'required',
-            'service_area_id' => 'required',
             'team_id'         => 'required',
             'team_name'       => 'required',
             'assign_date'     => 'required',

@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Model;
 
 class InventoryManagementModel extends Model
 {
-    // Define table name if different from the default
-    protected $table = 'inventory_management';
+    public static function get_inventory_material()
+    {
+        return DB::table('tb_inventory_material')->get();
+    }
 
-    // Define fillable fields
-    protected $fillable = [
-        // ...define fillable fields...
-    ];
+    public static function get_inventory_nte($type)
+    {
+        return DB::table('tb_inventory_nte')->where('nte_type', $type)->get();
+    }
 }

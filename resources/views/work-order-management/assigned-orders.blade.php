@@ -246,7 +246,14 @@
                     data: null,
                     render: function(data, type, row) {
                         return `
+                            <a href="/work-order-management/view/${row.id}" class="btn btn-sm btn-info" style="color: white !important;">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+
+                            &nbsp;
+
                             <button type="button" class="btn btn-sm btn-warning btn-reassign"
+                                data-id="${row.id}"
                                 data-order_code="${row.order_code}"
                                 data-order_id="${row.order_id}"
                                 data-team_id="${row.team_id}"
@@ -380,6 +387,7 @@
             });
             $('#assign_labels').val(labels).trigger('change');
 
+            $('#reassign-form input[name="id"]').val($(this).data('id'));
             $('#reassign-form input[name="order_code"]').val($(this).data('order_code'));
             $('#reassign-form input[name="order_id"]').val($(this).data('order_id'));
             $('#reassign-form input[name="assign_notes"]').val($(this).data('assign_notes'));

@@ -1,7 +1,6 @@
 @php
     use Illuminate\Support\Facades\Request;
 @endphp
-<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -103,6 +102,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
+                            @if(Session::get('role_name') != 'Technician')
                             <li class="{{ Request::is('work-order-management/*') ? 'active' : '' }}">
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="bx bx-list-check"></i>
@@ -194,6 +194,7 @@
                                     <li class="{{ Request::is('organization-structure/sub-group') ? 'active' : '' }}"><a href="/organization-structure/sub-group">Sub-Group</a></li>
                                     <li class="{{ Request::is('organization-structure/mitra') ? 'active' : '' }}"><a href="/organization-structure/mitra">Mitra</a></li>
                                     <li class="{{ Request::is('organization-structure/service-area') ? 'active' : '' }}"><a href="/organization-structure/service-area">Service Area</a></li>
+                                    <li class="{{ Request::is('organization-structure/work-zone') ? 'active' : '' }}"><a href="/organization-structure/work-zone">Work Zone</a></li>
                                     <li class="{{ Request::is('organization-structure/team') ? 'active' : '' }}"><a href="/organization-structure/team">Team</a></li>
 
                                 </ul>
@@ -208,8 +209,10 @@
                                     <li class="{{ Request::is('reporting-configuration/sub-status') ? 'active' : '' }}"><a href="/reporting-configuration/sub-status">Order Sub Status</a></li>
                                     <li class="{{ Request::is('reporting-configuration/segments') ? 'active' : '' }}"><a href="/reporting-configuration/segments">Order Segments</a></li>
                                     <li class="{{ Request::is('reporting-configuration/actions') ? 'active' : '' }}"><a href="/reporting-configuration/actions">Order Actions</a></li>
+                                    <li class="{{ Request::is('reporting-configuration/labels') ? 'active' : '' }}"><a href="/reporting-configuration/labels">Order Labels</a></li>
                                 </ul>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </div>

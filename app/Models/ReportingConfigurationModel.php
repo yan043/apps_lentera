@@ -44,9 +44,18 @@ class ReportingConfigurationModel extends Model
     {
         return DB::table('tb_order_sub_status AS toss')
         ->leftJoin('tb_order_status AS tos', 'tos.id', '=', 'toss.order_status_id')
-        ->select('toss.*', 'tos.name AS order_status_name')
+        ->select('toss.*', 'tos.step AS order_status_step', 'tos.name AS order_status_name')
         ->where('toss.id', $id)
         ->first();
+    }
+
+    public static function get_order_sub_status_by_status_id($order_status_id)
+    {
+        return DB::table('tb_order_sub_status AS toss')
+        ->leftJoin('tb_order_status AS tos', 'tos.id', '=', 'toss.order_status_id')
+        ->select('toss.*', 'tos.step AS order_status_step', 'tos.name AS order_status_name')
+        ->where('toss.order_status_id', $order_status_id)
+        ->get();
     }
 
     public static function insert_order_sub_status($data)
@@ -97,12 +106,12 @@ class ReportingConfigurationModel extends Model
         ->get();
     }
 
-    public static function get_order_action_by_id($id)
+    public static function get_order_action_by_segment_id($id)
     {
         return DB::table('tb_order_action AS toa')
         ->leftJoin('tb_order_segment AS tos', 'tos.id', '=', 'toa.order_segment_id')
         ->select('toa.*', 'tos.name AS order_segment_name')
-        ->where('toa.id', $id)
+        ->where('toa.order_segment_id', $id)
         ->first();
     }
 
@@ -124,5 +133,23 @@ class ReportingConfigurationModel extends Model
     public static function get_order_labels()
     {
         return DB::table('tb_order_labels')->get();
+    }
+
+    public static function get_photo_list($sourcedata, $id)
+    {
+        if (in_array($sourcedata, ['insera', 'manuals']))
+        {
+            $photos = DB::table('tb_order_segment')->where('id', $id)->first();
+        }
+        elseif ($sourcedata == 'bima')
+        {
+            $photos = DB::table('tb_order_sub_status')->where('id', $id)->first();
+        }
+        else
+        {
+            $photos = [];
+        }
+
+        return $photos;
     }
 }

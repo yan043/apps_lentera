@@ -11,7 +11,45 @@
     .detail-data-table td {
         text-align: center !important;
         vertical-align: middle !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
         font-size: 12px !important;
+    }
+    .detail-data-table tr {
+        height: 22px
+    }
+    .detail-data-table a {
+        color: inherit !important;
+        text-decoration: none !important;
+        cursor: pointer;
+    }
+    .detail-data-table a:hover {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto;
+    }
+    #filter-form .form-control,
+    #filter-form .select2-container .select2-selection--single {
+        height: 38px !important;
+        min-height: 38px !important;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+    #filter-form .input-group-text {
+        height: 38px !important;
+        min-height: 38px !important;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+    #filter-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px !important;
+    }
+    #filter-form .select2-container--default .select2-selection--single {
+        line-height: 38px !important;
     }
     .card-body {
         border-radius: 50px / 25px !important;
@@ -34,17 +72,17 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped text-center detail-data-table" id="orderTrackingTable">
+            <table class="table table-striped text-center detail-data-table" id="orderTrackingTable" style="table-layout: auto; width: 100%;">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Order Code</th>
-                        <th>Service NO</th>
-                        <th>Assign Date</th>
-                        <th>Service Area</th>
-                        <th>Team</th>
-                        <th>Assign Labels</th>
-                        <th>Action</th>
+                        <th style="width: 3%;">No</th>
+                        <th style="width: 10%;">Order Code</th>
+                        <th style="width: 15%;">Service NO</th>
+                        <th style="width: 12%;">Assign Date</th>
+                        <th style="width: 15%;">Service Area</th>
+                        <th style="width: 15%;">Team</th>
+                        <th style="width: 15%;">Assign Labels</th>
+                        <th style="width: 15%;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -252,12 +290,44 @@
                 {
                     data: null,
                     render: function(data, type, row) {
-                        // Jika belum di-assign (kategori New), tombol Assign biru
+                        let viewButton = `<a href="/work-order-management/view/${row.id || ''}" class="btn btn-sm btn-info" style="color: white !important;"><i class="fas fa-eye"></i> View</a>`;
                         if (!row.assign_date || !row.order_code || !row.order_id) {
                             return `
-                                <button type="button" class="btn btn-sm btn-primary btn-assign"
-                                    data-order_code="${row.order_code || ''}"
-                                    data-order_id="${row.order_id || ''}"
+                                ${viewButton}
+
+                                &nbsp;
+
+                                <div style="display: flex; gap: 5px;">
+                                    <button type="button" class="btn btn-sm btn-primary btn-assign"
+                                        data-id="${row.id || ''}"
+                                        data-order_code="${row.order_code || ''}"
+                                        data-order_id="${row.order_id || ''}"
+                                        data-team_id="${row.team_id || ''}"
+                                        data-team_name="${row.team_name || ''}"
+                                        data-service_area_id="${row.service_area_id || ''}"
+                                        data-service_area_name="${row.service_area_name || ''}"
+                                        data-assign_labels='${row.assign_labels ? JSON.stringify(row.assign_labels) : "[]"}'
+                                        data-assign_date="${row.assign_date || ''}"
+                                        data-assign_notes="${row.assign_notes || row.notes || ''}"
+                                        data-service_no="${row.service_no || ''}"
+                                        data-customer_name="${row.customer_name || ''}"
+                                        data-contact_phone="${row.contact_phone || ''}"
+                                        data-odp_name="${row.odp_name || ''}"
+                                        data-bs-toggle="modal" data-bs-target="#modal-reassign">
+                                        <i class="fas fa-paper-plane"></i> Assign
+                                    </button>
+                                </div>
+                            `;
+                        }
+                        return `
+                                ${viewButton}
+
+                                &nbsp;
+
+                                <button type="button" class="btn btn-sm btn-warning btn-reassign"
+                                    data-id="${row.id}"
+                                    data-order_code="${row.order_code}"
+                                    data-order_id="${row.order_id}"
                                     data-team_id="${row.team_id || ''}"
                                     data-team_name="${row.team_name || ''}"
                                     data-service_area_id="${row.service_area_id || ''}"
@@ -270,29 +340,8 @@
                                     data-contact_phone="${row.contact_phone || ''}"
                                     data-odp_name="${row.odp_name || ''}"
                                     data-bs-toggle="modal" data-bs-target="#modal-reassign">
-                                    <i class="fas fa-paper-plane"></i> Assign
+                                    <i class="fas fa-sync-alt"></i> Re-Assign
                                 </button>
-                            `;
-                        }
-                        // Jika sudah di-assign, tombol Re-Assign kuning
-                        return `
-                            <button type="button" class="btn btn-sm btn-warning btn-reassign"
-                                data-order_code="${row.order_code}"
-                                data-order_id="${row.order_id}"
-                                data-team_id="${row.team_id || ''}"
-                                data-team_name="${row.team_name || ''}"
-                                data-service_area_id="${row.service_area_id || ''}"
-                                data-service_area_name="${row.service_area_name || ''}"
-                                data-assign_labels='${row.assign_labels ? JSON.stringify(row.assign_labels) : "[]"}'
-                                data-assign_date="${row.assign_date || ''}"
-                                data-assign_notes="${row.assign_notes || row.notes || ''}"
-                                data-service_no="${row.service_no || ''}"
-                                data-customer_name="${row.customer_name || ''}"
-                                data-contact_phone="${row.contact_phone || ''}"
-                                data-odp_name="${row.odp_name || ''}"
-                                data-bs-toggle="modal" data-bs-target="#modal-reassign">
-                                <i class="fas fa-sync-alt"></i> Re-Assign
-                            </button>
                         `;
                     }
                 }
@@ -306,6 +355,7 @@
             }
             let rows = data.map(function(item) {
                 return {
+                    id: item.id ?? '-',
                     order_code: item.order_code ?? '-',
                     order_id: item.order_id ?? '-',
                     team_id: item.team_id ?? '',
