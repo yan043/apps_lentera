@@ -371,7 +371,7 @@ class AjaxController extends Controller
             ];
         }
 
-        if(!isset($photo_list))
+        if (!isset($photo_list))
         {
             $photo_list = [];
         }

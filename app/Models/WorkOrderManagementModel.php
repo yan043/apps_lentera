@@ -229,12 +229,12 @@ class WorkOrderManagementModel extends Model
         if (!empty($request['order_segment_id']))
         {
             DB::table('tb_assign_orders')->where('id', $request['id'])
-            ->update(
-                [
-                    'order_segment_id' => $request['order_segment_id'],
-                    'order_action_id'  => $request['order_action_id']
-                ]
-            );
+                ->update(
+                    [
+                        'order_segment_id' => $request['order_segment_id'],
+                        'order_action_id'  => $request['order_action_id']
+                    ]
+                );
         }
 
         $id = DB::table('tb_assign_order_reports_log')->insertGetId(
@@ -259,12 +259,12 @@ class WorkOrderManagementModel extends Model
         if (!empty($request['order_segment_id']))
         {
             DB::table('tb_assign_order_reports_log')->where('id', $id)
-            ->update(
-                [
-                    'order_segment_id' => $request['order_segment_id'],
-                    'order_action_id'  => $request['order_action_id']
-                ]
-            );
+                ->update(
+                    [
+                        'order_segment_id' => $request['order_segment_id'],
+                        'order_action_id'  => $request['order_action_id']
+                    ]
+                );
         }
 
         if (!empty($request['nte_data']))
@@ -438,9 +438,11 @@ class WorkOrderManagementModel extends Model
             ->orderBy('jumlah', 'DESC')
             ->get();
 
-        switch ($type) {
+        switch ($type)
+        {
             case 'bar':
-                return $final->map(function($row) {
+                return $final->map(function($row)
+                {
                     return [
                         "workzone" => $row->workzone,
                         "jumlah"   => (int) $row->jumlah
@@ -773,10 +775,8 @@ class WorkOrderManagementModel extends Model
         else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
-
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');
-
-            $bimaSql = $bimaQuery->orderBy('tao.updated_at', 'DESC');
+            $bimaSql   = $bimaQuery->orderBy('tao.updated_at', 'DESC');
 
             return $inseraSql->unionAll($manualSql)->unionAll($bimaSql)->get();
         }

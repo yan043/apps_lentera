@@ -460,7 +460,8 @@
     var nteOntData = @json($get_inventory_by_order_nte_ont);
     var nteStbData = @json($get_inventory_by_order_nte_stb);
 
-    if (!Array.isArray(materialsData)) {
+    if (!Array.isArray(materialsData))
+    {
         materialsData = [];
     }
 
@@ -473,8 +474,10 @@
         };
     }) : [];
 
-    $(document).ready(function() {
-        function renderOrderDetails() {
+    $(document).ready(function()
+    {
+        function renderOrderDetails()
+        {
             $('#order_code').text(orderData.order_code);
             $('#order_date').text(orderData.order_date || '-');
             $('#service_no').text(orderData.service_no || '-');
@@ -497,18 +500,23 @@
             $('#report_notes').val(orderData.report_notes || '-');
 
             var sourcedata = (orderData.sourcedata || '').toLowerCase();
-            if (sourcedata === 'bima' || sourcedata === 'manuals') {
+            if (sourcedata === 'bima' || sourcedata === 'manuals')
+            {
                 $('.is_sourcedata_hidden').hide();
                 $('.is_sourcedata_hidden .select2').hide();
-            } else {
+            }
+            else
+            {
                 $('.is_sourcedata_hidden').show();
                 $('.is_sourcedata_hidden .select2').show();
             }
         }
 
-        function updateMaterialsList() {
+        function updateMaterialsList()
+        {
             $('#materialsList').empty();
-            materialsData.forEach(function(material, index) {
+            materialsData.forEach(function(material, index)
+            {
                 var itemHtml = '<div class="list-group-item d-flex justify-content-between align-items-center">' +
                     '<div>' +
                         '<strong>' + material.name + '</strong>' +
@@ -521,26 +529,13 @@
             });
         }
 
-        function renderNteModal() {
-            if (nteOntData && nteOntData.id) {
-                var option = new Option(nteOntData.name, nteOntData.id, true, true);
-                $('#inventory_nte_id_ont').append(option).trigger('change');
-                $('#serial_number_ont').val(nteOntData.serial_number_ont || '');
-            } else {
-                $('#serial_number_ont').val('');
-            }
-            if (nteStbData && nteStbData.id) {
-                var option = new Option(nteStbData.name, nteStbData.id, true, true);
-                $('#inventory_nte_id_stb').append(option).trigger('change');
-                $('#serial_number_stb').val(nteStbData.serial_number_stb || '');
-            } else {
-                $('#serial_number_stb').val('');
-            }
-        }
 
-        function generatePhotoBoxes(photoList) {
+
+        function generatePhotoBoxes(photoList)
+        {
             $('#photoContainer').empty();
-            photoList.forEach(function(type) {
+            photoList.forEach(function(type)
+            {
                 var label = type.replace(/_/g, ' ');
                 var html = '<div class="col-md-3 mb-3">' +
                     '<div class="border rounded p-3 text-center photo-box" style="min-height:220px;">' +
@@ -587,13 +582,16 @@
         $.ajax({
             url: '{{ route("ajax.reporting-configuration.status.step", $id) }}',
             method: 'GET',
-            success: function(data) {
+            success: function(data)
+            {
                 let statusSelect = $('#order_status_id');
                 statusSelect.empty().append('<option value="" disabled selected>Pilih Status</option>');
-                data.forEach(function(item) {
+                data.forEach(function(item)
+                {
                     statusSelect.append(`<option value="${item.id}">${item.name}</option>`);
                 });
-                if (orderData.order_status_id) {
+                if (orderData.order_status_id)
+                {
                     statusSelect.val(orderData.order_status_id).trigger('change');
                 }
             }
@@ -602,39 +600,51 @@
         $.ajax({
             url: '{{ route("ajax.reporting-configuration.segments") }}',
             method: 'GET',
-            success: function(data) {
+            success: function(data)
+            {
                 let segmentSelect = $('#order_segment_id');
                 segmentSelect.empty().append('<option value="" disabled selected>Pilih Segment</option>');
-                data.forEach(function(item) {
+                data.forEach(function(item)
+                {
                     segmentSelect.append(`<option value="${item.id}">${item.name}</option>`);
                 });
 
-                if (orderData.order_segment_id) {
+                if (orderData.order_segment_id)
+                {
                     segmentSelect.val(orderData.order_segment_id).trigger('change');
-                } else {
+                }
+                else
+                {
                     fetchPhotoList(orderData.sourcedata, null);
                 }
             }
         });
 
-        $('#order_status_id').on('change', function() {
+        $('#order_status_id').on('change', function()
+        {
             let statusId = $(this).val();
-            if (statusId) {
+            if (statusId)
+            {
                 $.ajax({
                     url: '{{ route("ajax.reporting-configuration.sub-status.by-status", ":id") }}'.replace(':id', statusId),
                     method: 'GET',
-                    success: function(data) {
+                    success: function(data)
+                    {
                         let substatusSelect = $('#order_substatus_id');
                         substatusSelect.empty().append('<option value="" disabled selected>Pilih Sub Status</option>');
-                        data.forEach(function(item) {
+                        data.forEach(function(item)
+                        {
                             substatusSelect.append(`<option value="${item.id}">${item.name}</option>`);
                         });
-                        if (orderData.order_substatus_id) {
+                        if (orderData.order_substatus_id)
+                        {
                             substatusSelect.val(orderData.order_substatus_id).trigger('change');
                         }
                     }
                 });
-            } else {
+            }
+            else
+            {
                 $('#order_substatus_id').empty().append('<option value="" disabled selected>Pilih Sub Status</option>');
             }
         });
@@ -675,6 +685,9 @@
                     });
                     if (nteOntData && nteOntData.id) {
                         ontSelect.val(nteOntData.id).trigger('change');
+                        $('#serial_number_ont').val(nteOntData.serial_number_ont || '');
+                    } else {
+                        $('#serial_number_ont').val('');
                     }
                 }
             });
@@ -691,11 +704,12 @@
                     });
                     if (nteStbData && nteStbData.id) {
                         stbSelect.val(nteStbData.id).trigger('change');
+                        $('#serial_number_stb').val(nteStbData.serial_number_stb || '');
+                    } else {
+                        $('#serial_number_stb').val('');
                     }
                 }
             });
-
-            renderNteModal();
         });
 
         $('#materialModal').on('shown.bs.modal', function() {
@@ -817,6 +831,39 @@
 
         var customerMarker, odpMarker;
 
+        if (orderData.report_coordinates_location) {
+            var coords = orderData.report_coordinates_location.split(',');
+            if (coords.length === 2) {
+                var lat = parseFloat(coords[0]);
+                var lng = parseFloat(coords[1]);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    customerMarker = L.marker([lat, lng], {icon: customerIcon, draggable: true}).addTo(map)
+                        .bindPopup("<b>Customer Location</b><br>" + orderData.report_coordinates_location);
+                    map.setView([lat, lng], 17);
+                    customerMarker.on('dragend', function(e) {
+                        var pos = customerMarker.getLatLng();
+                        $('#report_coordinates_location').val(pos.lat + ',' + pos.lng);
+                    });
+                }
+            }
+        }
+
+        if (orderData.report_odp_coordinates) {
+            var odpCoords = orderData.report_odp_coordinates.split(',');
+            if (odpCoords.length === 2) {
+                var lat = parseFloat(odpCoords[0]);
+                var lng = parseFloat(odpCoords[1]);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    odpMarker = L.marker([lat, lng], {icon: odpIcon, draggable: true}).addTo(map)
+                        .bindPopup("<b>ODP Location</b><br>" + orderData.report_odp_coordinates);
+                    odpMarker.on('dragend', function(e) {
+                        var pos = odpMarker.getLatLng();
+                        $('#report_odp_coordinates').val(pos.lat + ',' + pos.lng);
+                    });
+                }
+            }
+        }
+
         function updateLocation(lat, lng) {
             var coordStr = lat + ',' + lng;
             $('#report_coordinates_location').val(coordStr);
@@ -883,16 +930,7 @@
                 var lat = parseFloat(coords[0]);
                 var lng = parseFloat(coords[1]);
                 if (!isNaN(lat) && !isNaN(lng)) {
-                    if (customerMarker) {
-                        customerMarker.setLatLng([lat, lng]);
-                    } else {
-                        customerMarker = L.marker([lat, lng], {icon: customerIcon, draggable: true}).addTo(map)
-                            .bindPopup("<b>Customer Location</b><br>" + val);
-                        customerMarker.on('dragend', function(e) {
-                            var pos = customerMarker.getLatLng();
-                            $('#report_coordinates_location').val(pos.lat + ',' + pos.lng);
-                        });
-                    }
+                    updateLocation(lat, lng);
                 }
             }
         });
@@ -904,16 +942,7 @@
                 var lat = parseFloat(coords[0]);
                 var lng = parseFloat(coords[1]);
                 if (!isNaN(lat) && !isNaN(lng)) {
-                    if (odpMarker) {
-                        odpMarker.setLatLng([lat, lng]);
-                    } else {
-                        odpMarker = L.marker([lat, lng], {icon: odpIcon, draggable: true}).addTo(map)
-                            .bindPopup("<b>ODP Location</b><br>" + val);
-                        odpMarker.on('dragend', function(e) {
-                            var pos = odpMarker.getLatLng();
-                            $('#report_odp_coordinates').val(pos.lat + ',' + pos.lng);
-                        });
-                    }
+                    updateOdpLocation(lat, lng);
                 }
             }
         });
