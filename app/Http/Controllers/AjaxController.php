@@ -333,13 +333,6 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_view_order($id)
-    {
-        $data = WorkOrderManagementModel::view($id);
-
-        return response()->json($data);
-    }
-
     public function get_inventory_material()
     {
         $data = InventoryManagementModel::get_inventory_material();

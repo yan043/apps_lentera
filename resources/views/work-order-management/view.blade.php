@@ -455,28 +455,87 @@
 <script src="/assets/libs/select2/js/select2.min.js"></script>
 <script src="/assets/libs/leaflet/leaflet.js"></script>
 <script>
-    $(document).ready(function() {
-        var orderData = {};
+    var orderData = @json($data);
+    var materialsData = @json($get_inventory_by_order_material ?? []);
+    var nteOntData = @json($get_inventory_by_order_nte_ont);
+    var nteStbData = @json($get_inventory_by_order_nte_stb);
 
-        function fetchPhotoList(sourcedata, id) {
-            if (!sourcedata || !id || id === '') {
-                generatePhotoBoxes([]);
-                return;
+    if (!Array.isArray(materialsData)) {
+        materialsData = [];
+    }
+
+    var selectedMaterials = Array.isArray(materialsData) ? materialsData.map(function(m) {
+        return {
+            id: m.id,
+            name: m.name,
+            designator_desc: m.designator_desc,
+            qty: m.qty
+        };
+    }) : [];
+
+    $(document).ready(function() {
+        function renderOrderDetails() {
+            $('#order_code').text(orderData.order_code);
+            $('#order_date').text(orderData.order_date || '-');
+            $('#service_no').text(orderData.service_no || '-');
+            $('#customer_name').text(orderData.customer_name || '-');
+            $('#contact_phone').text(orderData.contact_phone || '-');
+            $('#notes').text(orderData.notes || '-');
+            $('#customer_coordinates').text(orderData.customer_coordinate || '-');
+            $('#odp_name').text(orderData.odp_name || '-');
+            $('#odp_coordinates').text(orderData.odp_coordinates || '-');
+            $('#regional_witel_sto').text((orderData.region_name || '-') + ' / ' + (orderData.witel || '-') + ' / ' + (orderData.workzone || '-'));
+
+            $('#sourcedata').val(orderData.sourcedata);
+            $('#order_status_step').val(orderData.order_status_step || 0);
+            $('#report_phone_number').val(orderData.report_phone_number || orderData.contact_phone || '-');
+            $('#report_coordinates_location').val(orderData.report_coordinates_location || orderData.customer_coordinate || '-');
+            $('#report_odp_name').val(orderData.report_odp_name || orderData.odp_name || '-');
+            $('#report_odp_coordinates').val(orderData.report_odp_coordinates || orderData.odp_coordinates || '-');
+            $('#report_valins_id').val(orderData.report_valins_id || '-');
+            $('#report_refferal_order_code').val(orderData.report_refferal_order_code || '-');
+            $('#report_notes').val(orderData.report_notes || '-');
+
+            var sourcedata = (orderData.sourcedata || '').toLowerCase();
+            if (sourcedata === 'bima' || sourcedata === 'manuals') {
+                $('.is_sourcedata_hidden').hide();
+                $('.is_sourcedata_hidden .select2').hide();
+            } else {
+                $('.is_sourcedata_hidden').show();
+                $('.is_sourcedata_hidden .select2').show();
             }
-            $.ajax({
-                url: '{{ route("ajax.reporting-configuration.photo-list", ["sourcedata" => "__sourcedata__", "id" => "__id__"]) }}'.replace('__sourcedata__', sourcedata).replace('__id__', id),
-                type: 'GET',
-                success: function(data) {
-                    if (Array.isArray(data) && data.length > 0) {
-                        generatePhotoBoxes(data);
-                    } else {
-                        generatePhotoBoxes([]);
-                    }
-                },
-                error: function() {
-                    generatePhotoBoxes([]);
-                }
+        }
+
+        function updateMaterialsList() {
+            $('#materialsList').empty();
+            materialsData.forEach(function(material, index) {
+                var itemHtml = '<div class="list-group-item d-flex justify-content-between align-items-center">' +
+                    '<div>' +
+                        '<strong>' + material.name + '</strong>' +
+                        (material.designator_desc ? '<br><small class="text-muted">' + material.designator_desc + '</small>' : '') +
+                        '<br><small>Qty: ' + material.qty + '</small>' +
+                    '</div>' +
+                    '<button class="btn btn-sm btn-outline-danger removeMaterial" data-index="' + index + '">Delete</button>' +
+                '</div>';
+                $('#materialsList').append(itemHtml);
             });
+        }
+
+        function renderNteModal() {
+            if (nteOntData && nteOntData.id) {
+                var option = new Option(nteOntData.name, nteOntData.id, true, true);
+                $('#inventory_nte_id_ont').append(option).trigger('change');
+                $('#serial_number_ont').val(nteOntData.serial_number_ont || '');
+            } else {
+                $('#serial_number_ont').val('');
+            }
+            if (nteStbData && nteStbData.id) {
+                var option = new Option(nteStbData.name, nteStbData.id, true, true);
+                $('#inventory_nte_id_stb').append(option).trigger('change');
+                $('#serial_number_stb').val(nteStbData.serial_number_stb || '');
+            } else {
+                $('#serial_number_stb').val('');
+            }
         }
 
         function generatePhotoBoxes(photoList) {
@@ -503,261 +562,153 @@
             });
         }
 
+        renderOrderDetails();
+        updateMaterialsList();
+
+        var photoList = @json($photo_list ?? []);
+        generatePhotoBoxes(photoList);
+
         $(".select2").not('#inventory_nte_id_ont, #inventory_nte_id_stb, #inventory_material_id').select2({
             allowClear: true,
             placeholder: "Silahkan Pilih",
             width: '100%'
         });
 
-        $('#order_status_id').select2({
-            allowClear: true,
-            placeholder: "Pilih Status",
-            width: '100%',
-            ajax: {
-                url: '{{ route("ajax.reporting-configuration.status.step", $id) }}',
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name
-                            };
-                        })
-                    };
+        $('#nteModal, #materialModal').on('shown.bs.modal', function() {
+            $(this).find('.select2').select2({
+                dropdownParent: $(this),
+                allowClear: true,
+                placeholder: function() {
+                    return $(this).attr('id').includes('inventory_nte_id_ont') ? "Pilih Tipe ONT" :
+                           $(this).attr('id').includes('inventory_nte_id_stb') ? "Pilih Tipe STB" :
+                           $(this).attr('id').includes('inventory_material_id') ? "Pilih Jenis Material" : "Silahkan Pilih";
+                },
+                width: '100%'
+            });
+        });
+
+        $.ajax({
+            url: '{{ route("ajax.reporting-configuration.status.step", $id) }}',
+            method: 'GET',
+            success: function(data) {
+                let statusSelect = $('#order_status_id');
+                statusSelect.empty().append('<option value="" disabled selected>Pilih Status</option>');
+                data.forEach(function(item) {
+                    statusSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                });
+                if (orderData.order_status_id) {
+                    statusSelect.val(orderData.order_status_id).trigger('change');
                 }
+            }
+        });
+
+        $.ajax({
+            url: '{{ route("ajax.reporting-configuration.segments") }}',
+            method: 'GET',
+            success: function(data) {
+                let segmentSelect = $('#order_segment_id');
+                segmentSelect.empty().append('<option value="" disabled selected>Pilih Segment</option>');
+                data.forEach(function(item) {
+                    segmentSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                });
             }
         });
 
         $('#order_status_id').on('change', function() {
-            var statusId = $(this).val();
+            let statusId = $(this).val();
             if (statusId) {
-                $('#order_substatus_id').select2({
-                    allowClear: true,
-                    placeholder: "Pilih Sub Status",
-                    width: '100%',
-                    ajax: {
-                        url: '{{ route("ajax.reporting-configuration.sub-status.by-status", ":id") }}'.replace(':id', statusId),
-                        dataType: 'json',
-                        delay: 250,
-                        processResults: function (data) {
-                            return {
-                                results: $.map(data, function (item) {
-                                    return {
-                                        id: item.id,
-                                        text: item.name
-                                    };
-                                })
-                            };
-                }
-            }
-        });
-        $('#order_substatus_id').on('change', function() {
-            var sourcedata = (orderData.sourcedata || '').toLowerCase();
-
-            if (sourcedata === 'bima') {
-                var id = $(this).val();
-                fetchPhotoList(sourcedata, id);
-            }
-        });
-        $('#order_substatus_id').val(null).trigger('change');
-            } else {
-                $('#order_substatus_id').select2({
-                    allowClear: true,
-                    placeholder: "Pilih Sub Status",
-                    width: '100%'
-                });
-                $('#order_substatus_id').val(null).trigger('change');
-            }
-        });
-
-        $('#order_segment_id').select2({
-            allowClear: true,
-            placeholder: "Pilih Segment",
-            width: '100%',
-            ajax: {
-                url: '{{ route("ajax.reporting-configuration.segments") }}',
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-        $('#order_action_id').select2({
-            allowClear: true,
-            placeholder: "Pilih Action",
-            width: '100%'
-        });
-
-        $('#order_segment_id').on('change', function() {
-            var segmentId = $(this).val();
-            if (segmentId) {
-                $('#order_action_id').select2({
-                    allowClear: true,
-                    placeholder: "Pilih Action",
-                    width: '100%',
-                    ajax: {
-                        url: '{{ route("ajax.reporting-configuration.actions", ":id") }}'.replace(':id', segmentId),
-                        dataType: 'json',
-                        delay: 250,
-                        processResults: function (data) {
-                            return {
-                                results: $.map(data, function (item) {
-                                    return {
-                                        id: item.id,
-                                        text: item.name
-                                    };
-                                })
-                            };
+                $.ajax({
+                    url: '{{ route("ajax.reporting-configuration.sub-status.by-status", ":id") }}'.replace(':id', statusId),
+                    method: 'GET',
+                    success: function(data) {
+                        let substatusSelect = $('#order_substatus_id');
+                        substatusSelect.empty().append('<option value="" disabled selected>Pilih Sub Status</option>');
+                        data.forEach(function(item) {
+                            substatusSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                        });
+                        if (orderData.order_substatus_id) {
+                            substatusSelect.val(orderData.order_substatus_id).trigger('change');
                         }
                     }
                 });
-                $('#order_action_id').val(null).trigger('change');
-                var sourcedata = (orderData.sourcedata || '').toLowerCase();
-                if (['insera', 'manuals'].includes(sourcedata)) {
-                    fetchPhotoList(sourcedata, segmentId);
-                }
             } else {
-                $('#order_action_id').select2({
-                    allowClear: true,
-                    placeholder: "Pilih Action",
-                    width: '100%'
+                $('#order_substatus_id').empty().append('<option value="" disabled selected>Pilih Sub Status</option>');
+            }
+        });
+
+        $('#order_segment_id').on('change', function() {
+            let segmentId = $(this).val();
+            if (segmentId) {
+                $.ajax({
+                    url: '{{ route("ajax.reporting-configuration.actions", ":id") }}'.replace(':id', segmentId),
+                    method: 'GET',
+                    success: function(data) {
+                        let actionSelect = $('#order_action_id');
+                        actionSelect.empty().append('<option value="" disabled selected>Pilih Action</option>');
+                        data.forEach(function(item) {
+                            actionSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                        });
+                        var sourcedata = (orderData.sourcedata || '').toLowerCase();
+                        if (['insera', 'manuals'].includes(sourcedata)) {
+                            fetchPhotoList(sourcedata, segmentId);
+                        }
+                    }
                 });
-                $('#order_action_id').val(null).trigger('change');
+            } else {
+                $('#order_action_id').empty().append('<option value="" disabled selected>Pilih Action</option>');
             }
         });
 
-        $('#inventory_nte_id_ont').select2({
-            dropdownParent: $('#nteModal'),
-            allowClear: true,
-            placeholder: "Pilih Tipe ONT",
-            width: '100%',
-            ajax: {
+        $('#nteModal').on('shown.bs.modal', function() {
+            $.ajax({
                 url: '{{ route("ajax.inventory-management.designator.nte", "ont") }}',
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name,
-                                brand: item.brand
-                            };
-                        })
-                    };
-                }
-            },
-            templateResult: function (item) {
-                if (item.loading) return item.text;
-                var $container = $('<div>');
-                $container.text(item.text);
-                if (item.brand) {
-                    var $desc = $('<div>').text(item.brand).css({
-                        'font-size': '0.8em',
-                        'color': '#6c757d',
-                        'margin-top': '2px'
+                method: 'GET',
+                success: function(data) {
+                    let ontSelect = $('#inventory_nte_id_ont');
+                    ontSelect.empty().append('<option value="" disabled selected>Pilih Tipe ONT</option>');
+                    data.forEach(function(item) {
+                        let optionText = item.brand ? `${item.name} (${item.brand})` : item.name;
+                        ontSelect.append(`<option value="${item.id}">${optionText}</option>`);
                     });
-                    $container.append($desc);
+                    if (nteOntData && nteOntData.id) {
+                        ontSelect.val(nteOntData.id).trigger('change');
+                    }
                 }
-                return $container;
-            },
-            templateSelection: function (item) {
-                return item.text || item.id;
-            }
-        });
+            });
 
-        $('#inventory_nte_id_stb').select2({
-            dropdownParent: $('#nteModal'),
-            allowClear: true,
-            placeholder: "Pilih Tipe STB",
-            width: '100%',
-            ajax: {
+            $.ajax({
                 url: '{{ route("ajax.inventory-management.designator.nte", "stb") }}',
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name,
-                                brand: item.brand
-                            };
-                        })
-                    };
-                }
-            },
-            templateResult: function (item) {
-                if (item.loading) return item.text;
-                var $container = $('<div>');
-                $container.text(item.text);
-                if (item.brand) {
-                    var $desc = $('<div>').text(item.brand).css({
-                        'font-size': '0.8em',
-                        'color': '#6c757d',
-                        'margin-top': '2px'
+                method: 'GET',
+                success: function(data) {
+                    let stbSelect = $('#inventory_nte_id_stb');
+                    stbSelect.empty().append('<option value="" disabled selected>Pilih Tipe STB</option>');
+                    data.forEach(function(item) {
+                        let optionText = item.brand ? `${item.name} (${item.brand})` : item.name;
+                        stbSelect.append(`<option value="${item.id}">${optionText}</option>`);
                     });
-                    $container.append($desc);
+                    if (nteStbData && nteStbData.id) {
+                        stbSelect.val(nteStbData.id).trigger('change');
+                    }
                 }
-                return $container;
-            },
-            templateSelection: function (item) {
-                return item.text || item.id;
-            }
+            });
+
+            renderNteModal();
         });
 
-        $('#inventory_material_id').select2({
-            dropdownParent: $('#materialModal'),
-            allowClear: true,
-            placeholder: "Pilih Jenis Material",
-            width: '100%',
-            ajax: {
+        $('#materialModal').on('shown.bs.modal', function() {
+            $.ajax({
                 url: '{{ route("ajax.inventory-management.designator.materials") }}',
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name,
-                                designator_desc: item.designator_desc
-                            };
-                        })
-                    };
-                }
-            },
-            templateResult: function (item) {
-                if (item.loading) return item.text;
-                var $container = $('<div>');
-                $container.text(item.text);
-                if (item.designator_desc) {
-                    var $desc = $('<div>').text(item.designator_desc).css({
-                        'font-size': '0.8em',
-                        'color': '#6c757d',
-                        'margin-top': '2px'
+                method: 'GET',
+                success: function(data) {
+                    let materialSelect = $('#inventory_material_id');
+                    materialSelect.empty().append('<option value="" disabled selected>Pilih Jenis Material</option>');
+                    data.forEach(function(item) {
+                        let optionText = item.designator_desc ? `${item.name} (${item.designator_desc})` : item.name;
+                        materialSelect.append(`<option value="${item.id}">${optionText}</option>`);
                     });
-                    $container.append($desc);
                 }
-                return $container;
-            },
-            templateSelection: function (item) {
-                return item.text || item.id;
-            }
+            });
         });
-
-        var selectedMaterials = [];
 
         $('#addMaterialBtn').on('click', function() {
             var material = $('#inventory_material_id').select2('data')[0];
@@ -821,6 +772,7 @@
                 inventory_nte_id_stb: $('#inventory_nte_id_stb').val(),
                 serial_number_stb: $('#serial_number_stb').val()
             };
+
             $('#nte_data').val(JSON.stringify(nteData));
             $('#nteModal').modal('hide');
         });
@@ -840,8 +792,6 @@
         $('#mainOrderForm').on('submit', function(e) {
             collectPhotosData();
         });
-
-        loadOrderDetails();
 
         var map = L.map('map').setView([-3.316694, 114.590111], 17);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -965,88 +915,6 @@
             }
         });
 
-        function loadOrderDetails() {
-            $.ajax({
-                url: '{{ route("ajax.work-order-management.view", $id) }}',
-                type: 'GET',
-                success: function(data) {
-                    if (data) {
-                        $('#order_code').text(data.order_code);
-                        $('#order_date').text(data.order_date || '-');
-                        $('#service_no').text(data.service_no || '-');
-                        $('#customer_name').text(data.customer_name || '-');
-                        $('#contact_phone').text(data.contact_phone || '-');
-                        $('#notes').text(data.notes || '-');
-                        $('#customer_coordinates').text(data.customer_coordinate || '-');
-                        $('#odp_name').text(data.odp_name || '-');
-                        $('#odp_coordinates').text(data.odp_coordinates || '-');
-                        $('#regional_witel_sto').text((data.region_name || '-') + ' / ' + (data.witel || '-') + ' / ' + (data.workzone || '-'));
-
-                        $('#sourcedata').val(data.sourcedata);
-                        $('#order_status_step').val(data.order_status_step || 0);
-                        $('#report_phone_number').val(data.report_phone_number || data.contact_phone || '-');
-                        $('#report_coordinates_location').val(data.report_coordinates_location || data.customer_coordinate || '-');
-                        $('#report_odp_name').val(data.report_odp_name || data.odp_name || '-');
-                        $('#report_odp_coordinates').val(data.report_odp_coordinates || data.odp_coordinates || '-');
-                        $('#report_valins_id').val(data.report_valins_id || '-');
-                        $('#report_refferal_order_code').val(data.report_refferal_order_code || '-');
-                        $('#report_notes').val(data.report_notes || '-');
-
-                        var coordinate = data.report_coordinates_location || data.customer_coordinate;
-                        $('#report_coordinates_location').val(coordinate || '');
-                        if (coordinate) {
-                            var coords = coordinate.split(',');
-                            if (coords.length === 2) {
-                                var lat = parseFloat(coords[0]);
-                                var lng = parseFloat(coords[1]);
-                                if (!isNaN(lat) && !isNaN(lng)) {
-                                    updateLocation(lat, lng);
-                                }
-                            }
-                        }
-
-                        var odpCoordinate = data.report_odp_coordinates || data.odp_coordinates;
-                        if (odpCoordinate) {
-                            var coords = odpCoordinate.split(',');
-                            if (coords.length === 2) {
-                                var lat = parseFloat(coords[0]);
-                                var lng = parseFloat(coords[1]);
-                                if (!isNaN(lat) && !isNaN(lng)) {
-                                    odpMarker = L.marker([lat, lng], {icon: odpIcon, draggable: true}).addTo(map)
-                                        .bindPopup("<b>ODP Location</b><br>" + odpCoordinate);
-                                    odpMarker.on('dragend', function(e) {
-                                        var pos = odpMarker.getLatLng();
-                                        $('#report_odp_coordinates').val(pos.lat + ',' + pos.lng);
-                                    });
-                                }
-                            }
-                        }
-
-                        var sourcedata = (data.sourcedata || '').toLowerCase();
-                        if (sourcedata === 'bima' || sourcedata === 'manuals') {
-                            $('.is_sourcedata_hidden').hide();
-                            $('.is_sourcedata_hidden .select2').hide();
-                        } else {
-                            $('.is_sourcedata_hidden').show();
-                            $('.is_sourcedata_hidden .select2').show();
-                        }
-
-                        orderData = data;
-                        var id = null;
-                        if (sourcedata === 'bima') {
-                            id = data.order_substatus_id;
-                        } else if (['insera', 'manuals'].includes(sourcedata)) {
-                            id = data.order_segment_id;
-                        }
-                        fetchPhotoList(sourcedata, id);
-                    }
-                },
-                error: function() {
-                    console.log('Error loading order details');
-                }
-            });
-        }
-
         $(document).on('click', '.btn-toggle-card', function() {
             var $icon = $(this).find('i');
             var target = $(this).data('bs-target');
@@ -1095,6 +963,24 @@
             var src = $(this).attr('src');
             $('#modalPhotoImg').attr('src', src);
             $('#photoPreviewModal').modal('show');
+        });
+
+        function fetchPhotoList(sourcedata, id) {
+            $.get('{{ route("ajax.reporting-configuration.photo-list", ["sourcedata" => ":sourcedata", "id" => ":id"]) }}'
+                .replace(':sourcedata', sourcedata)
+                .replace(':id', id),
+                function(photoList) {
+                    generatePhotoBoxes(photoList);
+                }
+            );
+        }
+
+        $('#order_segment_id').on('change', function() {
+            var segmentId = $(this).val();
+            var sourcedata = (orderData.sourcedata || '').toLowerCase();
+            if (['insera', 'manuals'].includes(sourcedata)) {
+                fetchPhotoList(sourcedata, segmentId);
+            }
         });
     });
 </script>

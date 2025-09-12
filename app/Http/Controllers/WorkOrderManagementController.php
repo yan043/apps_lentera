@@ -15,8 +15,9 @@ class WorkOrderManagementController extends Controller
         $get_inventory_by_order_material = InventoryManagementModel::get_inventory_by_order($id, 'material');
         $get_inventory_by_order_nte_ont  = InventoryManagementModel::get_inventory_by_order($id, 'nte', 'ont');
         $get_inventory_by_order_nte_stb  = InventoryManagementModel::get_inventory_by_order($id, 'nte', 'stb');
+        $photo_list                      = ['Lokasi_Rumah', 'Kondisi_Dalam_ODP', 'Hasil_Ukur_Power_IN', 'Hasil_Ukur_Power_OUT'];
 
-        return view('work-order-management.view', ['id' => $id, 'data' => $data, 'get_inventory_by_order_material' => $get_inventory_by_order_material, 'get_inventory_by_order_nte_ont' => $get_inventory_by_order_nte_ont, 'get_inventory_by_order_nte_stb' => $get_inventory_by_order_nte_stb]);
+        return view('work-order-management.view', ['id' => $id, 'data' => $data, 'get_inventory_by_order_material' => $get_inventory_by_order_material, 'get_inventory_by_order_nte_ont' => $get_inventory_by_order_nte_ont, 'get_inventory_by_order_nte_stb' => $get_inventory_by_order_nte_stb, 'photo_list' => $photo_list]);
     }
 
     public function viewUpdate(Request $request)

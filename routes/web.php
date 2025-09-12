@@ -151,8 +151,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('new/details', [AjaxController::class, 'get_new_order_details'])->name('ajax.work-order-management.new.details');
 
             Route::get('assigned/details', [AjaxController::class, 'get_assigned_order_details'])->name('ajax.work-order-management.assigned.details');
-
-            Route::get('view/{id}', [AjaxController::class, 'get_view_order'])->name('ajax.work-order-management.view');
         });
 
         Route::prefix('support')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
