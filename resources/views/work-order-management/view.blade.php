@@ -565,9 +565,6 @@
         renderOrderDetails();
         updateMaterialsList();
 
-        var photoList = @json($photo_list ?? []);
-        generatePhotoBoxes(photoList);
-
         $(".select2").not('#inventory_nte_id_ont, #inventory_nte_id_stb, #inventory_material_id').select2({
             allowClear: true,
             placeholder: "Silahkan Pilih",
@@ -611,6 +608,12 @@
                 data.forEach(function(item) {
                     segmentSelect.append(`<option value="${item.id}">${item.name}</option>`);
                 });
+
+                if (orderData.order_segment_id) {
+                    segmentSelect.val(orderData.order_segment_id).trigger('change');
+                } else {
+                    fetchPhotoList(orderData.sourcedata, null);
+                }
             }
         });
 
@@ -965,22 +968,34 @@
             $('#photoPreviewModal').modal('show');
         });
 
-        function fetchPhotoList(sourcedata, id) {
+        function fetchPhotoList(sourcedata, segmentId) {
+            var defaultPhotos = ['Lokasi_Rumah', 'Kondisi_Dalam_ODP', 'Hasil_Ukur_Power_IN', 'Hasil_Ukur_Power_OUT'];
+
+            var ajaxId = segmentId;
+            if (sourcedata === 'bima') {
+                ajaxId = orderData.order_substatus_id || 0;
+            }
+
+            if (!sourcedata || !ajaxId) {
+                generatePhotoBoxes(defaultPhotos);
+                return;
+            }
+
             $.get('{{ route("ajax.reporting-configuration.photo-list", ["sourcedata" => ":sourcedata", "id" => ":id"]) }}'
                 .replace(':sourcedata', sourcedata)
-                .replace(':id', id),
+                .replace(':id', ajaxId),
                 function(photoList) {
                     generatePhotoBoxes(photoList);
                 }
-            );
+            ).fail(function() {
+                generatePhotoBoxes(defaultPhotos);
+            });
         }
 
         $('#order_segment_id').on('change', function() {
             var segmentId = $(this).val();
             var sourcedata = (orderData.sourcedata || '').toLowerCase();
-            if (['insera', 'manuals'].includes(sourcedata)) {
-                fetchPhotoList(sourcedata, segmentId);
-            }
+            fetchPhotoList(sourcedata, segmentId);
         });
     });
 </script>
