@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Telegram extends Model
@@ -14,11 +13,11 @@ class Telegram extends Model
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.telegram.org/bot$tokenBot/sendmessage?chat_id=$chatID&text=$text&parse_mode=HTML",
+            CURLOPT_URL            => "https://api.telegram.org/bot$tokenBot/sendmessage?chat_id=$chatID&text=$text&parse_mode=HTML",
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_CUSTOMREQUEST  => 'POST',
         ]);
 
         $response = curl_exec($curl);
@@ -35,11 +34,11 @@ class Telegram extends Model
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.telegram.org/bot$tokenBot/sendmessage?chat_id=$chatID&text=$text&parse_mode=HTML&reply_to_message_id=$messageID",
+            CURLOPT_URL            => "https://api.telegram.org/bot$tokenBot/sendmessage?chat_id=$chatID&text=$text&parse_mode=HTML&reply_to_message_id=$messageID",
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_CUSTOMREQUEST  => 'POST',
         ]);
 
         $response = curl_exec($curl);
@@ -54,16 +53,16 @@ class Telegram extends Model
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.telegram.org/bot$tokenBot/sendPhoto",
+            CURLOPT_URL            => "https://api.telegram.org/bot$tokenBot/sendPhoto",
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => [
-                "chat_id"    => $chatID,
-                "parse_mode" => "HTML",
-                "caption"    => $caption,
-                "photo"      => new \CURLFILE($photo),
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => [
+                'chat_id'    => $chatID,
+                'parse_mode' => 'HTML',
+                'caption'    => $caption,
+                'photo'      => new \CURLFILE($photo),
             ],
         ]);
 
@@ -79,14 +78,14 @@ class Telegram extends Model
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.telegram.org/bot$tokenBot/sendMessage",
+            CURLOPT_URL            => "https://api.telegram.org/bot$tokenBot/sendMessage",
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => [
-                'chat_id'             => $chatID,
-                'text'                => $message,
-                'parse_mode'          => 'HTML',
-                'reply_markup'        => json_encode($keyboard),
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => [
+                'chat_id'      => $chatID,
+                'text'         => $message,
+                'parse_mode'   => 'HTML',
+                'reply_markup' => json_encode($keyboard),
             ],
         ]);
 
@@ -102,10 +101,10 @@ class Telegram extends Model
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.telegram.org/bot$tokenBot/sendMessage",
+            CURLOPT_URL            => "https://api.telegram.org/bot$tokenBot/sendMessage",
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => [
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => [
                 'chat_id'             => $chatID,
                 'text'                => $message,
                 'parse_mode'          => 'HTML',
@@ -126,10 +125,10 @@ class Telegram extends Model
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.telegram.org/bot$tokenBot/answerCallbackQuery",
+            CURLOPT_URL            => "https://api.telegram.org/bot$tokenBot/answerCallbackQuery",
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => [
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => [
                 'callback_query_id' => $callback_query_id,
             ],
         ]);
@@ -143,19 +142,19 @@ class Telegram extends Model
 
     public static function downloadTelegramPhotoAndRename($tokenBot, $file_id, $path, $filename)
     {
-        $getFileUrl = "https://api.telegram.org/bot$tokenBot/getFile?file_id=$file_id";
-        $fileInfo   = json_decode(file_get_contents($getFileUrl), true);
-        $filePath   = $fileInfo['result']['file_path'];
-        $downloadUrl= "https://api.telegram.org/file/bot$tokenBot/$filePath";
-        $contents   = file_get_contents($downloadUrl);
-        $saveDir    = public_path($path);
+        $getFileUrl  = "https://api.telegram.org/bot$tokenBot/getFile?file_id=$file_id";
+        $fileInfo    = json_decode(file_get_contents($getFileUrl), true);
+        $filePath    = $fileInfo['result']['file_path'];
+        $downloadUrl = "https://api.telegram.org/file/bot$tokenBot/$filePath";
+        $contents    = file_get_contents($downloadUrl);
+        $saveDir     = public_path($path);
 
-        if (!is_dir($saveDir))
+        if (! is_dir($saveDir))
         {
             mkdir($saveDir, 0777, true);
         }
 
-        $savePath = $path. '/' . $filename;
+        $savePath = $path.'/'.$filename;
         file_put_contents(public_path($savePath), $contents);
 
         return $savePath;

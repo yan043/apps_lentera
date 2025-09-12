@@ -1,18 +1,18 @@
 <?php
 
-use Mews\Captcha\Captcha;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AjaxController;
-use App\Http\Controllers\SupportController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReportsPaymentController;
 use App\Http\Controllers\EmployeeManagementController;
 use App\Http\Controllers\InventoryManagementController;
-use App\Http\Controllers\WorkOrderManagementController;
-use App\Http\Controllers\TechnicianAttendanceController;
 use App\Http\Controllers\OrganizationStructureController;
 use App\Http\Controllers\ReportingConfigurationController;
+use App\Http\Controllers\ReportsPaymentController;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\TechnicianAttendanceController;
+use App\Http\Controllers\WorkOrderManagementController;
+use Illuminate\Support\Facades\Route;
+use Mews\Captcha\Captcha;
 
 Route::get('login', [AuthController::class, 'auth'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->middleware('guest')->name('login.post');
@@ -20,16 +20,16 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('captcha', [Captcha::class, 'create'])->name('captcha');
 
-Route::middleware(['auth'])->group(function () {
-
+Route::middleware(['auth'])->group(function ()
+{
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('profile/store', [AuthController::class, 'storeProfile'])->name('profile.store');
     Route::get('profile/deactivate', [AuthController::class, 'deactivateAccount'])->name('profile.deactivate');
 
-    Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
-
+    Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+    {
         Route::get('view/{id}', [WorkOrderManagementController::class, 'view'])->name('work-order-management.view');
         Route::put('view/{id}', [WorkOrderManagementController::class, 'viewUpdate'])->name('work-order-management.view.update');
 
@@ -51,13 +51,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('cancelled/details', [WorkOrderManagementController::class, 'cancelledOrderDetail'])->name('work-order-management.cancelled.detail');
     });
 
-    Route::prefix('support')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+    Route::prefix('support')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+    {
         Route::get('order-tracking', [SupportController::class, 'orderTracking'])->name('support.order-tracking');
         Route::get('helpdesk-monitoring', [SupportController::class, 'helpdeskMonitoring'])->name('support.helpdesk-monitoring');
         Route::get('maps-routing', [SupportController::class, 'mapsRouting'])->name('support.maps-routing');
     });
 
-    Route::prefix('technician-attendance')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+    Route::prefix('technician-attendance')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+    {
         Route::get('daily-attendance', [TechnicianAttendanceController::class, 'dailyAttendance'])->name('technician-attendance.daily-attendance');
         Route::get('shift-management', [TechnicianAttendanceController::class, 'shiftManagement'])->name('technician-attendance.shift-management');
         Route::get('leave-request', [TechnicianAttendanceController::class, 'leaveRequest'])->name('technician-attendance.leave-request');
@@ -65,7 +67,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('late-absence-logs', [TechnicianAttendanceController::class, 'lateAbsenceLogs'])->name('technician-attendance.late-absence-logs');
     });
 
-    Route::prefix('inventory-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+    Route::prefix('inventory-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+    {
         Route::get('stock-overview', [InventoryManagementController::class, 'stockOverview'])->name('inventory-management.stock-overview');
         Route::get('material-request', [InventoryManagementController::class, 'materialRequest'])->name('inventory-management.material-request');
         Route::get('material-inbound', [InventoryManagementController::class, 'materialInbound'])->name('inventory-management.material-inbound');
@@ -73,13 +76,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('material-return', [InventoryManagementController::class, 'materialReturn'])->name('inventory-management.material-return');
     });
 
-    Route::prefix('reports-payment')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+    Route::prefix('reports-payment')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+    {
         Route::get('daily-reports', [ReportsPaymentController::class, 'dailyReports'])->name('reports-payment.daily-reports');
         Route::get('technician-performance', [ReportsPaymentController::class, 'technicianPerformance'])->name('reports-payment.technician-performance');
         Route::get('billing-payment', [ReportsPaymentController::class, 'billingPayment'])->name('reports-payment.billing-payment');
     });
 
-    Route::prefix('employee-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function () {
+    Route::prefix('employee-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function ()
+    {
         Route::get('list', [EmployeeManagementController::class, 'employeeList'])->name('employee-management.list');
         Route::post('list/store', [EmployeeManagementController::class, 'storeEmployee'])->name('employee.store');
         Route::put('list/update/{id}', [EmployeeManagementController::class, 'updateEmployee'])->name('employee.update');
@@ -89,7 +94,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('roles-permissions/update', [EmployeeManagementController::class, 'updateRole'])->name('roles-permissions.update');
     });
 
-    Route::prefix('organization-structure')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function () {
+    Route::prefix('organization-structure')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function ()
+    {
         Route::get('regional', [OrganizationStructureController::class, 'regional'])->name('organization-structure.regional');
         Route::post('regional/store', [OrganizationStructureController::class, 'storeRegional'])->name('organization-structure.regional.store');
         Route::get('regional/destroy/{id}', [OrganizationStructureController::class, 'destroyRegional'])->name('organization-structure.regional.destroy');
@@ -123,7 +129,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('team/destroy/{id}', [OrganizationStructureController::class, 'destroyTeam'])->name('organization-structure.team.destroy');
     });
 
-    Route::prefix('reporting-configuration')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Helpdesk')->group(function () {
+    Route::prefix('reporting-configuration')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Helpdesk')->group(function ()
+    {
         Route::get('status', [ReportingConfigurationController::class, 'status'])->name('reporting-configuration.status');
         Route::post('status/store', [ReportingConfigurationController::class, 'storeStatus'])->name('reporting-configuration.status.store');
         Route::get('status/destroy/{id}', [ReportingConfigurationController::class, 'destroyStatus'])->name('reporting-configuration.status.destroy');
@@ -145,24 +152,29 @@ Route::middleware(['auth'])->group(function () {
         Route::get('labels/destroy/{id}', [ReportingConfigurationController::class, 'destroyLabel'])->name('reporting-configuration.labels.destroy');
     });
 
-    Route::prefix('ajax')->group(function () {
-        Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+    Route::prefix('ajax')->group(function ()
+    {
+        Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+        {
             Route::get('new/charts', [AjaxController::class, 'get_new_order_charts'])->name('ajax.work-order-management.new.charts');
             Route::get('new/details', [AjaxController::class, 'get_new_order_details'])->name('ajax.work-order-management.new.details');
 
             Route::get('assigned/details', [AjaxController::class, 'get_assigned_order_details'])->name('ajax.work-order-management.assigned.details');
         });
 
-        Route::prefix('support')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+        Route::prefix('support')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+        {
             Route::get('order-tracking/search/{id}', [AjaxController::class, 'get_search_order'])->name('ajax.support.search');
         });
 
-        Route::prefix('inventory-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
+        Route::prefix('inventory-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+        {
             Route::get('designator/materials', [AjaxController::class, 'get_inventory_material'])->name('ajax.inventory-management.designator.materials');
             Route::get('designator/nte/{type}', [AjaxController::class, 'get_inventory_nte'])->name('ajax.inventory-management.designator.nte');
         });
 
-        Route::prefix('employee-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function () {
+        Route::prefix('employee-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function ()
+        {
             Route::get('list', [AjaxController::class, 'get_employee_list'])->name('ajax.employee-management.list');
             Route::get('list/{id}', [AjaxController::class, 'get_employee_list_by_id'])->name('ajax.employee-management.list.id');
 
@@ -172,7 +184,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('get-sub-unit-by-regional/{regional_id}', [AjaxController::class, 'get_sub_unit_by_regional'])->name('ajax.employee-management.get-sub-unit-by-regional');
         });
 
-        Route::prefix('organization-structure')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function () {
+        Route::prefix('organization-structure')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function ()
+        {
             Route::get('regional', [AjaxController::class, 'get_regional'])->name('ajax.organization-structure.regional');
             Route::get('regional/{id}', [AjaxController::class, 'get_regional_by_id'])->name('ajax.organization-structure.regional.id');
 
@@ -198,7 +211,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('team/{id}', [AjaxController::class, 'get_team_by_id'])->name('ajax.organization-structure.team.id');
         });
 
-        Route::prefix('reporting-configuration')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Helpdesk')->group(function () {
+        Route::prefix('reporting-configuration')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Helpdesk')->group(function ()
+        {
             Route::get('status', [AjaxController::class, 'get_order_status'])->name('ajax.reporting-configuration.status');
             Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id'])->name('ajax.reporting-configuration.status.id');
             Route::get('status/step/{id}', [AjaxController::class, 'get_order_status_by_step'])->name('ajax.reporting-configuration.status.step');

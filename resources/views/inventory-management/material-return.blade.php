@@ -6,7 +6,7 @@
 @section('title', 'Material Return')
 
 @section('content')
-{{-- <div class="card">
+    {{-- <div class="card">
     <div class="card-header">
         Card Title
     </div>

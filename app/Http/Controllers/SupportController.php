@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\SupportModel;
 
 class SupportController extends Controller
@@ -15,8 +14,8 @@ class SupportController extends Controller
     public function helpdeskMonitoring()
     {
         $service_area_id = request()->input('service_area_id') ?? 'ALL';
-        $sourcedata      = request()->input('sourcedata') ?? 'ALL';
-        $date            = request()->input('date') ?? date('Y-m-d');
+        $sourcedata      = request()->input('sourcedata')      ?? 'ALL';
+        $date            = request()->input('date')            ?? date('Y-m-d');
 
         $data = SupportModel::helpdesk_monitoring($service_area_id, $sourcedata, $date);
 
@@ -33,24 +32,19 @@ class SupportController extends Controller
                     if ($status === null || $status === 'READY')
                     {
                         $summary['READY']++;
-                    }
-                    elseif ($status === 'ON-PROGRESS')
+                    } elseif ($status === 'ON-PROGRESS')
                     {
                         $summary['ON-PROGRESS']++;
-                    }
-                    elseif ($status === 'CUST-ISSUE')
+                    } elseif ($status === 'CUST-ISSUE')
                     {
                         $summary['CUST-ISSUE']++;
-                    }
-                    elseif ($status === 'TECH-ISSUE')
+                    } elseif ($status === 'TECH-ISSUE')
                     {
                         $summary['TECH-ISSUE']++;
-                    }
-                    elseif ($status === 'EXTERNAL-ISSUE')
+                    } elseif ($status === 'EXTERNAL-ISSUE')
                     {
                         $summary['EXTERNAL-ISSUE']++;
-                    }
-                    elseif ($status === 'DONE')
+                    } elseif ($status === 'DONE')
                     {
                         $summary['DONE']++;
                     }
@@ -58,7 +52,7 @@ class SupportController extends Controller
             }
         }
 
-        return view('support.helpdesk-monitoring', [ 'service_area_id' => $service_area_id, 'sourcedata' => $sourcedata, 'date' => $date, 'data' => $data, 'summary' => $summary]);
+        return view('support.helpdesk-monitoring', ['service_area_id' => $service_area_id, 'sourcedata' => $sourcedata, 'date' => $date, 'data' => $data, 'summary' => $summary]);
     }
 
     public function mapsRouting()

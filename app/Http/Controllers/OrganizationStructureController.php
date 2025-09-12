@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\OrganizationStructureModel;
+use Illuminate\Http\Request;
 
 class OrganizationStructureController extends Controller
 {
@@ -19,8 +19,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_regional', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_regional', $data);
         }
@@ -49,8 +48,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_witel', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_witel', $data);
         }
@@ -79,8 +77,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_sub_unit', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_sub_unit', $data);
         }
@@ -107,8 +104,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_sub_group', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_sub_group', $data);
         }
@@ -137,8 +133,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_mitra', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_mitra', $data);
         }
@@ -165,8 +160,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_service_area', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_service_area', $data);
         }
@@ -195,8 +189,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_work_zone', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_work_zone', $data);
         }
@@ -223,8 +216,7 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_team', $data['id'], $data);
-        }
-        else
+        } else
         {
             OrganizationStructureModel::insert_data('tb_team', $data);
         }

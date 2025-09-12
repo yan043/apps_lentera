@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\ReportsPaymentModel;
-
 class ReportsPaymentController extends Controller
 {
     public function dailyReports()

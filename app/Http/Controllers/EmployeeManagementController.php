@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use App\Models\EmployeeManagementModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeManagementController extends Controller
 {
@@ -35,7 +33,7 @@ class EmployeeManagementController extends Controller
             'sub_unit_id'  => 'required',
             'sub_group_id' => 'required',
             'role_id'      => 'required',
-            'is_active'    => 'required'
+            'is_active'    => 'required',
         ]);
 
         if ($request->filled('password'))
@@ -59,7 +57,7 @@ class EmployeeManagementController extends Controller
             'sub_unit_id'  => 'required',
             'sub_group_id' => 'required',
             'role_id'      => 'required',
-            'is_active'    => 'required'
+            'is_active'    => 'required',
         ]);
 
         if ($request->filled('password'))

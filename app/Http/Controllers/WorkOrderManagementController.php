@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Models\WorkOrderManagementModel;
 use App\Models\InventoryManagementModel;
+use App\Models\WorkOrderManagementModel;
+use Illuminate\Http\Request;
 
 class WorkOrderManagementController extends Controller
 {
@@ -23,20 +22,20 @@ class WorkOrderManagementController extends Controller
     {
         $request->validate(
             [
-                'id'                          => 'required',
-                'order_status_id'             => 'required',
-                'order_substatus_id'          => 'required',
-                'report_odp_name'             => 'nullable',
-                'report_odp_coordinates'      => 'nullable',
-                'report_valins_id'            => 'nullable',
-                'report_refferal_order_code'  => 'nullable',
-                'nte_data'                    => 'nullable',
-                'materials_data'              => 'nullable',
-                'photos_data'                 => 'nullable',
+                'id'                         => 'required',
+                'order_status_id'            => 'required',
+                'order_substatus_id'         => 'required',
+                'report_odp_name'            => 'nullable',
+                'report_odp_coordinates'     => 'nullable',
+                'report_valins_id'           => 'nullable',
+                'report_refferal_order_code' => 'nullable',
+                'nte_data'                   => 'nullable',
+                'materials_data'             => 'nullable',
+                'photos_data'                => 'nullable',
             ]
         );
 
-        if (!in_array($request->input('order_status_id'), [1, 2]))
+        if (! in_array($request->input('order_status_id'), [1, 2]))
         {
             $request->validate(
                 [
@@ -47,7 +46,7 @@ class WorkOrderManagementController extends Controller
             );
         }
 
-        if (!empty($request->input('order_segment_id')))
+        if (! empty($request->input('order_segment_id')))
         {
             $request->validate(
                 [
@@ -93,7 +92,7 @@ class WorkOrderManagementController extends Controller
         $startdate  = request()->input('startdate');
         $enddate    = request()->input('enddate');
 
-        return view('work-order-management.new-order-details', ['sourcedata' => $sourcedata, 'workzone' => $workzone, 'ttr' => $ttr, 'startdate' => $startdate, 'enddate' => $enddate,]);
+        return view('work-order-management.new-order-details', ['sourcedata' => $sourcedata, 'workzone' => $workzone, 'ttr' => $ttr, 'startdate' => $startdate, 'enddate' => $enddate]);
     }
 
     public function assignedOrders()

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationStructureModel extends Model
 {
@@ -105,7 +105,7 @@ class OrganizationStructureModel extends Model
             )
             ->where([
                 'tsa.is_active' => 1,
-                'tsa.witel_id'  => Session()->get('witel_id')
+                'tsa.witel_id'  => Session()->get('witel_id'),
             ])
             ->get();
     }
@@ -131,7 +131,7 @@ class OrganizationStructureModel extends Model
             ->where([
                 'tsa.id'        => $id,
                 'tsa.is_active' => 1,
-                'tsa.witel_id'  => Session()->get('witel_id')
+                'tsa.witel_id'  => Session()->get('witel_id'),
             ])
             ->first();
     }
@@ -139,42 +139,42 @@ class OrganizationStructureModel extends Model
     public static function get_work_zone()
     {
         return DB::table('tb_work_zone AS wz')
-        ->leftJoin('tb_service_area AS ta', 'wz.service_area_id', '=', 'ta.id')
-        ->leftJoin('tb_regional AS tr', 'ta.regional_id', '=', 'tr.id')
-        ->leftJoin('tb_witel AS tw', 'ta.witel_id', '=', 'tw.id')
-        ->select(
-            'wz.*',
-            'ta.id AS service_area_id',
-            'ta.name AS service_area_name',
-            'tr.id AS regional_id',
-            'tr.name AS regional_name',
-            'tw.id AS witel_id',
-            'tw.name AS witel_name'
-        )
-        ->where('ta.witel_id', Session()->get('witel_id'))
-        ->get();
+            ->leftJoin('tb_service_area AS ta', 'wz.service_area_id', '=', 'ta.id')
+            ->leftJoin('tb_regional AS tr', 'ta.regional_id', '=', 'tr.id')
+            ->leftJoin('tb_witel AS tw', 'ta.witel_id', '=', 'tw.id')
+            ->select(
+                'wz.*',
+                'ta.id AS service_area_id',
+                'ta.name AS service_area_name',
+                'tr.id AS regional_id',
+                'tr.name AS regional_name',
+                'tw.id AS witel_id',
+                'tw.name AS witel_name'
+            )
+            ->where('ta.witel_id', Session()->get('witel_id'))
+            ->get();
     }
 
     public static function get_work_zone_by_id($id)
     {
         return DB::table('tb_work_zone AS wz')
-        ->leftJoin('tb_service_area AS ta', 'wz.service_area_id', '=', 'ta.id')
-        ->leftJoin('tb_regional AS tr', 'ta.regional_id', '=', 'tr.id')
-        ->leftJoin('tb_witel AS tw', 'ta.witel_id', '=', 'tw.id')
-        ->select(
-            'wz.*',
-            'ta.id AS service_area_id',
-            'ta.name AS service_area_name',
-            'tr.id AS regional_id',
-            'tr.name AS regional_name',
-            'tw.id AS witel_id',
-            'tw.name AS witel_name'
-        )
-        ->where([
-            'wz.id'       => $id,
-            'ta.witel_id' => Session()->get('witel_id')
-        ])
-        ->first();
+            ->leftJoin('tb_service_area AS ta', 'wz.service_area_id', '=', 'ta.id')
+            ->leftJoin('tb_regional AS tr', 'ta.regional_id', '=', 'tr.id')
+            ->leftJoin('tb_witel AS tw', 'ta.witel_id', '=', 'tw.id')
+            ->select(
+                'wz.*',
+                'ta.id AS service_area_id',
+                'ta.name AS service_area_name',
+                'tr.id AS regional_id',
+                'tr.name AS regional_name',
+                'tw.id AS witel_id',
+                'tw.name AS witel_name'
+            )
+            ->where([
+                'wz.id'       => $id,
+                'ta.witel_id' => Session()->get('witel_id'),
+            ])
+            ->first();
     }
 
     public static function get_team()
@@ -208,8 +208,8 @@ class OrganizationStructureModel extends Model
                 DB::raw('te2.full_name AS technician2_name')
             )
             ->where([
-                'tt.id' => $id,
-                'tt.is_active' => 1
+                'tt.id'        => $id,
+                'tt.is_active' => 1,
             ])
             ->first();
     }

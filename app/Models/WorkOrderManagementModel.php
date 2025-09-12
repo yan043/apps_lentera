@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Database\Eloquent\Model;
 
 class WorkOrderManagementModel extends Model
 {
@@ -67,7 +66,7 @@ class WorkOrderManagementModel extends Model
             )
             ->where([
                 'tao.id'    => $id,
-                'tsi.witel' => $witel
+                'tsi.witel' => $witel,
             ]);
 
         $manualQuery = DB::table('tb_assign_orders AS tao')
@@ -124,7 +123,7 @@ class WorkOrderManagementModel extends Model
             )
             ->where([
                 'tao.id'    => $id,
-                'tsm.witel' => $witel
+                'tsm.witel' => $witel,
             ]);
 
         $bimaQuery = DB::table('tb_assign_orders AS tao')
@@ -180,8 +179,8 @@ class WorkOrderManagementModel extends Model
                 'tar.report_notes'
             )
             ->where([
-                'tao.id' => $id,
-                'tbm.c_tk_subregion' => $witel
+                'tao.id'             => $id,
+                'tbm.c_tk_subregion' => $witel,
             ]);
 
         $insera = $inseraQuery->first();
@@ -209,7 +208,7 @@ class WorkOrderManagementModel extends Model
     {
         DB::table('tb_assign_order_reports')->updateOrInsert(
             [
-                'assign_order_id' => $request['id']
+                'assign_order_id' => $request['id'],
             ],
             [
                 'order_substatus_id'          => $request['order_substatus_id'],
@@ -226,13 +225,13 @@ class WorkOrderManagementModel extends Model
             ]
         );
 
-        if (!empty($request['order_segment_id']))
+        if (! empty($request['order_segment_id']))
         {
             DB::table('tb_assign_orders')->where('id', $request['id'])
                 ->update(
                     [
                         'order_segment_id' => $request['order_segment_id'],
-                        'order_action_id'  => $request['order_action_id']
+                        'order_action_id'  => $request['order_action_id'],
                     ]
                 );
         }
@@ -256,36 +255,36 @@ class WorkOrderManagementModel extends Model
             ]
         );
 
-        if (!empty($request['order_segment_id']))
+        if (! empty($request['order_segment_id']))
         {
             DB::table('tb_assign_order_reports_log')->where('id', $id)
                 ->update(
                     [
                         'order_segment_id' => $request['order_segment_id'],
-                        'order_action_id'  => $request['order_action_id']
+                        'order_action_id'  => $request['order_action_id'],
                     ]
                 );
         }
 
-        if (!empty($request['nte_data']))
+        if (! empty($request['nte_data']))
         {
             $nte = json_decode($request['nte_data'], true);
             DB::table('tb_inventory_nte_reports')->updateOrInsert(
                 [
-                    'assign_order_reports_id' => $request['id']
+                    'assign_order_reports_id' => $request['id'],
                 ],
                 [
                     'inventory_nte_id_ont' => $nte['inventory_nte_id_ont'] ?? 0,
-                    'serial_number_ont'    => $nte['serial_number_ont'] ?? null,
+                    'serial_number_ont'    => $nte['serial_number_ont']    ?? null,
                     'inventory_nte_id_stb' => $nte['inventory_nte_id_stb'] ?? 0,
-                    'serial_number_stb'    => $nte['serial_number_stb'] ?? null,
+                    'serial_number_stb'    => $nte['serial_number_stb']    ?? null,
                     'created_by'           => Session::get('nik'),
                     'created_at'           => now(),
                 ]
             );
         }
 
-        if (!empty($request['materials_data']))
+        if (! empty($request['materials_data']))
         {
             $materials = json_decode($request['materials_data'], true);
             foreach ($materials as $material)
@@ -293,7 +292,7 @@ class WorkOrderManagementModel extends Model
                 DB::table('tb_inventory_material_reports')->updateOrInsert(
                     [
                         'assign_order_reports_id' => $request['id'],
-                        'inventory_material_id'   => $material['id']
+                        'inventory_material_id'   => $material['id'],
                     ],
                     [
                         'qty'        => $material['qty'],
@@ -309,7 +308,7 @@ class WorkOrderManagementModel extends Model
     {
         DB::table('tb_assign_orders')->updateOrInsert(
             [
-                'order_id' => $data['order_id']
+                'order_id' => $data['order_id'],
             ],
             [
                 'sourcedata'    => $data['source_data'],
@@ -373,9 +372,9 @@ class WorkOrderManagementModel extends Model
             ->whereBetween('tsi.date_reported', [$startdate, $enddate])
             ->where([
                 ['tsi.witel', $witel],
-                ['tsi.service_type', '!=', "NON-NUMBERING"],
+                ['tsi.service_type', '!=', 'NON-NUMBERING'],
             ])
-            ->whereIn('tsi.status', ["NEW", "DRAFT", "ANALYSIS", "PENDING", "BACKEND"])
+            ->whereIn('tsi.status', ['NEW', 'DRAFT', 'ANALYSIS', 'PENDING', 'BACKEND'])
             ->groupBy('tsi.workzone');
 
         $manual = DB::table('tb_source_manuals AS tsm')
@@ -441,21 +440,22 @@ class WorkOrderManagementModel extends Model
         switch ($type)
         {
             case 'bar':
-                return $final->map(function($row)
+                return $final->map(function ($row)
                 {
                     return [
-                        "workzone" => $row->workzone,
-                        "jumlah"   => (int) $row->jumlah
+                        'workzone' => $row->workzone,
+                        'jumlah'   => (int) $row->jumlah,
                     ];
                 });
             case 'pie':
                 $sla = [
-                    "ttr0to2"   => $final->sum("ttr0to2"),
-                    "ttr2to3"   => $final->sum("ttr2to3"),
-                    "ttr3to12"  => $final->sum("ttr3to12"),
-                    "ttr12to24" => $final->sum("ttr12to24"),
-                    "ttr24"     => $final->sum("ttr24"),
+                    'ttr0to2'   => $final->sum('ttr0to2'),
+                    'ttr2to3'   => $final->sum('ttr2to3'),
+                    'ttr3to12'  => $final->sum('ttr3to12'),
+                    'ttr12to24' => $final->sum('ttr12to24'),
+                    'ttr24'     => $final->sum('ttr24'),
                 ];
+
                 return $sla;
             default:
                 return $final;
@@ -484,28 +484,34 @@ class WorkOrderManagementModel extends Model
             ->whereNull('tao.order_code')
             ->whereBetween('tsi.reported_date', [$startdate, $enddate])
             ->where('tsi.witel', $witel)
-            ->when(!empty($workzone), function ($query) use ($workzone) {
+            ->when(! empty($workzone), function ($query) use ($workzone)
+            {
                 return $query->where('tsi.workzone', $workzone);
             })
-            ->where('tsi.service_type', '!=', "NON-NUMBERING")
-            ->whereIn('tsi.status', ["NEW", "DRAFT", "ANALYSIS", "PENDING", "BACKEND"])
-            ->when($ttr == 'ttr0to2', function ($query) {
+            ->where('tsi.service_type', '!=', 'NON-NUMBERING')
+            ->whereIn('tsi.status', ['NEW', 'DRAFT', 'ANALYSIS', 'PENDING', 'BACKEND'])
+            ->when($ttr == 'ttr0to2', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) >= 0')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) < 2');
             })
-            ->when($ttr == 'ttr2to3', function ($query) {
+            ->when($ttr == 'ttr2to3', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) >= 2')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) < 3');
             })
-            ->when($ttr == 'ttr3to12', function ($query) {
+            ->when($ttr == 'ttr3to12', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) >= 3')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) < 12');
             })
-            ->when($ttr == 'ttr12to24', function ($query) {
+            ->when($ttr == 'ttr12to24', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) >= 12')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) < 24');
             })
-            ->when($ttr == 'ttr24', function ($query) {
+            ->when($ttr == 'ttr24', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsi.reported_date, NOW() ) >= 24');
             });
 
@@ -527,26 +533,32 @@ class WorkOrderManagementModel extends Model
             ->whereNull('tao.order_code')
             ->whereBetween('tsm.reported_date', [$startdate, $enddate])
             ->where('tsm.witel', $witel)
-            ->when(!empty($workzone), function ($query) use ($workzone) {
+            ->when(! empty($workzone), function ($query) use ($workzone)
+            {
                 return $query->where('tsm.workzone', $workzone);
             })
-            ->when($ttr == 'ttr0to2', function ($query) {
+            ->when($ttr == 'ttr0to2', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) >= 0')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) < 2');
             })
-            ->when($ttr == 'ttr2to3', function ($query) {
+            ->when($ttr == 'ttr2to3', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) >= 2')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) < 3');
             })
-            ->when($ttr == 'ttr3to12', function ($query) {
+            ->when($ttr == 'ttr3to12', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) >= 3')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) < 12');
             })
-            ->when($ttr == 'ttr12to24', function ($query) {
+            ->when($ttr == 'ttr12to24', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) >= 12')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) < 24');
             })
-            ->when($ttr == 'ttr24', function ($query) {
+            ->when($ttr == 'ttr24', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tsm.reported_date, NOW() ) >= 24');
             });
 
@@ -568,46 +580,50 @@ class WorkOrderManagementModel extends Model
             ->whereNull('tao.order_code')
             ->whereBetween('tbm.c_datemodified', [$startdate, $enddate])
             ->where('tbm.c_tk_subregion', $witel)
-            ->when(!empty($workzone), function ($query) use ($workzone) {
+            ->when(! empty($workzone), function ($query) use ($workzone)
+            {
                 return $query->where('tbm.c_workzone', $workzone);
             })
-            ->when($ttr == 'ttr0to2', function ($query) {
+            ->when($ttr == 'ttr0to2', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) >= 0')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) < 2');
             })
-            ->when($ttr == 'ttr2to3', function ($query) {
+            ->when($ttr == 'ttr2to3', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) >= 2')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) < 3');
             })
-            ->when($ttr == 'ttr3to12', function ($query) {
+            ->when($ttr == 'ttr3to12', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) >= 3')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) < 12');
             })
-            ->when($ttr == 'ttr12to24', function ($query) {
+            ->when($ttr == 'ttr12to24', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) >= 12')
                     ->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) < 24');
             })
-            ->when($ttr == 'ttr24', function ($query) {
+            ->when($ttr == 'ttr24', function ($query)
+            {
                 return $query->whereRaw('TIMESTAMPDIFF( HOUR , tbm.c_datemodified, NOW() ) >= 24');
             });
 
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tsi.reported_date', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'manual')
+        } elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tsm.reported_date', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tbm.c_datemodified', 'DESC')->get();
-        }
-        else
+        } else
         {
             $inseraSql = $inseraQuery->orderBy('tsi.reported_date', 'DESC');
             $manualSql = $manualQuery->orderBy('tsm.reported_date', 'DESC');
             $bimaSql   = $bimaQuery->orderBy('tbm.c_datemodified', 'DESC');
+
             return $inseraSql->unionAll($manualSql)->unionAll($bimaSql)->get();
         }
     }
@@ -763,16 +779,13 @@ class WorkOrderManagementModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'manual')
+        } elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        else
+        } else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');

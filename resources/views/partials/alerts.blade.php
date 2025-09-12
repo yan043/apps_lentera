@@ -1,6 +1,6 @@
 @if ($errors->any())
     <script>
-        window.onload = function () {
+        window.onload = function() {
             if (typeof toastr !== 'undefined') {
                 toastr.options = {
                     "closeButton": true,
@@ -32,7 +32,7 @@
 
 @if (session('success'))
     <script>
-        window.onload = function () {
+        window.onload = function() {
             if (typeof toastr !== 'undefined') {
                 toastr.success('{{ session('success') }}');
             } else {

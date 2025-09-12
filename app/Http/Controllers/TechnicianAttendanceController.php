@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\TechnicianAttendanceModel;
-
 class TechnicianAttendanceController extends Controller
 {
     public function dailyAttendance()

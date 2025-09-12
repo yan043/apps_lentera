@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use App\Models\AuthModel;
 use App\Models\EmployeeManagementModel;
 use App\Models\OrganizationStructureModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -23,9 +23,9 @@ class AuthController extends Controller
         $request->validate([
             'nik'      => 'required|numeric',
             'password' => 'required|string',
-            'captcha'  => 'required|captcha'
+            'captcha'  => 'required|captcha',
         ], [
-            'captcha.captcha' => 'Captcha yang dimasukkan salah.'
+            'captcha.captcha' => 'Captcha yang dimasukkan salah.',
         ]);
 
         $user = AuthModel::identity($request->nik);
@@ -46,28 +46,22 @@ class AuthController extends Controller
             if (isset($_SERVER['HTTP_CLIENT_IP']))
             {
                 $ip_address = $_SERVER['HTTP_CLIENT_IP'];
-            }
-            elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
-            elseif (isset($_SERVER['HTTP_X_FORWARDED']))
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED'];
-            }
-            elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
+            } elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
-            }
-            elseif (isset($_SERVER['HTTP_FORWARDED']))
+            } elseif (isset($_SERVER['HTTP_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED'];
-            }
-            elseif (isset($_SERVER['REMOTE_ADDR']))
+            } elseif (isset($_SERVER['REMOTE_ADDR']))
             {
                 $ip_address = $_SERVER['REMOTE_ADDR'];
-            }
-            else
+            } else
             {
                 $ip_address = 'UNKNOWN';
             }
@@ -100,7 +94,7 @@ class AuthController extends Controller
                 'date_of_birth'  => $profile->date_of_birth,
                 'place_of_birth' => $profile->place_of_birth,
                 'remember_token' => $token,
-                'is_logged_in'   => true
+                'is_logged_in'   => true,
             ]);
 
             return redirect()->route('dashboard');
@@ -130,7 +124,7 @@ class AuthController extends Controller
                 'login_at'         => null,
                 'google2fa_secret' => null,
                 'password'         => null,
-                'is_active'        => 0
+                'is_active'        => 0,
             ]);
 
             Auth::logout();
@@ -152,7 +146,7 @@ class AuthController extends Controller
 
         $get_gender = collect([
             (object) ['id' => 'Laki-Laki', 'name' => 'Laki-Laki'],
-            (object) ['id' => 'Perempuan', 'name' => 'Perempuan']
+            (object) ['id' => 'Perempuan', 'name' => 'Perempuan'],
         ]);
 
         $data = AuthModel::profile(Session::get('employee_id'));
@@ -175,12 +169,12 @@ class AuthController extends Controller
             'mitra_id'       => 'required|integer',
             'sub_unit_id'    => 'required|integer',
             'sub_group_id'   => 'required|integer',
-            'password'       => 'nullable|string|min:6'
+            'password'       => 'nullable|string|min:6',
         ]);
 
         $user = AuthModel::find(Session::get('employee_id'));
 
-        if (!$user)
+        if (! $user)
         {
             return back()->withErrors(['update' => 'User tidak ditemukan!']);
         }
@@ -203,7 +197,7 @@ class AuthController extends Controller
         if ($request->password)
         {
             $user->update([
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
             ]);
 
             $token = Str::random(60);
@@ -213,28 +207,22 @@ class AuthController extends Controller
             if (isset($_SERVER['HTTP_CLIENT_IP']))
             {
                 $ip_address = $_SERVER['HTTP_CLIENT_IP'];
-            }
-            elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
-            elseif (isset($_SERVER['HTTP_X_FORWARDED']))
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED'];
-            }
-            elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
+            } elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
-            }
-            elseif (isset($_SERVER['HTTP_FORWARDED']))
+            } elseif (isset($_SERVER['HTTP_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED'];
-            }
-            elseif (isset($_SERVER['REMOTE_ADDR']))
+            } elseif (isset($_SERVER['REMOTE_ADDR']))
             {
                 $ip_address = $_SERVER['REMOTE_ADDR'];
-            }
-            else
+            } else
             {
                 $ip_address = 'UNKNOWN';
             }

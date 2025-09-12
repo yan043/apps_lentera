@@ -6,7 +6,7 @@
 @section('title', 'Late & Absent Logs')
 
 @section('content')
-{{-- <div class="card">
+    {{-- <div class="card">
     <div class="card-header">
         Card Title
     </div>

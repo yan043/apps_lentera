@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\SupportModel;
 use App\Models\EmployeeManagementModel;
-use App\Models\WorkOrderManagementModel;
 use App\Models\InventoryManagementModel;
 use App\Models\OrganizationStructureModel;
 use App\Models\ReportingConfigurationModel;
+use App\Models\SupportModel;
+use App\Models\WorkOrderManagementModel;
 
 class AjaxController extends Controller
 {
@@ -159,7 +158,6 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-
     public function get_service_area()
     {
         $data = OrganizationStructureModel::get_service_area();
@@ -246,9 +244,9 @@ class AjaxController extends Controller
 
     public function get_new_order_charts()
     {
-        $type       = request()->input('type');
-        $startdate  = request()->input('startdate');
-        $enddate    = request()->input('enddate');
+        $type      = request()->input('type');
+        $startdate = request()->input('startdate');
+        $enddate   = request()->input('enddate');
 
         $data = WorkOrderManagementModel::get_new_order_charts($type, $startdate, $enddate);
 
@@ -264,40 +262,39 @@ class AjaxController extends Controller
             }
 
             return response()->json([
-                "labels" => $labels,
-                "datasets" => [
+                'labels'   => $labels,
+                'datasets' => [
                     [
-                        "label"           => "Orders by Zone",
-                        "data"            => $values,
-                        "backgroundColor" => "#3b82f6"
-                    ]
-                ]
+                        'label'           => 'Orders by Zone',
+                        'data'            => $values,
+                        'backgroundColor' => '#3b82f6',
+                    ],
+                ],
             ]);
-        }
-        elseif ($type == 'pie')
+        } elseif ($type == 'pie')
         {
             $sla = [
-                "0-2"   => 0,
-                "2-3"   => 0,
-                "3-12"  => 0,
-                "12-24" => 0,
-                "24+"   => 0
+                '0-2'   => 0,
+                '2-3'   => 0,
+                '3-12'  => 0,
+                '12-24' => 0,
+                '24+'   => 0,
             ];
 
-            $sla["0-2"]   += $data['ttr0to2'];
-            $sla["2-3"]   += $data['ttr2to3'];
-            $sla["3-12"]  += $data['ttr3to12'];
-            $sla["12-24"] += $data['ttr12to24'];
-            $sla["24+"]   += $data['ttr24'];
+            $sla['0-2']   += $data['ttr0to2'];
+            $sla['2-3']   += $data['ttr2to3'];
+            $sla['3-12']  += $data['ttr3to12'];
+            $sla['12-24'] += $data['ttr12to24'];
+            $sla['24+']   += $data['ttr24'];
 
             return response()->json([
-                "labels" => array_keys($sla),
-                "datasets" => [
+                'labels'   => array_keys($sla),
+                'datasets' => [
                     [
-                        "data"            => array_values($sla),
-                        "backgroundColor" => ["#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"]
-                    ]
-                ]
+                        'data'            => array_values($sla),
+                        'backgroundColor' => ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'],
+                    ],
+                ],
             ]);
         }
     }
@@ -354,24 +351,22 @@ class AjaxController extends Controller
             $order_segment_id = $id;
 
             $photo_list = json_decode(ReportingConfigurationModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             $order_substatus_id = $id;
 
             $photo_list = json_decode(ReportingConfigurationModel::get_photo_list($sourcedata, $order_substatus_id)->photo_list);
-        }
-        else
+        } else
         {
             $photo_list = [
                 'Lokasi_Rumah',
                 'Kondisi_Dalam_ODP',
                 'Hasil_Ukur_Power_IN',
-                'Hasil_Ukur_Power_OUT'
+                'Hasil_Ukur_Power_OUT',
             ];
         }
 
-        if (!isset($photo_list))
+        if (! isset($photo_list))
         {
             $photo_list = [];
         }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ApiModel extends Model
 {
@@ -22,16 +22,16 @@ class ApiModel extends Model
 
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL            => $link,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => "",
+            CURLOPT_ENCODING       => '',
             CURLOPT_MAXREDIRS      => 10,
             CURLOPT_TIMEOUT        => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => "GET",
-        ));
+            CURLOPT_CUSTOMREQUEST  => 'GET',
+        ]);
 
         $response = curl_exec($curl);
 
@@ -47,16 +47,16 @@ class ApiModel extends Model
         // type <ORDER_ID/ND_INTERNET/ND_INET/NCLI>
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL            => "http://10.128.16.65/comparin/controller/api/tomman_search.php?token=5ebabd69df0c7e36dfe6dd14c7d068156af5146a4c3867ef056b564f22cfd925&id=$id&type=$type",
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => "",
+            CURLOPT_ENCODING       => '',
             CURLOPT_MAXREDIRS      => 10,
             CURLOPT_TIMEOUT        => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => "GET",
-        ));
+            CURLOPT_CUSTOMREQUEST  => 'GET',
+        ]);
 
         $response = curl_exec($curl);
 
@@ -71,17 +71,17 @@ class ApiModel extends Model
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL            => 'http://benspec.dalapa.id/api/ibooster/ukur',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => array('nd' => $id, 'domain' => '@telkom.net'),
-            CURLOPT_HTTPHEADER     => array(
-                'Authorization: 1a3a774238934d08af294bbe01135cc02b3e4abd723f0a0621775f745c192f0792cd4ab0fe79f5a3'
-            ),
-        ));
+            CURLOPT_POSTFIELDS     => ['nd' => $id, 'domain' => '@telkom.net'],
+            CURLOPT_HTTPHEADER     => [
+                'Authorization: 1a3a774238934d08af294bbe01135cc02b3e4abd723f0a0621775f745c192f0792cd4ab0fe79f5a3',
+            ],
+        ]);
 
         $response   = curl_exec($curl);
         $http_code  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -92,8 +92,7 @@ class ApiModel extends Model
         if ($curl_error || $http_code != 200)
         {
             $result = null;
-        }
-        else
+        } else
         {
             $result = json_decode($response);
         }
@@ -106,7 +105,7 @@ class ApiModel extends Model
         DB::table('log_ibooster')
             ->where([
                 ['nd_inet', $nd_inet],
-                ['data_type', $type]
+                ['data_type', $type],
             ])
             ->whereDate('created_date', date('Y-m-d'))
             ->delete();
@@ -164,7 +163,7 @@ class ApiModel extends Model
             'log'               => @$data->log,
             'data_type'         => $type,
             'created_date'      => date('Y-m-d'),
-            'created_time'      => date('H:i:s')
+            'created_time'      => date('H:i:s'),
         ]);
     }
 }

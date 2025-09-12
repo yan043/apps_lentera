@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Database\Eloquent\Model;
 
 class SupportModel extends Model
 {
@@ -16,12 +16,10 @@ class SupportModel extends Model
         if (preg_match('/^INC\d+$/', $id))
         {
             $searchType = 'incident';
-        }
-        elseif (preg_match('/^\d{10,}$/', $id))
+        } elseif (preg_match('/^\d{10,}$/', $id))
         {
             $searchType = 'service_no';
-        }
-        else
+        } else
         {
             $searchType = 'order_code';
         }
@@ -58,12 +56,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedInsera->where('tsi.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $assignedInsera->where('tsi.service_no', $id);
-        }
-        else
+        } else
         {
             $assignedInsera->where('tao.order_code', $id);
         }
@@ -100,12 +96,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedManual->where('tsm.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $assignedManual->where('tsm.service_no', $id);
-        }
-        else
+        } else
         {
             $assignedManual->where('tao.order_code', $id);
         }
@@ -141,12 +135,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedBima->where('tbm.c_wonum', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $assignedBima->where('tbm.c_servicenum', $id);
-        }
-        else
+        } else
         {
             $assignedBima->where('tao.order_code', $id);
         }
@@ -177,12 +169,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newInsera->where('tsi.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $newInsera->where('tsi.service_no', $id);
-        }
-        else
+        } else
         {
             $newInsera->where('tsi.incident', $id);
         }
@@ -213,12 +203,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newManual->where('tsm.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $newManual->where('tsm.service_no', $id);
-        }
-        else
+        } else
         {
             $newManual->where('tsm.incident', $id);
         }
@@ -249,12 +237,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newBima->where('tbm.c_wonum', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $newBima->where('tbm.c_servicenum', $id);
-        }
-        else
+        } else
         {
             $newBima->where('tbm.c_wonum', $id);
         }
@@ -290,7 +276,7 @@ class SupportModel extends Model
                 'tao.assign_date' => $date,
                 'tsa.witel_id'    => Session::get('witel_id'),
                 'tt.is_active'    => 1,
-                'tsa.is_active'   => 1
+                'tsa.is_active'   => 1,
             ])
             ->groupBy('tsa.id');
 
@@ -322,7 +308,7 @@ class SupportModel extends Model
                 'tt.service_area_id' => $service_area_id,
                 'tao.assign_date'    => $date,
                 'tt.is_active'       => 1,
-                'tsa.is_active'      => 1
+                'tsa.is_active'      => 1,
             ]);
 
         if ($sourcedata != 'ALL')
@@ -385,7 +371,7 @@ class SupportModel extends Model
                 'tao.assign_date' => $date,
                 'tsi.witel'       => $witel,
                 'tt.is_active'    => 1,
-                'tsa.is_active'   => 1
+                'tsa.is_active'   => 1,
             ]);
 
         $manualQuery = DB::table('tb_assign_orders AS tao')
@@ -436,7 +422,7 @@ class SupportModel extends Model
                 'tao.assign_date' => $date,
                 'tsm.witel'       => $witel,
                 'tt.is_active'    => 1,
-                'tsa.is_active'   => 1
+                'tsa.is_active'   => 1,
             ]);
 
         $bimaQuery = DB::table('tb_assign_orders AS tao')
@@ -483,26 +469,23 @@ class SupportModel extends Model
             )
             ->whereNotNull('tao.order_code')
             ->where([
-                'tao.team_id'         => $team_id,
-                'tao.assign_date'     => $date,
-                'tbm.c_tk_subregion'  => $witel,
-                'tt.is_active'        => 1,
-                'tsa.is_active'       => 1
+                'tao.team_id'        => $team_id,
+                'tao.assign_date'    => $date,
+                'tbm.c_tk_subregion' => $witel,
+                'tt.is_active'       => 1,
+                'tsa.is_active'      => 1,
             ]);
 
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'manual')
+        } elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        else
+        } else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');

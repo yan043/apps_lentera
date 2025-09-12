@@ -120,7 +120,7 @@ return [
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
+        'store'  => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
     'providers' => [
@@ -174,7 +174,7 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
 
-        'Captcha'      => Mews\Captcha\Facades\Captcha::class,
-    ]
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
+    ],
 
 ];
