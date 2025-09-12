@@ -26,6 +26,13 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
+    public function get_order_status_by_step($id)
+    {
+        $data = ReportingConfigurationModel::get_order_status_by_step($id);
+
+        return response()->json($data);
+    }
+
     public function get_order_sub_status()
     {
         $data = ReportingConfigurationModel::get_order_sub_status();

@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function () {
 
         Route::get('view/{id}', [WorkOrderManagementController::class, 'view'])->name('work-order-management.view');
-        Route::post('view/{id}', [WorkOrderManagementController::class, 'viewPost'])->name('work-order-management.view.post');
+        Route::put('view/{id}', [WorkOrderManagementController::class, 'viewUpdate'])->name('work-order-management.view.update');
 
         Route::post('updateOrInsertOrder', [WorkOrderManagementController::class, 'updateOrInsertOrder'])->name('work-order-management.updateOrInsertOrder');
 
@@ -203,6 +203,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('reporting-configuration')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Helpdesk')->group(function () {
             Route::get('status', [AjaxController::class, 'get_order_status'])->name('ajax.reporting-configuration.status');
             Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id'])->name('ajax.reporting-configuration.status.id');
+            Route::get('status/step/{id}', [AjaxController::class, 'get_order_status_by_step'])->name('ajax.reporting-configuration.status.step');
 
             Route::get('sub-status', [AjaxController::class, 'get_order_sub_status'])->name('ajax.reporting-configuration.sub-status');
             Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id'])->name('ajax.reporting-configuration.sub-status.id');

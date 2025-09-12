@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class ReportingConfigurationModel extends Model
 {
@@ -15,6 +16,41 @@ class ReportingConfigurationModel extends Model
     public static function get_order_status_by_id($id)
     {
         return DB::table('tb_order_status')->where('id', $id)->first();
+    }
+
+    public static function get_order_status_by_step($id)
+    {
+        $check = DB::table('tb_assign_orders AS tao')
+                ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
+                ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
+                ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+                ->select(
+                    'tst.*',
+                    'tss.name AS order_substatus_name',
+                    'tss.previous_step',
+                    'tss.next_step'
+                )
+                ->where('tao.id', $id)
+                ->first();
+
+        if ($check->name == null && Session::get('role_id') == 16)
+        {
+            $data = DB::table('tb_order_status')->where('step', 2);
+        }
+        elseif ($check->step == 3)
+        {
+            $data = DB::table('tb_order_status')->whereIn('step', [3, 4]);
+        }
+        elseif ($check->name != null)
+        {
+            $data = DB::table('tb_order_status')->where('step', $check->after_step);
+        }
+        else
+        {
+            $data = DB::table('tb_order_status')->where('step', '!=', 1);
+        }
+
+        return $data->get();
     }
 
     public static function insert_order_status($data)

@@ -160,8 +160,9 @@
     <div class="modal-dialog modal-dialog-centered">
         <form id="assign-form" action="{{ route('work-order-management.updateOrInsertOrder') }}" method="POST" class="modal-content">
             @csrf
-            <input type="hidden" name="order_code" id="order_code">
+            <input type="hidden" name="source_data" id="source_data">
             <input type="hidden" name="order_id" id="order_id">
+            <input type="hidden" name="order_code" id="order_code">
             <input type="hidden" name="assign_notes" id="assign_notes">
             <div class="modal-header">
                 <h5 class="modal-title">Assign Order</h5>
@@ -427,7 +428,7 @@ $(document).ready(function() {
             data: function(d) {
                 d.sourcedata = $('#sourcedata').val() || null;
                 d.workzone = $('#work_zone').val() || null;
-                d.ttr = $('#sourcedata').val() || null;
+                d.ttr = $('#ttr').val() || null;
                 d.startdate = $('#start_date input').val() || "{{ date('Y-m-01') }}";
                 d.enddate = $('#end_date input').val() || "{{ date('Y-m-d') }}";
             },
@@ -457,6 +458,7 @@ $(document).ready(function() {
                 render: function(data, type, row) {
                     return `
                         <button type="button" class="btn btn-sm btn-primary btn-assign"
+                            data-source_data="${row.source_data}"
                             data-order_code="${row.order_code}"
                             data-order_id="${row.order_id}"
                             data-customer_name="${row.customer_name}"
@@ -467,7 +469,6 @@ $(document).ready(function() {
                             data-bs-toggle="modal" data-bs-target="#modal-assign">
                             <i class="fas fa-paper-plane"></i>
                             &nbsp;
-
                             Assign
                         </button>
                     `;
@@ -547,6 +548,7 @@ $(document).ready(function() {
         let customerName = String($(this).data('customer_name') || '');
         let contactPhone = String($(this).data('contact_phone') || '');
 
+        $('#assign-form input[name="source_data"]').val($(this).data('source_data'));
         $('#assign-form input[name="order_code"]').val($(this).data('order_code'));
         $('#assign-form input[name="order_id"]').val($(this).data('order_id'));
         $('#assign-form input[name="customer_name"]').val(maskText(customerName));

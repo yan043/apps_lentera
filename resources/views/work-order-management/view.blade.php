@@ -59,177 +59,183 @@
 @section('title', 'Work Order #' . $id)
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <button class="btn btn-sm btn-outline-dark waves-effect waves-light" onclick="window.history.back();">
-        <i class="fas fa-arrow-left"></i>&nbsp; Back
-    </button>
+<form method="POST" action="{{ route('work-order-management.view.update', $id) }}" enctype="multipart/form-data" id="mainOrderForm">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="id" value="{{ $id }}" />
+    <input type="hidden" name="sourcedata" id="sourcedata" />
+    <input type="hidden" name="order_status_step" id="order_status_step" />
 
-    <div>
-        <button class="btn btn-sm btn-outline-primary waves-effect waves-light me-2" data-bs-toggle="modal" data-bs-target=".bs-modal-history-log-order">
-            <i class="fas fa-list"></i>&nbsp; Log Order
-        </button>
-
-        <button class="btn btn-sm btn-outline-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-modal-history-log-assignment">
-            <i class="fas fa-list"></i>&nbsp; Log Assignment
-        </button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <button class="btn btn-sm btn-outline-dark waves-effect waves-light me-2" onclick="window.history.back();" type="button">
+                <i class="fas fa-arrow-left"></i>&nbsp; Back
+            </button>
+            <button type="submit" class="btn btn-sm btn-outline-success waves-effect waves-light me-2" id="saveAllBtn">
+                <i class="fas fa-save"></i>&nbsp; Save Changes
+            </button>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-outline-primary waves-effect waves-light me-2" data-bs-toggle="modal" data-bs-target=".bs-modal-history-log-order" type="button">
+                <i class="fas fa-list"></i>&nbsp; Log Order
+            </button>
+            <button class="btn btn-sm btn-outline-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-modal-history-log-assignment" type="button">
+                <i class="fas fa-list"></i>&nbsp; Log Assignment
+            </button>
+        </div>
     </div>
-</div>
 
-<div class="modal fade bs-modal-history-log-order" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">History Log Order</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div  data-simplebar style="max-height: 310px;">
-                    <ul class="verti-timeline list-unstyled">
+    <div class="modal fade bs-modal-history-log-order" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">History Log Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div  data-simplebar style="max-height: 310px;">
+                        <ul class="verti-timeline list-unstyled">
 
-                        <li class="event-list">
-                            <div class="event-timeline-dot">
-                                <i class="bx bx-right-arrow-circle font-size-18"></i>
-                            </div>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <h5 class="font-size-14">15 Mor <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>
+                            <li class="event-list">
+                                <div class="event-timeline-dot">
+                                    <i class="bx bx-right-arrow-circle font-size-18"></i>
                                 </div>
-                                <div class="flex-grow-1">
-                                    <div>
-                                        If several languages coalesce of the resulting.
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <h5 class="font-size-14">15 Mor <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div>
+                                            If several languages coalesce of the resulting.
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
 
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade bs-modal-history-log-assignment" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">History Log Assignment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div  data-simplebar style="max-height: 310px;">
-                    <ul class="verti-timeline list-unstyled">
+    <div class="modal fade bs-modal-history-log-assignment" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">History Log Assignment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div  data-simplebar style="max-height: 310px;">
+                        <ul class="verti-timeline list-unstyled">
 
-                        <li class="event-list">
-                            <div class="event-timeline-dot">
-                                <i class="bx bx-right-arrow-circle font-size-18"></i>
-                            </div>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <h5 class="font-size-14">15 Mor <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>
+                            <li class="event-list">
+                                <div class="event-timeline-dot">
+                                    <i class="bx bx-right-arrow-circle font-size-18"></i>
                                 </div>
-                                <div class="flex-grow-1">
-                                    <div>
-                                        If several languages coalesce of the resulting.
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <h5 class="font-size-14">15 Mor <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div>
+                                            If several languages coalesce of the resulting.
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
 
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-xl-8">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between align-items-center">
-                    <span>Order Detail</span>
-                    <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-order-detail" aria-expanded="true">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                </div>
-                <div id="card-order-detail" class="collapse show">
-                    <table class="table table-sm text-muted" style="font-size: 12px;">
-                        <tr>
-                            <td><strong>Order Code</strong></td>
-                            <td>:</td>
-                            <td id="order_code"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Order Date</strong></td>
-                            <td>:</td>
-                            <td id="order_date"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Service No</strong></td>
-                            <td>:</td>
-                            <td id="service_no"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Customer Name</strong></td>
-                            <td>:</td>
-                            <td id="customer_name"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Contact Phone</strong></td>
-                            <td>:</td>
-                            <td id="contact_phone"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Notes</strong></td>
-                            <td>:</td>
-                            <td id="notes" style="word-wrap: break-word; white-space: normal;"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Customer Coordinates</strong></td>
-                            <td>:</td>
-                            <td id="customer_coordinates"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>ODP Name</strong></td>
-                            <td>:</td>
-                            <td id="odp_name"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Regional / Witel / STO</strong></td>
-                            <td>:</td>
-                            <td id="regional_witel_sto"></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between align-items-center">
-                    <span>Update Form</span>
-                    <div class="d-flex align-items-center">
-                        <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2" data-bs-toggle="modal" data-bs-target="#nteModal">
-                            <i class="fas fa-plus"></i>&nbsp; Add NTE
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2" data-bs-toggle="modal" data-bs-target="#materialModal">
-                            <i class="fas fa-plus"></i>&nbsp; Add Material
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-update-form" aria-expanded="true">
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <span>Order Detail</span>
+                        <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-order-detail" aria-expanded="true">
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
+                    <div id="card-order-detail" class="collapse show">
+                        <table class="table table-sm text-muted" style="font-size: 12px;">
+                            <tr>
+                                <td><strong>Order Code</strong></td>
+                                <td>:</td>
+                                <td id="order_code"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Order Date</strong></td>
+                                <td>:</td>
+                                <td id="order_date"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Service No</strong></td>
+                                <td>:</td>
+                                <td id="service_no"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Customer Name</strong></td>
+                                <td>:</td>
+                                <td id="customer_name"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contact Phone</strong></td>
+                                <td>:</td>
+                                <td id="contact_phone"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Notes</strong></td>
+                                <td>:</td>
+                                <td id="notes" style="word-wrap: break-word; white-space: normal;"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Customer Coordinates</strong></td>
+                                <td>:</td>
+                                <td id="customer_coordinates"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>ODP Name</strong></td>
+                                <td>:</td>
+                                <td id="odp_name"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Regional / Witel / STO</strong></td>
+                                <td>:</td>
+                                <td id="regional_witel_sto"></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-                <div id="card-update-form" class="collapse show">
-                    <form method="POST" action="{{ route('work-order-management.view', $id) }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="id" value="{{ $id }}" />
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <span>Update Form</span>
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2" data-bs-toggle="modal" data-bs-target="#nteModal">
+                                <i class="fas fa-plus"></i>&nbsp; Add NTE
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2" data-bs-toggle="modal" data-bs-target="#materialModal">
+                                <i class="fas fa-plus"></i>&nbsp; Add Material
+                            </button>
+                            <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-update-form" aria-expanded="true">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="card-update-form" class="collapse show">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="order_status_id" class="form-label">Status</label>
-                                    <select name="order_status_id" id="order_status_id" class="form-select select2">
+                                    <select name="order_status_id" id="order_status_id" class="form-select select2" required >
                                         <option value="" disabled selected>Pilih Status</option>
                                     </select>
                                 </div>
@@ -237,13 +243,13 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="order_substatus_id" class="form-label">Sub Status</label>
-                                    <select name="order_substatus_id" id="order_substatus_id" class="form-select select2">
+                                    <select name="order_substatus_id" id="order_substatus_id" class="form-select select2" required >
                                         <option value="" disabled selected>Pilih Sub Status</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="row is_sourcecode_hidden">
+                        <div class="row is_sourcedata_hidden">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="order_segment_id" class="form-label">Segment</label>
@@ -265,7 +271,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="report_phone_number" class="form-label">Customer Phone Number</label>
-                                    <input type="text" name="report_phone_number" id="report_phone_number" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="+62" />
+                                    <input type="text" name="report_phone_number" id="report_phone_number" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="+62" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -315,124 +321,124 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="submit" class="btn btn-success btn-block">
-                                <i class="fas fa-save"></i>&nbsp; Save Changes
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <span>Location</span>
+                        <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-location" aria-expanded="true">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <div id="card-location" class="collapse show">
+                        <div id="map" style="height:250px; border-radius:6px;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-xl-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between align-items-center">
-                    <span>Location</span>
-                    <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-location" aria-expanded="true">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                </div>
-                <div id="card-location" class="collapse show">
-                    <div id="map" style="height:250px; border-radius:6px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="nteModal" tabindex="-1" aria-labelledby="nteModalLabel">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="nteModalLabel">NTE Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="inventory_nte_id_ont" class="form-label">Tipe ONT</label>
-                    <select name="inventory_nte_id_ont" id="inventory_nte_id_ont" class="form-control select2">
-                        <option value="" disabled selected>Pilih Tipe ONT</option>
-                    </select>
+    <div class="modal fade" id="nteModal" tabindex="-1" aria-labelledby="nteModalLabel">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nteModalLabel">NTE Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mb-3">
-                    <label for="serial_number_ont" class="form-label">Serial Number ONT</label>
-                    <input type="text" name="serial_number_ont" id="serial_number_ont" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label for="inventory_nte_id_stb" class="form-label">Tipe STB</label>
-                    <select name="inventory_nte_id_stb" id="inventory_nte_id_stb" class="form-control select2">
-                        <option value="" disabled selected>Pilih Tipe STB</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="serial_number_stb" class="form-label">Serial Number STB</label>
-                    <input type="text" name="serial_number_stb" id="serial_number_stb" class="form-control" />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-sm btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="materialModal" tabindex="-1" aria-labelledby="materialModalLabel">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="materialModalLabel">Material Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body mb-0">
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <label for="inventory_material_id" class="form-label">Type of Material</label>
-                        <select name="inventory_material_id[]" id="inventory_material_id" class="form-control select2">
-                            <option value="" disabled selected>Pilih Jenis Material</option>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inventory_nte_id_ont" class="form-label">Tipe ONT</label>
+                        <select name="inventory_nte_id_ont" id="inventory_nte_id_ont" class="form-control select2">
+                            <option value="" disabled selected>Pilih Tipe ONT</option>
                         </select>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <label for="inventory_material_qty" class="form-label">Qty</label>
-                        <input type="number" name="inventory_material_qty" id="inventory_material_qty" class="form-control text-center" min="1" />
+                    <div class="mb-3">
+                        <label for="serial_number_ont" class="form-label">Serial Number ONT</label>
+                        <input type="text" name="serial_number_ont" id="serial_number_ont" class="form-control" />
                     </div>
-                    <div class="col-md-3 mb-4 d-flex align-items-end">
-                        <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2" id="addMaterialBtn"><i class="fas fa-plus"></i>&nbsp; Add</button>
+                    <div class="mb-3">
+                        <label for="inventory_nte_id_stb" class="form-label">Tipe STB</label>
+                        <select name="inventory_nte_id_stb" id="inventory_nte_id_stb" class="form-control select2">
+                            <option value="" disabled selected>Pilih Tipe STB</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="serial_number_stb" class="form-label">Serial Number STB</label>
+                        <input type="text" name="serial_number_stb" id="serial_number_stb" class="form-control" />
                     </div>
                 </div>
-                <div id="selectedMaterials" class="mt-3">
-                    <h6>Selected Material List :</h6>
-                    <div id="materialsList" class="list-group">
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary">Save</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-sm btn-primary" id="saveMaterialsBtn">Save</button>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row mt-4">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex justify-content-between align-items-center">
-                    <span>Upload Photo</span>
-                    <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-upload-photo" aria-expanded="true">
-                        <i class="fa fa-minus"></i>
-                    </button>
+    <div class="modal fade" id="materialModal" tabindex="-1" aria-labelledby="materialModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="materialModalLabel">Material Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="card-upload-photo" class="collapse show">
-                    <div id="photoContainer" class="row"></div>
+                <div class="modal-body mb-0">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="inventory_material_id" class="form-label">Type of Material</label>
+                            <select name="inventory_material_id[]" id="inventory_material_id" class="form-control select2">
+                                <option value="" disabled selected>Pilih Jenis Material</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <label for="inventory_material_qty" class="form-label">Qty</label>
+                            <input type="number" name="inventory_material_qty" id="inventory_material_qty" class="form-control text-center" min="1" />
+                        </div>
+                        <div class="col-md-3 mb-4 d-flex align-items-end">
+                            <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2" id="addMaterialBtn"><i class="fas fa-plus"></i>&nbsp; Add</button>
+                        </div>
+                    </div>
+                    <div id="selectedMaterials" class="mt-3">
+                        <h6>Selected Material List :</h6>
+                        <div id="materialsList" class="list-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="saveMaterialsBtn">Save</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <span>Upload Photo</span>
+                        <button type="button" class="btn btn-sm btn-light btn-toggle-card" data-bs-toggle="collapse" data-bs-target="#card-upload-photo" aria-expanded="true">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <div id="card-upload-photo" class="collapse show">
+                        <div id="photoContainer" class="row"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="nte_data" id="nte_data" />
+    <input type="hidden" name="materials_data" id="materials_data" />
+    <input type="hidden" name="photos_data" id="photos_data" />
+
+</form>
 
 <div class="modal fade" id="photoPreviewModal" tabindex="-1" role="dialog" aria-labelledby="photoPreviewModalLabel">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -483,6 +489,7 @@
                             '<button type="button" class="btn btn-outline-primary btn-sm add-photo-btn" data-type="' + type + '">' +
                                 '<i class="fa fa-camera"></i>' +
                             '</button>' +
+                            '&nbsp;&nbsp;' +
                             '<button type="button" class="btn btn-outline-danger btn-sm delete-all-photo-btn" data-type="' + type + '">' +
                                 '<i class="fa fa-trash"></i>' +
                             '</button>' +
@@ -507,7 +514,7 @@
             placeholder: "Pilih Status",
             width: '100%',
             ajax: {
-                url: '{{ route("ajax.reporting-configuration.status") }}',
+                url: '{{ route("ajax.reporting-configuration.status.step", $id) }}',
                 dataType: 'json',
                 delay: 250,
                 processResults: function (data) {
@@ -548,6 +555,7 @@
         });
         $('#order_substatus_id').on('change', function() {
             var sourcedata = (orderData.sourcedata || '').toLowerCase();
+
             if (sourcedata === 'bima') {
                 var id = $(this).val();
                 fetchPhotoList(sourcedata, id);
@@ -800,75 +808,40 @@
         });
 
         $('#saveMaterialsBtn').on('click', function() {
-            if (selectedMaterials.length === 0) {
-                alert('Tidak ada material yang dipilih.');
-                return;
-            }
-            console.log('Selected Materials:', selectedMaterials);
+            $('#materials_data').val(JSON.stringify(selectedMaterials));
             $('#materialModal').modal('hide');
             selectedMaterials = [];
             updateMaterialsList();
         });
 
-        loadOrderDetails();
+        $('#nteModal .btn-primary').on('click', function() {
+            var nteData = {
+                inventory_nte_id_ont: $('#inventory_nte_id_ont').val(),
+                serial_number_ont: $('#serial_number_ont').val(),
+                inventory_nte_id_stb: $('#inventory_nte_id_stb').val(),
+                serial_number_stb: $('#serial_number_stb').val()
+            };
+            $('#nte_data').val(JSON.stringify(nteData));
+            $('#nteModal').modal('hide');
+        });
 
-        function loadOrderDetails() {
-            $.ajax({
-                url: '{{ route("ajax.work-order-management.view", $id) }}',
-                type: 'GET',
-                success: function(data) {
-                    if (data) {
-                        $('#order_code').text(data.order_code);
-                        $('#order_date').text(data.order_date || '-');
-                        $('#service_no').text(data.service_no || '-');
-                        $('#customer_name').text(data.customer_name || '-');
-                        $('#contact_phone').text(data.contact_phone || '-');
-                        $('#notes').text(data.notes || '-');
-                        $('#customer_coordinates').text(data.customer_coordinate || '-');
-                        $('#odp_name').text(data.odp_name || '-');
-                        $('#odp_coordinates').text(data.odp_coordinates || '-');
-                        $('#regional_witel_sto').text((data.region_name || '-') + ' / ' + (data.witel || '-') + ' / ' + (data.workzone || '-'));
-
-                        $('#report_phone_number').text(data.report_phone_number || data.contact_phone || '-');
-                        $('#report_coordinates_location').text(data.report_coordinates_location || data.customer_coordinate || '-');
-                        $('#report_odp_name').text(data.report_odp_name || data.odp_name || '-');
-                        $('#report_odp_coordinates').text(data.report_odp_coordinates || data.odp_coordinates || '-');
-                        $('#report_valins_id').text(data.report_valins_id || '-');
-                        $('#report_refferal_order_code').text(data.report_refferal_order_code || '-');
-
-                        var coordinate = data.report_coordinates_location || data.customer_coordinate;
-                        $('#customer_coordinates').text(coordinate || '-');
-                        $('#report_coordinates_location').text(data.report_coordinates_location || data.customer_coordinate || '-');
-
-                        if (coordinate) {
-                            var coords = coordinate.split(',');
-                            if (coords.length === 2) {
-                                var lat = parseFloat(coords[0]);
-                                var lng = parseFloat(coords[1]);
-                                if (!isNaN(lat) && !isNaN(lng)) {
-                                    map.setView([lat, lng], 17);
-                                    L.marker([lat, lng]).addTo(map)
-                                        .bindPopup("<b>Customer Location</b><br>" + coordinate)
-                                        .openPopup();
-                                }
-                            }
-                        }
-
-                        var sourcedata = (data.sourcedata || '').toLowerCase();
-                        if (sourcedata === 'bima' || sourcedata === 'manuals') {
-                            $('.is_sourcecode_hidden').hide();
-                            $('.is_sourcecode_hidden .select2').select2('destroy').hide();
-                        } else {
-                            $('.is_sourcecode_hidden').show();
-                            $('.is_sourcecode_hidden .select2').show();
-                        }
-                    }
-                },
-                error: function() {
-                    console.log('Error loading order details');
-                }
+        function collectPhotosData() {
+            var photos = {};
+            $('.photo-preview').each(function() {
+                var type = $(this).attr('id').replace('preview_', '');
+                photos[type] = [];
+                $(this).find('img').each(function() {
+                    photos[type].push($(this).attr('src'));
+                });
             });
+            $('#photos_data').val(JSON.stringify(photos));
         }
+
+        $('#mainOrderForm').on('submit', function(e) {
+            collectPhotosData();
+        });
+
+        loadOrderDetails();
 
         var map = L.map('map').setView([-3.316694, 114.590111], 17);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1009,12 +982,15 @@
                         $('#odp_coordinates').text(data.odp_coordinates || '-');
                         $('#regional_witel_sto').text((data.region_name || '-') + ' / ' + (data.witel || '-') + ' / ' + (data.workzone || '-'));
 
-                        $('#report_phone_number').text(data.report_phone_number || data.contact_phone || '-');
-                        $('#report_coordinates_location').text(data.report_coordinates_location || data.customer_coordinate || '-');
-                        $('#report_odp_name').text(data.report_odp_name || data.odp_name || '-');
-                        $('#report_odp_coordinates').text(data.report_odp_coordinates || data.odp_coordinates || '-');
-                        $('#report_valins_id').text(data.report_valins_id || '-');
-                        $('#report_refferal_order_code').text(data.report_refferal_order_code || '-');
+                        $('#sourcedata').val(data.sourcedata);
+                        $('#order_status_step').val(data.order_status_step || 0);
+                        $('#report_phone_number').val(data.report_phone_number || data.contact_phone || '-');
+                        $('#report_coordinates_location').val(data.report_coordinates_location || data.customer_coordinate || '-');
+                        $('#report_odp_name').val(data.report_odp_name || data.odp_name || '-');
+                        $('#report_odp_coordinates').val(data.report_odp_coordinates || data.odp_coordinates || '-');
+                        $('#report_valins_id').val(data.report_valins_id || '-');
+                        $('#report_refferal_order_code').val(data.report_refferal_order_code || '-');
+                        $('#report_notes').val(data.report_notes || '-');
 
                         var coordinate = data.report_coordinates_location || data.customer_coordinate;
                         $('#report_coordinates_location').val(coordinate || '');
@@ -1024,35 +1000,35 @@
                                 var lat = parseFloat(coords[0]);
                                 var lng = parseFloat(coords[1]);
                                 if (!isNaN(lat) && !isNaN(lng)) {
-            updateLocation(lat, lng);
-        }
-    }
-}
+                                    updateLocation(lat, lng);
+                                }
+                            }
+                        }
 
-var odpCoordinate = data.report_odp_coordinates || data.odp_coordinates;
-if (odpCoordinate) {
-    var coords = odpCoordinate.split(',');
-    if (coords.length === 2) {
-        var lat = parseFloat(coords[0]);
-        var lng = parseFloat(coords[1]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-            odpMarker = L.marker([lat, lng], {icon: odpIcon, draggable: true}).addTo(map)
-                .bindPopup("<b>ODP Location</b><br>" + odpCoordinate);
-            odpMarker.on('dragend', function(e) {
-                var pos = odpMarker.getLatLng();
-                $('#report_odp_coordinates').val(pos.lat + ',' + pos.lng);
-            });
-        }
-    }
-}
+                        var odpCoordinate = data.report_odp_coordinates || data.odp_coordinates;
+                        if (odpCoordinate) {
+                            var coords = odpCoordinate.split(',');
+                            if (coords.length === 2) {
+                                var lat = parseFloat(coords[0]);
+                                var lng = parseFloat(coords[1]);
+                                if (!isNaN(lat) && !isNaN(lng)) {
+                                    odpMarker = L.marker([lat, lng], {icon: odpIcon, draggable: true}).addTo(map)
+                                        .bindPopup("<b>ODP Location</b><br>" + odpCoordinate);
+                                    odpMarker.on('dragend', function(e) {
+                                        var pos = odpMarker.getLatLng();
+                                        $('#report_odp_coordinates').val(pos.lat + ',' + pos.lng);
+                                    });
+                                }
+                            }
+                        }
 
-var sourcedata = (data.sourcedata || '').toLowerCase();
+                        var sourcedata = (data.sourcedata || '').toLowerCase();
                         if (sourcedata === 'bima' || sourcedata === 'manuals') {
-                            $('.is_sourcecode_hidden').hide();
-                            $('.is_sourcecode_hidden .select2').hide();
+                            $('.is_sourcedata_hidden').hide();
+                            $('.is_sourcedata_hidden .select2').hide();
                         } else {
-                            $('.is_sourcecode_hidden').show();
-                            $('.is_sourcecode_hidden .select2').show();
+                            $('.is_sourcedata_hidden').show();
+                            $('.is_sourcedata_hidden .select2').show();
                         }
 
                         orderData = data;

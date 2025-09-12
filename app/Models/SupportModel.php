@@ -363,16 +363,20 @@ class SupportModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tst.step AS order_step',
+                'tos.order_status_id',
                 'tst.name AS order_status_name',
+                'tst.step AS order_status_step',
+                'tst.after_step AS order_status_after_step',
 
-                'tar.order_substatus_id AS order_substatus_id',
+                'tar.order_substatus_id',
                 'tos.name AS order_substatus_name',
+                'tos.previous_step AS order_substatus_previous_step',
+                'tos.next_step AS order_substatus_next_step',
 
-                'tar.order_segment_id AS order_segment_id',
+                'tar.order_segment_id',
                 'tseg.name AS order_segment_name',
 
-                'tar.order_action_id AS order_action_id',
+                'tar.order_action_id',
                 'toa.name AS order_action_name'
             )
             ->whereNotNull('tao.order_code')
@@ -410,16 +414,20 @@ class SupportModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tst.step AS order_step',
+                'tos.order_status_id',
                 'tst.name AS order_status_name',
+                'tst.step AS order_status_step',
+                'tst.after_step AS order_status_after_step',
 
-                'tar.order_substatus_id AS order_substatus_id',
+                'tar.order_substatus_id',
                 'tos.name AS order_substatus_name',
+                'tos.previous_step AS order_substatus_previous_step',
+                'tos.next_step AS order_substatus_next_step',
 
-                'tar.order_segment_id AS order_segment_id',
+                'tar.order_segment_id',
                 'tseg.name AS order_segment_name',
 
-                'tar.order_action_id AS order_action_id',
+                'tar.order_action_id',
                 'toa.name AS order_action_name'
             )
             ->whereNotNull('tao.order_code')
@@ -457,16 +465,20 @@ class SupportModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tst.step AS order_step',
+                'tos.order_status_id',
                 'tst.name AS order_status_name',
+                'tst.step AS order_status_step',
+                'tst.after_step AS order_status_after_step',
 
-                'tar.order_substatus_id AS order_substatus_id',
+                'tar.order_substatus_id',
                 'tos.name AS order_substatus_name',
+                'tos.previous_step AS order_substatus_previous_step',
+                'tos.next_step AS order_substatus_next_step',
 
-                'tar.order_segment_id AS order_segment_id',
+                'tar.order_segment_id',
                 'tseg.name AS order_segment_name',
 
-                'tar.order_action_id AS order_action_id',
+                'tar.order_action_id',
                 'toa.name AS order_action_name'
             )
             ->whereNotNull('tao.order_code')

@@ -267,6 +267,17 @@
                                 data-customer_name="${row.customer_name || ''}"
                                 data-contact_phone="${row.contact_phone || ''}"
                                 data-odp_name="${row.odp_name || ''}"
+                                data-region_name="${row.region_name || ''}"
+                                data-witel="${row.witel || ''}"
+                                data-workzone="${row.workzone || ''}"
+                                data-order_status_after_step="${row.order_status_after_step || ''}"
+                                data-order_status_name="${row.order_status_name || ''}"
+                                data-order_substatus_id="${row.order_substatus_id || ''}"
+                                data-order_substatus_name="${row.order_substatus_name || ''}"
+                                data-order_segment_id="${row.order_segment_id || ''}"
+                                data-order_segment_name="${row.order_segment_name || ''}"
+                                data-order_action_id="${row.order_action_id || ''}"
+                                data-order_action_name="${row.order_action_name || ''}"
                                 data-bs-toggle="modal" data-bs-target="#modal-reassign">
                                 <i class="fas fa-sync-alt"></i> Re-Assign
                             </button>

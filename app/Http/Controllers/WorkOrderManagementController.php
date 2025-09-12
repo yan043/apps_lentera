@@ -5,27 +5,59 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\WorkOrderManagementModel;
+use App\Models\InventoryManagementModel;
 
 class WorkOrderManagementController extends Controller
 {
     public function view($id)
     {
-        return view('work-order-management.view', ['id' => $id]);
+        $data                            = WorkOrderManagementModel::view($id);
+        $get_inventory_by_order_material = InventoryManagementModel::get_inventory_by_order($id, 'material');
+        $get_inventory_by_order_nte_ont  = InventoryManagementModel::get_inventory_by_order($id, 'nte', 'ont');
+        $get_inventory_by_order_nte_stb  = InventoryManagementModel::get_inventory_by_order($id, 'nte', 'stb');
+
+        return view('work-order-management.view', ['id' => $id, 'data' => $data, 'get_inventory_by_order_material' => $get_inventory_by_order_material, 'get_inventory_by_order_nte_ont' => $get_inventory_by_order_nte_ont, 'get_inventory_by_order_nte_stb' => $get_inventory_by_order_nte_stb]);
     }
 
-    public function viewPost(Request $request)
+    public function viewUpdate(Request $request)
     {
-        $validateData = $request->validate([
-            'order_code'    => 'required',
-            'order_id'      => 'required',
-            'team_id'       => 'required',
-            'team_name'     => 'required',
-            'assign_date'   => 'required',
-            'assign_labels' => 'required',
-            'assign_notes'  => 'required',
-        ]);
+        $request->validate(
+            [
+                'id'                          => 'required',
+                'order_status_id'             => 'required',
+                'order_substatus_id'          => 'required',
+                'report_odp_name'             => 'nullable',
+                'report_odp_coordinates'      => 'nullable',
+                'report_valins_id'            => 'nullable',
+                'report_refferal_order_code'  => 'nullable',
+                'nte_data'                    => 'nullable',
+                'materials_data'              => 'nullable',
+                'photos_data'                 => 'nullable',
+            ]
+        );
 
-        WorkOrderManagementModel::updateOrder($validateData);
+        if (!in_array($request->input('order_status_id'), [1, 2]))
+        {
+            $request->validate(
+                [
+                    'report_phone_number'         => 'required',
+                    'report_coordinates_location' => 'required',
+                    'report_notes'                => 'required',
+                ]
+            );
+        }
+
+        if (!empty($request->input('order_segment_id')))
+        {
+            $request->validate(
+                [
+                    'order_segment_id' => 'required',
+                    'order_action_id'  => 'required',
+                ]
+            );
+        }
+
+        WorkOrderManagementModel::viewUpdate($request);
 
         return redirect()->back()->with('success', 'Successfully Updated Work Order!');
     }
@@ -33,13 +65,14 @@ class WorkOrderManagementController extends Controller
     public function updateOrInsertOrder(Request $request)
     {
         $validateData = $request->validate([
-            'order_code'      => 'required',
-            'order_id'        => 'required',
-            'team_id'         => 'required',
-            'team_name'       => 'required',
-            'assign_date'     => 'required',
-            'assign_labels'   => 'required',
-            'assign_notes'    => 'required',
+            'source_data'   => 'required',
+            'order_code'    => 'required',
+            'order_id'      => 'required',
+            'team_id'       => 'required',
+            'team_name'     => 'required',
+            'assign_date'   => 'required',
+            'assign_labels' => 'required',
+            'assign_notes'  => 'required',
         ]);
 
         WorkOrderManagementModel::updateOrInsertOrder($validateData);
