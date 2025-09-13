@@ -61,11 +61,10 @@
     </style>
 @endsection
 
-@section('title', 'Work Order #' . $id)
+@section('title', 'Order #' . $id)
 
 @section('content')
-    <form method="POST" action="{{ route('work-order-management.view.update', $id) }}" enctype="multipart/form-data"
-        id="mainOrderForm">
+    <form method="POST" action="{{ route('order.index.update', $id) }}" enctype="multipart/form-data" id="mainOrderForm">
         @csrf
         @method('PUT')
         <input type="hidden" name="id" value="{{ $id }}" />
@@ -94,35 +93,18 @@
             </div>
         </div>
 
-        <div class="modal fade bs-modal-history-log-order" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade bs-modal-history-log-order" tabindex="-1" role="dialog"
+            aria-labelledby="logOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">History Log Order</h5>
+                        <h5 class="modal-title" id="logOrderModalLabel">History Log Order</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div data-simplebar style="max-height: 310px;">
-                            <ul class="verti-timeline list-unstyled">
-
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
-                                    </div>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 me-3">
-                                            <h5 class="font-size-14">15 Mor <i
-                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
-                                            </h5>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <div>
-                                                If several languages coalesce of the resulting.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
+                            <ul class="verti-timeline list-unstyled" id="logOrderList">
+                                <!-- Log order items will be appended here dynamically -->
                             </ul>
                         </div>
                     </div>
@@ -130,35 +112,18 @@
             </div>
         </div>
 
-        <div class="modal fade bs-modal-history-log-assignment" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade bs-modal-history-log-assignment" tabindex="-1" role="dialog"
+            aria-labelledby="logAssignmentModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">History Log Assignment</h5>
+                        <h5 class="modal-title" id="logAssignmentModalLabel">History Log Assignment</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div data-simplebar style="max-height: 310px;">
-                            <ul class="verti-timeline list-unstyled">
-
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="bx bx-right-arrow-circle font-size-18"></i>
-                                    </div>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 me-3">
-                                            <h5 class="font-size-14">15 Mor <i
-                                                    class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i>
-                                            </h5>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <div>
-                                                If several languages coalesce of the resulting.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
+                            <ul class="verti-timeline list-unstyled" id="logAssignmentList">
+                                <!-- Log assignment items will be appended here dynamically -->
                             </ul>
                         </div>
                     </div>
@@ -625,7 +590,7 @@
             });
 
             $.ajax({
-                url: '{{ route('ajax.reporting-configuration.status.step', $id) }}',
+                url: '{{ route('ajax.order.status.step', $id) }}',
                 method: 'GET',
                 success: function(data) {
                     let statusSelect = $('#order_status_id');
@@ -664,7 +629,7 @@
                 let statusId = $(this).val();
                 if (statusId) {
                     $.ajax({
-                        url: '{{ route('ajax.reporting-configuration.sub-status.by-status', ':id') }}'
+                        url: '{{ route('ajax.order.sub-status.by-status', ':id') }}'
                             .replace(':id', statusId),
                         method: 'GET',
                         success: function(data) {
@@ -1091,7 +1056,7 @@
                     return;
                 }
 
-                $.get('{{ route('ajax.reporting-configuration.photo-list', ['sourcedata' => ':sourcedata', 'id' => ':id']) }}'
+                $.get('{{ route('ajax.order.photo-list', ['sourcedata' => ':sourcedata', 'id' => ':id']) }}'
                     .replace(':sourcedata', sourcedata)
                     .replace(':id', ajaxId),
                     function(photoList) {
@@ -1107,6 +1072,102 @@
                 var sourcedata = (orderData.sourcedata || '').toLowerCase();
                 fetchPhotoList(sourcedata, segmentId);
             });
+
+            $('.bs-modal-history-log-order').on('shown.bs.modal', function() {
+                loadLogOrder();
+            });
+
+            $('.bs-modal-history-log-assignment').on('shown.bs.modal', function() {
+                loadLogAssignment();
+            });
+
+            function loadLogOrder() {
+                $.ajax({
+                    url: '{{ route('ajax.order.log-order', $id) }}',
+                    method: 'GET',
+                    success: function(data) {
+                        var list = $('#logOrderList');
+                        list.empty();
+                        if (data.length === 0) {
+                            list.append(
+                                '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>No log entries found.</div></div></div></li>'
+                            );
+                            return;
+                        }
+                        data.forEach(function(item) {
+                            var date = new Date(item.created_at).toLocaleString();
+                            var description = 'Status: ' + (item.order_status_name || '-') +
+                                ' - ' + (item.order_substatus_name || '-') +
+                                ', Segment: ' + (item.order_segment_name || '-') +
+                                ', Action: ' + (item.order_action_name || '-') +
+                                ', Notes: ' + (item.report_notes || '-') +
+                                ', By: ' + (item.created_name || '-');
+                            var li = '<li class="event-list">' +
+                                '<div class="event-timeline-dot">' +
+                                '<i class="bx bx-right-arrow-circle font-size-18"></i>' +
+                                '</div>' +
+                                '<div class="d-flex">' +
+                                '<div class="flex-shrink-0 me-3">' +
+                                '<h5 class="font-size-14">' + date +
+                                ' <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>' +
+                                '</div>' +
+                                '<div class="flex-grow-1">' +
+                                '<div>' + description + '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</li>';
+                            list.append(li);
+                        });
+                    },
+                    error: function() {
+                        $('#logOrderList').html(
+                            '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>Failed to load log.</div></div></div></li>'
+                        );
+                    }
+                });
+            }
+
+            function loadLogAssignment() {
+                $.ajax({
+                    url: '{{ route('ajax.order.log-assignment', $id) }}',
+                    method: 'GET',
+                    success: function(data) {
+                        var list = $('#logAssignmentList');
+                        list.empty();
+                        if (data.length === 0) {
+                            list.append(
+                                '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>No log entries found.</div></div></div></li>'
+                            );
+                            return;
+                        }
+                        data.forEach(function(item) {
+                            var date = new Date(item.created_at).toLocaleString();
+                            var description = 'Assigned to Team: ' + (item.team_name || '-') +
+                                ', By: ' + (item.created_name || '-');
+                            var li = '<li class="event-list">' +
+                                '<div class="event-timeline-dot">' +
+                                '<i class="bx bx-right-arrow-circle font-size-18"></i>' +
+                                '</div>' +
+                                '<div class="d-flex">' +
+                                '<div class="flex-shrink-0 me-3">' +
+                                '<h5 class="font-size-14">' + date +
+                                ' <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>' +
+                                '</div>' +
+                                '<div class="flex-grow-1">' +
+                                '<div>' + description + '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</li>';
+                            list.append(li);
+                        });
+                    },
+                    error: function() {
+                        $('#logAssignmentList').html(
+                            '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>Failed to load log.</div></div></div></li>'
+                        );
+                    }
+                });
+            }
         });
     </script>
 @endsection

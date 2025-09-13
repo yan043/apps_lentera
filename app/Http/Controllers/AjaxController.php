@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderModel;
+use App\Models\SupportModel;
 use App\Models\EmployeeManagementModel;
+use App\Models\WorkOrderManagementModel;
 use App\Models\InventoryManagementModel;
 use App\Models\OrganizationStructureModel;
 use App\Models\ReportingConfigurationModel;
-use App\Models\SupportModel;
-use App\Models\WorkOrderManagementModel;
 
 class AjaxController extends Controller
 {
@@ -27,7 +28,7 @@ class AjaxController extends Controller
 
     public function get_order_status_by_step($id)
     {
-        $data = ReportingConfigurationModel::get_order_status_by_step($id);
+        $data = OrderModel::get_order_status_by_step($id);
 
         return response()->json($data);
     }
@@ -41,14 +42,14 @@ class AjaxController extends Controller
 
     public function get_order_sub_status_by_id($id)
     {
-        $data = ReportingConfigurationModel::get_order_sub_status_by_id($id);
+        $data = OrderModel::get_order_sub_status_by_id($id);
 
         return response()->json($data);
     }
 
     public function get_order_sub_status_by_status_id($id)
     {
-        $data = ReportingConfigurationModel::get_order_sub_status_by_status_id($id);
+        $data = OrderModel::get_order_sub_status_by_status_id($id);
 
         return response()->json($data);
     }
@@ -271,7 +272,8 @@ class AjaxController extends Controller
                     ],
                 ],
             ]);
-        } elseif ($type == 'pie')
+        }
+        elseif ($type == 'pie')
         {
             $sla = [
                 '0-2'   => 0,
@@ -350,13 +352,15 @@ class AjaxController extends Controller
         {
             $order_segment_id = $id;
 
-            $photo_list = json_decode(ReportingConfigurationModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
-        } elseif ($sourcedata == 'bima')
+            $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
+        }
+        elseif ($sourcedata == 'bima')
         {
             $order_substatus_id = $id;
 
-            $photo_list = json_decode(ReportingConfigurationModel::get_photo_list($sourcedata, $order_substatus_id)->photo_list);
-        } else
+            $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_substatus_id)->photo_list);
+        }
+        else
         {
             $photo_list = [
                 'Lokasi_Rumah',
@@ -372,5 +376,19 @@ class AjaxController extends Controller
         }
 
         return response()->json($photo_list);
+    }
+
+    public function get_log_order($id)
+    {
+        $data = OrderModel::get_log_order($id);
+
+        return response()->json($data);
+    }
+
+    public function get_log_assignment($id)
+    {
+        $data = OrderModel::get_log_assignment($id);
+
+        return response()->json($data);
     }
 }

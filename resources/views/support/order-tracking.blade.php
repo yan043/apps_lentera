@@ -338,7 +338,7 @@
                         data: null,
                         render: function(data, type, row) {
                             let viewButton =
-                                `<a href="/work-order-management/view/${row.id || ''}" class="btn btn-sm btn-info" style="color: white !important;"><i class="fas fa-eye"></i> View</a>`;
+                                `<a href="/order/${row.id || ''}" class="btn btn-sm btn-info" style="color: white !important;"><i class="fas fa-eye"></i> View</a>`;
                             if (!row.assign_date || !row.order_code || !row.order_id) {
                                 return `
                                 ${viewButton}
@@ -582,3 +582,4 @@
         });
     </script>
 @endsection
+

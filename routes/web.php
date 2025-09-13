@@ -1,18 +1,19 @@
 <?php
 
+use Mews\Captcha\Captcha;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportsPaymentController;
 use App\Http\Controllers\EmployeeManagementController;
 use App\Http\Controllers\InventoryManagementController;
+use App\Http\Controllers\WorkOrderManagementController;
+use App\Http\Controllers\TechnicianAttendanceController;
 use App\Http\Controllers\OrganizationStructureController;
 use App\Http\Controllers\ReportingConfigurationController;
-use App\Http\Controllers\ReportsPaymentController;
-use App\Http\Controllers\SupportController;
-use App\Http\Controllers\TechnicianAttendanceController;
-use App\Http\Controllers\WorkOrderManagementController;
-use Illuminate\Support\Facades\Route;
-use Mews\Captcha\Captcha;
 
 Route::get('login', [AuthController::class, 'auth'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->middleware('guest')->name('login.post');
@@ -28,11 +29,14 @@ Route::middleware(['auth'])->group(function ()
     Route::post('profile/store', [AuthController::class, 'storeProfile'])->name('profile.store');
     Route::get('profile/deactivate', [AuthController::class, 'deactivateAccount'])->name('profile.deactivate');
 
+    Route::prefix('order')->group(function ()
+    {
+        Route::get('{id}', [OrderController::class, 'index'])->name('order.index');
+        Route::put('{id}', [OrderController::class, 'indexUpdate'])->name('order.index.update');
+    });
+
     Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
     {
-        Route::get('view/{id}', [WorkOrderManagementController::class, 'view'])->name('work-order-management.view');
-        Route::put('view/{id}', [WorkOrderManagementController::class, 'viewUpdate'])->name('work-order-management.view.update');
-
         Route::post('updateOrInsertOrder', [WorkOrderManagementController::class, 'updateOrInsertOrder'])->name('work-order-management.updateOrInsertOrder');
 
         Route::get('new', [WorkOrderManagementController::class, 'newOrders'])->name('work-order-management.new');
@@ -154,6 +158,19 @@ Route::middleware(['auth'])->group(function ()
 
     Route::prefix('ajax')->group(function ()
     {
+        Route::prefix('order')->group(function ()
+        {
+            Route::get('status/step/{id}', [AjaxController::class, 'get_order_status_by_step'])->name('ajax.order.status.step');
+
+            Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id'])->name('ajax.order.sub-status.id');
+            Route::get('sub-status/by-status/{id}', [AjaxController::class, 'get_order_sub_status_by_status_id'])->name('ajax.order.sub-status.by-status');
+
+            Route::get('photo-list/{sourcedata}/{id}', [AjaxController::class, 'get_photo_list'])->name('ajax.order.photo-list');
+
+            Route::get('log-order/{id}', [AjaxController::class, 'get_log_order'])->name('ajax.order.log-order');
+            Route::get('log-assignment/{id}', [AjaxController::class, 'get_log_assignment'])->name('ajax.order.log-assignment');
+        });
+
         Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
         {
             Route::get('new/charts', [AjaxController::class, 'get_new_order_charts'])->name('ajax.work-order-management.new.charts');
@@ -215,11 +232,8 @@ Route::middleware(['auth'])->group(function ()
         {
             Route::get('status', [AjaxController::class, 'get_order_status'])->name('ajax.reporting-configuration.status');
             Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id'])->name('ajax.reporting-configuration.status.id');
-            Route::get('status/step/{id}', [AjaxController::class, 'get_order_status_by_step'])->name('ajax.reporting-configuration.status.step');
 
             Route::get('sub-status', [AjaxController::class, 'get_order_sub_status'])->name('ajax.reporting-configuration.sub-status');
-            Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id'])->name('ajax.reporting-configuration.sub-status.id');
-            Route::get('sub-status/by-status/{id}', [AjaxController::class, 'get_order_sub_status_by_status_id'])->name('ajax.reporting-configuration.sub-status.by-status');
 
             Route::get('segments', [AjaxController::class, 'get_order_segments'])->name('ajax.reporting-configuration.segments');
             Route::get('segments/{id}', [AjaxController::class, 'get_order_segment_by_id'])->name('ajax.reporting-configuration.segments.id');
@@ -228,8 +242,6 @@ Route::middleware(['auth'])->group(function ()
             Route::get('actions/by-segment/{id}', [AjaxController::class, 'get_order_action_by_segment_id'])->name('ajax.reporting-configuration.actions.id');
 
             Route::get('labels', [AjaxController::class, 'get_order_labels'])->name('ajax.reporting-configuration.labels');
-
-            Route::get('photo-list/{sourcedata}/{id}', [AjaxController::class, 'get_photo_list'])->name('ajax.reporting-configuration.photo-list');
         });
     });
 });

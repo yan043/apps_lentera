@@ -281,7 +281,7 @@
                         data: null,
                         render: function(data, type, row) {
                             return `
-                            <a href="/work-order-management/view/${row.id}" class="btn btn-sm btn-info" style="color: white !important;">
+                            <a href="/order/${row.id}" class="btn btn-sm btn-info" style="color: white !important;">
                                 <i class="fas fa-eye"></i> View
                             </a>
 
@@ -472,3 +472,4 @@
         });
     </script>
 @endsection
+
