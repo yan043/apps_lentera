@@ -1038,7 +1038,7 @@
 
                 var ajaxId = segmentId;
                 if (sourcedata === 'bima') {
-                    ajaxId = orderData.order_next_step || "2.1";
+                    ajaxId = orderData.order_status_id || 0;
                 }
 
                 if (!sourcedata || !ajaxId) {

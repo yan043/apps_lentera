@@ -335,9 +335,9 @@ class AjaxController extends Controller
         }
         elseif ($sourcedata == 'bima')
         {
-            $next_step = $id;
+            $order_status_id = $id;
 
-            $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $next_step)->photo_list);
+            $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_status_id)->photo_list);
         }
         else
         {

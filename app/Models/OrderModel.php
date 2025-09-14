@@ -352,7 +352,7 @@ class OrderModel extends Model
         }
         elseif ($sourcedata == 'bima')
         {
-            $photos = DB::table('tb_order_status')->where('previous_step', $id)->first();
+            $photos = DB::table('tb_order_status')->where('id', $id)->first();
         }
         else
         {
