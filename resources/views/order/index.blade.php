@@ -111,17 +111,17 @@
                     <i class="fas fa-arrow-left"></i>&nbsp; Back
                 </button>
                 <button type="submit" class="btn btn-sm btn-outline-success waves-effect waves-light me-2" id="saveAllBtn">
-                    <i class="fas fa-save"></i>&nbsp; Save Changes
+                    <i class="fas fa-save"></i>&nbsp; Save
                 </button>
             </div>
             <div>
                 <button class="btn btn-sm btn-outline-primary waves-effect waves-light me-2" data-bs-toggle="modal"
                     data-bs-target=".bs-modal-history-log-order" type="button">
-                    <i class="fas fa-list"></i>&nbsp; Log Order
+                    <i class="fas fa-list"></i>&nbsp; Order
                 </button>
                 <button class="btn btn-sm btn-outline-primary waves-effect waves-light" data-bs-toggle="modal"
                     data-bs-target=".bs-modal-history-log-assignment" type="button">
-                    <i class="fas fa-list"></i>&nbsp; Log Assignment
+                    <i class="fas fa-list"></i>&nbsp; Assignment
                 </button>
             </div>
         </div>
@@ -249,7 +249,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title d-flex justify-content-between align-items-center">
-                            <span>Update Form</span>
+                            <span>Form</span>
                             <div class="d-flex align-items-center">
                                 <button type="button" class="btn btn-sm btn-outline-info waves-effect waves-light me-2"
                                     data-bs-toggle="modal" data-bs-target="#nteModal">
@@ -715,8 +715,9 @@
                 let segmentId = $(this).val();
                 if (segmentId) {
                     $.ajax({
-                        url: '{{ route('ajax.reporting-configuration.actions', ':id') }}'.replace(
-                            ':id', segmentId),
+                        url: '{{ route('ajax.reporting-configuration.actions.id', ':id') }}'
+                            .replace(
+                                ':id', segmentId),
                         method: 'GET',
                         success: function(data) {
                             let actionSelect = $('#order_action_id');
@@ -727,6 +728,9 @@
                                     `<option value="${item.id}">${item.name}</option>`
                                 );
                             });
+                            if (orderData.order_action_id) {
+                                actionSelect.val(orderData.order_action_id);
+                            }
                             var sourcedata = (orderData.sourcedata || '').toLowerCase();
                             if (['insera', 'manuals'].includes(sourcedata)) {
                                 fetchPhotoList(sourcedata, segmentId);

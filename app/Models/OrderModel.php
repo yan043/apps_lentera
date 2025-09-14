@@ -13,7 +13,8 @@ class OrderModel extends Model
         if ($step == 'ALL')
         {
             $data = DB::table('tb_order_status');
-        } else
+        }
+        else
         {
             $data = DB::table('tb_order_status')->where('previous_step', $step);
         }
@@ -228,7 +229,7 @@ class OrderModel extends Model
 
         if (! empty($request['order_segment_id']))
         {
-            DB::table('tb_assign_orders')->where('id', $request['id'])
+            DB::table('tb_assign_order_reports')->where('assign_order_id', $request['id'])
                 ->update(
                     [
                         'order_segment_id' => $request['order_segment_id'],
@@ -315,7 +316,8 @@ class OrderModel extends Model
                 ->select('tim.*', 'tmr.qty')
                 ->where('tao.id', $id)
                 ->get();
-        } elseif ($inventory == 'nte')
+        }
+        elseif ($inventory == 'nte')
         {
             if ($type == 'ont')
             {
@@ -327,7 +329,8 @@ class OrderModel extends Model
                     ->where('tao.id', $id)
                     ->where('tin.nte_type', 'ont')
                     ->first();
-            } elseif ($type == 'stb')
+            }
+            elseif ($type == 'stb')
             {
                 return DB::table('tb_assign_orders AS tao')
                     ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
@@ -346,10 +349,12 @@ class OrderModel extends Model
         if (in_array($sourcedata, ['insera', 'manuals']))
         {
             $photos = DB::table('tb_order_segment')->where('id', $id)->first();
-        } elseif ($sourcedata == 'bima')
+        }
+        elseif ($sourcedata == 'bima')
         {
             $photos = DB::table('tb_order_status')->where('id', $id)->first();
-        } else
+        }
+        else
         {
             $photos = [];
         }

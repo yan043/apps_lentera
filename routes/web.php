@@ -228,7 +228,6 @@ Route::middleware(['auth'])->group(function ()
             Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id'])->name('ajax.reporting-configuration.status.id');
 
             Route::get('segments', [AjaxController::class, 'get_order_segments'])->name('ajax.reporting-configuration.segments');
-            Route::get('segments/{id}', [AjaxController::class, 'get_order_segment_by_id'])->name('ajax.reporting-configuration.segments.id');
 
             Route::get('actions', [AjaxController::class, 'get_order_actions'])->name('ajax.reporting-configuration.actions');
             Route::get('actions/by-segment/{id}', [AjaxController::class, 'get_order_action_by_segment_id'])->name('ajax.reporting-configuration.actions.id');

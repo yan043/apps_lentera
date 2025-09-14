@@ -40,13 +40,6 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_order_segment_by_id($id)
-    {
-        $data = ReportingConfigurationModel::get_order_segment_by_id($id);
-
-        return response()->json($data);
-    }
-
     public function get_order_actions()
     {
         $data = ReportingConfigurationModel::get_order_actions();
@@ -251,7 +244,8 @@ class AjaxController extends Controller
                     ],
                 ],
             ]);
-        } elseif ($type == 'pie')
+        }
+        elseif ($type == 'pie')
         {
             $sla = [
                 '0-2'   => 0,
@@ -331,12 +325,14 @@ class AjaxController extends Controller
             $order_segment_id = $id;
 
             $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
-        } elseif ($sourcedata == 'bima')
+        }
+        elseif ($sourcedata == 'bima')
         {
             $order_status_id = $id;
 
             $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_status_id)->photo_list);
-        } else
+        }
+        else
         {
             $photo_list = [
                 'Lokasi_Rumah',
