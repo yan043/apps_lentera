@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {

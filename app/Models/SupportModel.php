@@ -16,12 +16,10 @@ class SupportModel extends Model
         if (preg_match('/^INC\d+$/', $id))
         {
             $searchType = 'incident';
-        }
-        elseif (preg_match('/^\d{10,}$/', $id))
+        } elseif (preg_match('/^\d{10,}$/', $id))
         {
             $searchType = 'service_no';
-        }
-        else
+        } else
         {
             $searchType = 'order_code';
         }
@@ -58,12 +56,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedInsera->where('tsi.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $assignedInsera->where('tsi.service_no', $id);
-        }
-        else
+        } else
         {
             $assignedInsera->where('tao.order_code', $id);
         }
@@ -100,12 +96,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedManual->where('tsm.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $assignedManual->where('tsm.service_no', $id);
-        }
-        else
+        } else
         {
             $assignedManual->where('tao.order_code', $id);
         }
@@ -141,12 +135,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedBima->where('tbm.c_wonum', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $assignedBima->where('tbm.c_servicenum', $id);
-        }
-        else
+        } else
         {
             $assignedBima->where('tao.order_code', $id);
         }
@@ -177,12 +169,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newInsera->where('tsi.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $newInsera->where('tsi.service_no', $id);
-        }
-        else
+        } else
         {
             $newInsera->where('tsi.incident', $id);
         }
@@ -213,12 +203,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newManual->where('tsm.incident', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $newManual->where('tsm.service_no', $id);
-        }
-        else
+        } else
         {
             $newManual->where('tsm.incident', $id);
         }
@@ -249,12 +237,10 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newBima->where('tbm.c_wonum', $id);
-        }
-        elseif ($searchType == 'service_no')
+        } elseif ($searchType == 'service_no')
         {
             $newBima->where('tbm.c_servicenum', $id);
-        }
-        else
+        } else
         {
             $newBima->where('tbm.c_wonum', $id);
         }
@@ -484,16 +470,13 @@ class SupportModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'manual')
+        } elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        else
+        } else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');

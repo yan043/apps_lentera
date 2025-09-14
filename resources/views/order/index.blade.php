@@ -114,7 +114,6 @@
                     <div class="modal-body">
                         <div data-simplebar style="max-height: 310px;">
                             <ul class="verti-timeline list-unstyled" id="logOrderList">
-                                <!-- Log order items will be appended here dynamically -->
                             </ul>
                         </div>
                     </div>
@@ -133,7 +132,6 @@
                     <div class="modal-body">
                         <div data-simplebar style="max-height: 310px;">
                             <ul class="verti-timeline list-unstyled" id="logAssignmentList">
-                                <!-- Log assignment items will be appended here dynamically -->
                             </ul>
                         </div>
                     </div>
@@ -839,7 +837,10 @@
 
             function updateMaterialsList() {
                 $('#materialsList').empty();
-                selectedMaterials.forEach(function(material, index) {
+                var validMaterials = selectedMaterials.filter(function(material) {
+                    return material.name && material.qty;
+                });
+                validMaterials.forEach(function(material, index) {
                     var itemHtml =
                         '<div class="list-group-item d-flex justify-content-between align-items-center">' +
                         '<div>' +
@@ -853,6 +854,11 @@
                         '</div>';
                     $('#materialsList').append(itemHtml);
                 });
+                if (validMaterials.length === 0) {
+                    $('#selectedMaterials').hide();
+                } else {
+                    $('#selectedMaterials').show();
+                }
             }
 
             $(document).on('click', '.removeMaterial', function() {

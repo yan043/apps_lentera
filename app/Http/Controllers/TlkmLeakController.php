@@ -52,16 +52,16 @@ class TlkmLeakController extends Controller
                     "C_SERVICEADDRESS": "",
                     "C_SCHEDSTART": "",
                     "C_PRODUCTNAME": "",
-                    "C_TK_SUBREGION": "' . $witel . '",
+                    "C_TK_SUBREGION": "'.$witel.'",
                     "C_PRODUCTTYPE": "",
                     "C_SITEID": "",
                     "C_MEASUREMENT": "",
                     "C_MEASUREMENTRESULT": "",
-                    "DATECREATED_FROM": "' . $datecreated_from . '",
-                    "DATECREATED_TO": "' . $datecreated_to . '"
+                    "DATECREATED_FROM": "'.$datecreated_from.'",
+                    "DATECREATED_TO": "'.$datecreated_to.'"
                 },
-                "page": ' . $page . ',
-                "pageSize": ' . $page_size . ',
+                "page": '.$page.',
+                "pageSize": '.$page_size.',
                 "SORT": "DESC",
                 "ORDER_BY": "datecreated"
             }',
@@ -86,8 +86,7 @@ class TlkmLeakController extends Controller
                 if ($servicenum === '' || $servicenum === null)
                 {
                     $servicenum = 0;
-                }
-                else
+                } else
                 {
                     $servicenum = preg_replace('/\D/', '', explode(' ', $servicenum)[0]);
                     $servicenum = $servicenum !== '' ? $servicenum : 0;
@@ -134,8 +133,7 @@ class TlkmLeakController extends Controller
             print_r("no data\n");
 
             return;
-        }
-        else
+        } else
         {
             DB::table('tb_source_bima')
                 ->where('c_tk_subregion', $witel)
@@ -237,10 +235,10 @@ class TlkmLeakController extends Controller
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => 'username=' . $username . '&password=' . $password . '&credentialId=',
+            CURLOPT_POSTFIELDS     => 'username='.$username.'&password='.$password.'&credentialId=',
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/x-www-form-urlencoded',
-                'Cookie: ' . $cookies2,
+                'Cookie: '.$cookies2,
             ],
         ]);
 
@@ -274,10 +272,10 @@ class TlkmLeakController extends Controller
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => true,
             CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => 'otp=' . $otp . '&login=Sign+In',
+            CURLOPT_POSTFIELDS     => 'otp='.$otp.'&login=Sign+In',
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/x-www-form-urlencoded',
-                'Cookie: ' . $cookies2,
+                'Cookie: '.$cookies2,
             ],
         ]);
 
@@ -303,7 +301,7 @@ class TlkmLeakController extends Controller
             CURLOPT_HEADER         => true,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookies1,
+                'Cookie: '.$cookies1,
             ],
         ]);
 
@@ -353,7 +351,7 @@ class TlkmLeakController extends Controller
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $insera->cookies,
+                'Cookie: '.$insera->cookies,
             ],
         ]);
 
@@ -424,7 +422,7 @@ class TlkmLeakController extends Controller
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $insera->cookies,
+                'Cookie: '.$insera->cookies,
             ],
         ]);
 
@@ -435,21 +433,20 @@ class TlkmLeakController extends Controller
         if (preg_match($pattern, $response, $matches))
         {
             $tokenValue = $matches[1];
-        }
-        else
+        } else
         {
             $tokenValue = null;
         }
 
         curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://oss-incident.telkom.co.id/jw/web/userview/ticketIncidentService/ticketIncidentService/_/allTicketList?d-5564009-p=' . $page . '&d-5564009-ps=' . $page_show . '&d-5564009-fn_reported_date_filter=' . urlencode($start_datetime) . '&d-5564009-fn_reported_date_filter=' . urlencode($end_datetime) . '&d-5564009-fn_status_date_filter=&d-5564009-fn_status_date_filter=&d-5564009-fn_C_OWNER_GROUP=&d-5564009-fn_C_OWNER=&d-5564009-fn_C_REPORTED_PRIORITY=&d-5564009-fn_C_SOURCE_TICKET=GAMAS,PROACTIVE,CUSTOMER&d-5564009-fn_C_EXTERNAL_TICKETID=&d-5564009-fn_C_CHANNEL=&d-5564009-fn_C_CUSTOMER_SEGMENT=DCS,PL-TSEL,DGS,DWS,DES,DBS,DSS,DPS,REG&d-5564009-fn_C_CUSTOMER_TYPE=&d-5564009-fn_C_SERVICE_NO=&d-5564009-fn_C_SERVICE_TYPE=&d-5564009-fn_C_SERVICE_ID=&d-5564009-fn_C_SLG=&d-5564009-fn_C_KODE_PRODUK=&d-5564009-fn_DATEMODIFIED=&d-5564009-fn_C_CLOSED_BY=&d-5564009-fn_C_WORK_ZONE=&d-5564009-fn_C_WITEL=' . $witel . '&d-5564009-fn_C_REGION=&d-5564009-fn_C_ID_TICKET=&d-5564009-fn_C_ACTUAL_SOLUTION=&d-5564009-fn_C_CLASSIFICATION_PATH=&d-5564009-fn_C_INCIDENT_DOMAIN=&d-5564009-fn_C_PERANGKAT=&d-5564009-fn_C_DESCRIPTION_ASSIGMENT=&d-5564009-fn_C_CLASSIFICATION_CATEGORY=&d-5564009-fn_C_REALM=&d-5564009-fn_C_PIPE_NAME=&d-5564009-fn_C_CUSTOMER_ID=&d-5564009-fn_C_RELATED_TO_GAMAS=&d-5564009-fn_C_TICKET_ID_GAMAS=&d-5564009-fn_C_GUARANTE_STATUS=&d-5564009-fn_C_DESCRIPTION_CUSTOMERID=&OWASP_CSRFTOKEN=' . $tokenValue,
+            CURLOPT_URL            => 'https://oss-incident.telkom.co.id/jw/web/userview/ticketIncidentService/ticketIncidentService/_/allTicketList?d-5564009-p='.$page.'&d-5564009-ps='.$page_show.'&d-5564009-fn_reported_date_filter='.urlencode($start_datetime).'&d-5564009-fn_reported_date_filter='.urlencode($end_datetime).'&d-5564009-fn_status_date_filter=&d-5564009-fn_status_date_filter=&d-5564009-fn_C_OWNER_GROUP=&d-5564009-fn_C_OWNER=&d-5564009-fn_C_REPORTED_PRIORITY=&d-5564009-fn_C_SOURCE_TICKET=GAMAS,PROACTIVE,CUSTOMER&d-5564009-fn_C_EXTERNAL_TICKETID=&d-5564009-fn_C_CHANNEL=&d-5564009-fn_C_CUSTOMER_SEGMENT=DCS,PL-TSEL,DGS,DWS,DES,DBS,DSS,DPS,REG&d-5564009-fn_C_CUSTOMER_TYPE=&d-5564009-fn_C_SERVICE_NO=&d-5564009-fn_C_SERVICE_TYPE=&d-5564009-fn_C_SERVICE_ID=&d-5564009-fn_C_SLG=&d-5564009-fn_C_KODE_PRODUK=&d-5564009-fn_DATEMODIFIED=&d-5564009-fn_C_CLOSED_BY=&d-5564009-fn_C_WORK_ZONE=&d-5564009-fn_C_WITEL='.$witel.'&d-5564009-fn_C_REGION=&d-5564009-fn_C_ID_TICKET=&d-5564009-fn_C_ACTUAL_SOLUTION=&d-5564009-fn_C_CLASSIFICATION_PATH=&d-5564009-fn_C_INCIDENT_DOMAIN=&d-5564009-fn_C_PERANGKAT=&d-5564009-fn_C_DESCRIPTION_ASSIGMENT=&d-5564009-fn_C_CLASSIFICATION_CATEGORY=&d-5564009-fn_C_REALM=&d-5564009-fn_C_PIPE_NAME=&d-5564009-fn_C_CUSTOMER_ID=&d-5564009-fn_C_RELATED_TO_GAMAS=&d-5564009-fn_C_TICKET_ID_GAMAS=&d-5564009-fn_C_GUARANTE_STATUS=&d-5564009-fn_C_DESCRIPTION_CUSTOMERID=&OWASP_CSRFTOKEN='.$tokenValue,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $insera->cookies,
+                'Cookie: '.$insera->cookies,
             ],
         ]);
 
@@ -461,8 +458,7 @@ class TlkmLeakController extends Controller
             if (preg_match('/Nothing found to display./', $response))
             {
                 print_r("nothing found to display (insera_ticket_list_date, $type, $witel, $date)\n");
-            }
-            else
+            } else
             {
                 libxml_use_internal_errors(true);
                 $dom = new \DOMDocument;
@@ -595,8 +591,7 @@ class TlkmLeakController extends Controller
                         {
                             $data['service_no']  = $data['service_no'];
                             $data['service_no2'] = $data['service_no'];
-                        }
-                        else
+                        } else
                         {
                             $data['service_no2'] = $data['service_no'];
                             $data['service_no']  = 0;
@@ -605,8 +600,7 @@ class TlkmLeakController extends Controller
                         if (preg_match('/^\d+$/', $data['channel']))
                         {
                             $data['channel'] = $data['channel'];
-                        }
-                        else
+                        } else
                         {
                             $data['channel'] = 0;
                         }
@@ -614,8 +608,7 @@ class TlkmLeakController extends Controller
                         if ($data['status_date'] == '')
                         {
                             $data['status_date'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['status_date'] = date('Y-m-d H:i:s', strtotime($data['status_date']));
                         }
@@ -623,8 +616,7 @@ class TlkmLeakController extends Controller
                         if ($data['booking_date'] == '')
                         {
                             $data['booking_date'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['booking_date'] = date('Y-m-d H:i:s', strtotime($data['booking_date']));
                         }
@@ -634,8 +626,7 @@ class TlkmLeakController extends Controller
                             $data['reported_date'] = null;
                             $data['date_reported'] = null;
                             $data['time_reported'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['reported_date'] = date('Y-m-d H:i:s', strtotime($data['reported_date']));
                             $data['date_reported'] = date('Y-m-d', strtotime($data['reported_date']));
@@ -645,8 +636,7 @@ class TlkmLeakController extends Controller
                         if ($data['resolve_date'] == '')
                         {
                             $data['resolve_date'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['resolve_date'] = date('Y-m-d H:i:s', strtotime($data['resolve_date']));
                         }
@@ -654,12 +644,10 @@ class TlkmLeakController extends Controller
                         if ($data['perangkat'] != '')
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['perangkat']);
-                        }
-                        elseif ($data['device_name'] != '')
+                        } elseif ($data['device_name'] != '')
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['device_name']);
-                        }
-                        else
+                        } else
                         {
                             $data['odp_name'] = null;
                         }
@@ -714,7 +702,7 @@ class TlkmLeakController extends Controller
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $insera->cookies,
+                'Cookie: '.$insera->cookies,
             ],
         ]);
         $response = curl_exec($curl);
@@ -724,21 +712,20 @@ class TlkmLeakController extends Controller
         if (preg_match($pattern, $response, $matches))
         {
             $tokenValue = $matches[1];
-        }
-        else
+        } else
         {
             $tokenValue = null;
         }
 
         curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://oss-incident.telkom.co.id/jw/web/userview/ticketIncidentService/ticketIncidentService/_/allTicketListRepo?d-7228731-p=' . $page . '&d-7228731-ps=' . $page_show . '&d-7228731-fn_reported_date_filter=' . urlencode($start_datetime) . '&d-7228731-fn_reported_date_filter=' . urlencode($end_datetime) . '&d-7228731-fn_status_date_filter=&d-7228731-fn_status_date_filter=&d-7228731-fn_C_OWNER_GROUP=&d-7228731-fn_C_OWNER=&d-7228731-fn_C_REPORTED_PRIORITY=&d-7228731-fn_C_SOURCE_TICKET=GAMAS,PROACTIVE,CUSTOMER&d-7228731-fn_C_EXTERNAL_TICKETID=&d-7228731-fn_C_CHANNEL=&d-7228731-fn_C_CUSTOMER_SEGMENT=DCS,PL-TSEL,DGS,DWS,DES,DBS,DSS,DPS,REG&d-7228731-fn_C_CUSTOMER_TYPE=&d-7228731-fn_C_SERVICE_NO=&d-7228731-fn_C_SERVICE_TYPE=&d-7228731-fn_C_SERVICE_ID=&d-7228731-fn_C_SLG=&d-7228731-fn_C_KODE_PRODUK=&d-7228731-fn_DATEMODIFIED=&d-7228731-fn_C_CLOSED_BY=&d-7228731-fn_C_WORK_ZONE=&d-7228731-fn_C_WITEL=' . $witel . '&d-7228731-fn_C_REGION=&d-7228731-fn_C_ID_TICKET=&d-7228731-fn_C_ACTUAL_SOLUTION=&d-7228731-fn_C_CLASSIFICATION_PATH=&d-7228731-fn_C_INCIDENT_DOMAIN=&d-7228731-fn_C_PERANGKAT=&d-7228731-fn_C_DESCRIPTION_ASSIGMENT=&d-7228731-fn_C_CLASSIFICATION_CATEGORY=&d-7228731-fn_C_REALM=&d-7228731-fn_C_PIPE_NAME=&d-7228731-fn_C_CUSTOMER_ID=&d-7228731-fn_C_RELATED_TO_GAMAS=&d-7228731-fn_C_TICKET_ID_GAMAS=&d-7228731-fn_C_GUARANTE_STATUS=&d-7228731-fn_C_DESCRIPTION_CUSTOMERID=&OWASP_CSRFTOKEN=' . $tokenValue,
+            CURLOPT_URL            => 'https://oss-incident.telkom.co.id/jw/web/userview/ticketIncidentService/ticketIncidentService/_/allTicketListRepo?d-7228731-p='.$page.'&d-7228731-ps='.$page_show.'&d-7228731-fn_reported_date_filter='.urlencode($start_datetime).'&d-7228731-fn_reported_date_filter='.urlencode($end_datetime).'&d-7228731-fn_status_date_filter=&d-7228731-fn_status_date_filter=&d-7228731-fn_C_OWNER_GROUP=&d-7228731-fn_C_OWNER=&d-7228731-fn_C_REPORTED_PRIORITY=&d-7228731-fn_C_SOURCE_TICKET=GAMAS,PROACTIVE,CUSTOMER&d-7228731-fn_C_EXTERNAL_TICKETID=&d-7228731-fn_C_CHANNEL=&d-7228731-fn_C_CUSTOMER_SEGMENT=DCS,PL-TSEL,DGS,DWS,DES,DBS,DSS,DPS,REG&d-7228731-fn_C_CUSTOMER_TYPE=&d-7228731-fn_C_SERVICE_NO=&d-7228731-fn_C_SERVICE_TYPE=&d-7228731-fn_C_SERVICE_ID=&d-7228731-fn_C_SLG=&d-7228731-fn_C_KODE_PRODUK=&d-7228731-fn_DATEMODIFIED=&d-7228731-fn_C_CLOSED_BY=&d-7228731-fn_C_WORK_ZONE=&d-7228731-fn_C_WITEL='.$witel.'&d-7228731-fn_C_REGION=&d-7228731-fn_C_ID_TICKET=&d-7228731-fn_C_ACTUAL_SOLUTION=&d-7228731-fn_C_CLASSIFICATION_PATH=&d-7228731-fn_C_INCIDENT_DOMAIN=&d-7228731-fn_C_PERANGKAT=&d-7228731-fn_C_DESCRIPTION_ASSIGMENT=&d-7228731-fn_C_CLASSIFICATION_CATEGORY=&d-7228731-fn_C_REALM=&d-7228731-fn_C_PIPE_NAME=&d-7228731-fn_C_CUSTOMER_ID=&d-7228731-fn_C_RELATED_TO_GAMAS=&d-7228731-fn_C_TICKET_ID_GAMAS=&d-7228731-fn_C_GUARANTE_STATUS=&d-7228731-fn_C_DESCRIPTION_CUSTOMERID=&OWASP_CSRFTOKEN='.$tokenValue,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $insera->cookies,
+                'Cookie: '.$insera->cookies,
             ],
         ]);
 
@@ -750,8 +737,7 @@ class TlkmLeakController extends Controller
             if (preg_match('/Nothing found to display./', $response))
             {
                 print_r("nothing found to display (insera_ticket_list_repo_date, $type, $witel, $date)\n");
-            }
-            else
+            } else
             {
                 libxml_use_internal_errors(true);
                 $dom = new \DOMDocument;
@@ -884,8 +870,7 @@ class TlkmLeakController extends Controller
                         {
                             $data['service_no']  = $data['service_no'];
                             $data['service_no2'] = $data['service_no'];
-                        }
-                        else
+                        } else
                         {
                             $data['service_no2'] = $data['service_no'];
                             $data['service_no']  = 0;
@@ -894,8 +879,7 @@ class TlkmLeakController extends Controller
                         if (preg_match('/^\d+$/', $data['channel']))
                         {
                             $data['channel'] = $data['channel'];
-                        }
-                        else
+                        } else
                         {
                             $data['channel'] = 0;
                         }
@@ -903,8 +887,7 @@ class TlkmLeakController extends Controller
                         if ($data['status_date'] == '')
                         {
                             $data['status_date'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['status_date'] = date('Y-m-d H:i:s', strtotime($data['status_date']));
                         }
@@ -912,8 +895,7 @@ class TlkmLeakController extends Controller
                         if ($data['booking_date'] == '')
                         {
                             $data['booking_date'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['booking_date'] = date('Y-m-d H:i:s', strtotime($data['booking_date']));
                         }
@@ -923,8 +905,7 @@ class TlkmLeakController extends Controller
                             $data['reported_date'] = null;
                             $data['date_reported'] = null;
                             $data['time_reported'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['reported_date'] = date('Y-m-d H:i:s', strtotime($data['reported_date']));
                             $data['date_reported'] = date('Y-m-d', strtotime($data['reported_date']));
@@ -934,8 +915,7 @@ class TlkmLeakController extends Controller
                         if ($data['resolve_date'] == '')
                         {
                             $data['resolve_date'] = null;
-                        }
-                        else
+                        } else
                         {
                             $data['resolve_date'] = date('Y-m-d H:i:s', strtotime($data['resolve_date']));
                         }
@@ -943,12 +923,10 @@ class TlkmLeakController extends Controller
                         if ($data['perangkat'] != '')
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['perangkat']);
-                        }
-                        elseif ($data['device_name'] != '')
+                        } elseif ($data['device_name'] != '')
                         {
                             $data['odp_name'] = preg_replace('/\s+.*$/', '', $data['device_name']);
-                        }
-                        else
+                        } else
                         {
                             $data['odp_name'] = null;
                         }
@@ -1028,10 +1006,10 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => 'guid=0&code=0&data=' . urlencode('{"token":"' . $token . '","code":"' . $uname . '","password":"' . $pass . '"}'),
+            CURLOPT_POSTFIELDS     => 'guid=0&code=0&data='.urlencode('{"token":"'.$token.'","code":"'.$uname.'","password":"'.$pass.'"}'),
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/x-www-form-urlencoded',
-                'Cookie: ' . $cookiesOut,
+                'Cookie: '.$cookiesOut,
             ],
         ]);
 
@@ -1055,7 +1033,7 @@ class TlkmLeakController extends Controller
 
         $result = json_decode($response);
 
-        $based64Captcha = 'data:image/png;base64,' . $result->data->captcha;
+        $based64Captcha = 'data:image/png;base64,'.$result->data->captcha;
 
         [$type, $based64Captcha] = explode(';', $based64Captcha);
         [, $based64Captcha]      = explode(',', $based64Captcha);
@@ -1066,7 +1044,7 @@ class TlkmLeakController extends Controller
 
         file_put_contents($filename, $imageData);
 
-        $caption = 'Kode Captcha Starclick One ' . date('Y-m-d H:i:s');
+        $caption = 'Kode Captcha Starclick One '.date('Y-m-d H:i:s');
 
         Telegram::sendPhoto('7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8', $chatid, $caption, 'sc1.jpg');
 
@@ -1094,7 +1072,7 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'POST',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookiesOut,
+                'Cookie: '.$cookiesOut,
             ],
         ]);
 
@@ -1107,10 +1085,10 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => 'guid=0&code=0&data=' . urlencode('{"token":"' . $token . '","code":"' . $uname . '","password":"' . $pass . '","otp":"' . $otp . '","captcha":"' . $captcha . '"}'),
+            CURLOPT_POSTFIELDS     => 'guid=0&code=0&data='.urlencode('{"token":"'.$token.'","code":"'.$uname.'","password":"'.$pass.'","otp":"'.$otp.'","captcha":"'.$captcha.'"}'),
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/x-www-form-urlencoded',
-                'Cookie: ' . $cookiesOut,
+                'Cookie: '.$cookiesOut,
             ],
         ]);
         $response = curl_exec($curl);
@@ -1148,7 +1126,7 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookiesOut,
+                'Cookie: '.$cookiesOut,
             ],
         ]);
         $response = curl_exec($curl);
@@ -1177,7 +1155,7 @@ class TlkmLeakController extends Controller
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $sc1->cookies,
+                'Cookie: '.$sc1->cookies,
             ],
         ]);
 
@@ -1201,7 +1179,7 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $sc1->cookies,
+                'Cookie: '.$sc1->cookies,
             ],
         ]);
 
@@ -1215,7 +1193,7 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $sc1->cookies,
+                'Cookie: '.$sc1->cookies,
             ],
         ]);
 
@@ -1243,13 +1221,13 @@ class TlkmLeakController extends Controller
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_CUSTOMREQUEST  => 'GET',
                 CURLOPT_HTTPHEADER     => [
-                    'Cookie: ' . $sc1->cookies,
+                    'Cookie: '.$sc1->cookies,
                 ],
             ]);
 
             curl_exec($curl);
 
-            $link = 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data=' . urlencode('{"SearchText":"' . $witel . '","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"' . $datex . '","EndDate":"' . $datex . '","start":null,"source":"NOSS","typeMenu":"TRACKING"}') . '&page=1&start=0&limit=10';
+            $link = 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data='.urlencode('{"SearchText":"'.$witel.'","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"'.$datex.'","EndDate":"'.$datex.'","start":null,"source":"NOSS","typeMenu":"TRACKING"}').'&page=1&start=0&limit=10';
 
             curl_setopt_array($curl, [
                 CURLOPT_URL            => $link,
@@ -1259,7 +1237,7 @@ class TlkmLeakController extends Controller
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_CUSTOMREQUEST  => 'GET',
                 CURLOPT_HTTPHEADER     => [
-                    'Cookie: ' . $sc1->cookies,
+                    'Cookie: '.$sc1->cookies,
                 ],
             ]);
 
@@ -1267,10 +1245,9 @@ class TlkmLeakController extends Controller
 
             if (curl_errno($curl))
             {
-                echo 'Error:' . curl_error($curl);
+                echo 'Error:'.curl_error($curl);
                 curl_close($curl);
-            }
-            else
+            } else
             {
                 curl_close($curl);
                 $response = json_decode($response);
@@ -1290,16 +1267,14 @@ class TlkmLeakController extends Controller
                     if ($data->CNT > 0 && $data->CNT < 10)
                     {
                         self::scone_insert_order($witel, $datex, 1, 0, $sc1->cookies);
-                    }
-                    else
+                    } else
                     {
                         for ($x = 1; $x <= $jumlahpage; $x++)
                         {
                             if ($x == 1)
                             {
                                 $start = $start + 11;
-                            }
-                            else
+                            } else
                             {
                                 $start = $start + 10;
                             }
@@ -1326,21 +1301,21 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookies,
+                'Cookie: '.$cookies,
             ],
         ]);
 
         curl_exec($curl);
 
         curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data=' . urlencode('{"SearchText":"' . $witel . '","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"' . $datex . '","EndDate":"' . $datex . '","start":null,"source":"NOSS","typeMenu":"TRACKING"}') . '&page=' . $x . '&start=' . $start . '&limit=10',
+            CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data='.urlencode('{"SearchText":"'.$witel.'","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"'.$datex.'","EndDate":"'.$datex.'","start":null,"source":"NOSS","typeMenu":"TRACKING"}').'&page='.$x.'&start='.$start.'&limit=10',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookies,
+                'Cookie: '.$cookies,
             ],
         ]);
 
@@ -1415,13 +1390,13 @@ class TlkmLeakController extends Controller
             ',',
             array_map(function ($row)
             {
-                return '(' . implode(
+                return '('.implode(
                     ',',
                     array_map(function ($value)
                     {
-                        return '"' . str_replace('"', '""', $value) . '"';
+                        return '"'.str_replace('"', '""', $value).'"';
                     }, $row)
-                ) . ')';
+                ).')';
             }, $rows)
         );
 

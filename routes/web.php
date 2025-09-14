@@ -1,19 +1,19 @@
 <?php
 
-use Mews\Captcha\Captcha;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\SupportController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReportsPaymentController;
 use App\Http\Controllers\EmployeeManagementController;
 use App\Http\Controllers\InventoryManagementController;
-use App\Http\Controllers\WorkOrderManagementController;
-use App\Http\Controllers\TechnicianAttendanceController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrganizationStructureController;
 use App\Http\Controllers\ReportingConfigurationController;
+use App\Http\Controllers\ReportsPaymentController;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\TechnicianAttendanceController;
+use App\Http\Controllers\WorkOrderManagementController;
+use Illuminate\Support\Facades\Route;
+use Mews\Captcha\Captcha;
 
 Route::get('login', [AuthController::class, 'auth'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->middleware('guest')->name('login.post');

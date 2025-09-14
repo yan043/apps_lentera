@@ -573,4 +573,3 @@
         });
     </script>
 @endsection
-

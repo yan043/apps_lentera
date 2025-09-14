@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class WorkOrderManagementModel extends Model
@@ -40,7 +40,7 @@ class WorkOrderManagementModel extends Model
                 'assign_labels' => json_encode($data['assign_labels']),
                 'assign_notes'  => $data['assign_notes'],
                 'created_by'    => Session::get('nik'),
-                'created_at'    => now()
+                'created_at'    => now(),
             ]
         );
     }
@@ -314,16 +314,13 @@ class WorkOrderManagementModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tsi.reported_date', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'manual')
+        } elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tsm.reported_date', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tbm.c_datemodified', 'DESC')->get();
-        }
-        else
+        } else
         {
             $inseraSql = $inseraQuery->orderBy('tsi.reported_date', 'DESC');
             $manualSql = $manualQuery->orderBy('tsm.reported_date', 'DESC');
@@ -475,16 +472,13 @@ class WorkOrderManagementModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'manual')
+        } elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
-        }
-        else
+        } else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');

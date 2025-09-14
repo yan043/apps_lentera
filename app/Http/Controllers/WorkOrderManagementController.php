@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\WorkOrderManagementModel;
+use Illuminate\Http\Request;
 
 class WorkOrderManagementController extends Controller
 {
