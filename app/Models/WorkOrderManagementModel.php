@@ -342,8 +342,7 @@ class WorkOrderManagementModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -365,15 +364,13 @@ class WorkOrderManagementModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tss.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step AS order_substatus_previous_step',
-                'tss.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
+                'tst.status_description AS order_status_description',
 
                 'tar.order_segment_id',
                 'tos.name AS order_segment_name',
@@ -390,8 +387,7 @@ class WorkOrderManagementModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -413,15 +409,13 @@ class WorkOrderManagementModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tss.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step AS order_substatus_previous_step',
-                'tss.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
+                'tst.status_description AS order_status_description',
 
                 'tar.order_segment_id',
                 'tos.name AS order_segment_name',
@@ -438,8 +432,7 @@ class WorkOrderManagementModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -461,15 +454,13 @@ class WorkOrderManagementModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tss.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step AS order_substatus_previous_step',
-                'tss.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
+                'tst.status_description AS order_status_description',
 
                 'tar.order_segment_id',
                 'tos.name AS order_segment_name',

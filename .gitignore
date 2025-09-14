@@ -1,35 +1,37 @@
 /vendor/
-node_modules/
-.env
-.env.*
-!.env.example
-.phpunit.cache/
-storage/
-!storage/app/public/
-public/storage
-public/upload_*
-bootstrap/cache/
-
-
-.idea/
-.vscode/
-.fleet/
-.DS_Store
-Thumbs.db
-
-
-.nova/
-.zed/
-
+/node_modules/
 
 /composer.lock
 /package-lock.json
 /pnpm-lock.yaml
 /yarn.lock
 
+.env
+.env.*
+!.env.example
 
+.phpunit.cache/
 /.phpunit.result.cache
+storage/
+!storage/app/public/
+public/storage
+public/upload_*
+bootstrap/cache/
+storage/*.key
+storage/pail
 
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+.phpactor.json
+
+.DS_Store
+Thumbs.db
+
+Homestead.json
+Homestead.yaml
 
 Dockerfile
 docker-compose.yml

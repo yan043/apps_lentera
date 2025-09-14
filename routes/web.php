@@ -139,10 +139,6 @@ Route::middleware(['auth'])->group(function ()
         Route::post('status/store', [ReportingConfigurationController::class, 'storeStatus'])->name('reporting-configuration.status.store');
         Route::get('status/destroy/{id}', [ReportingConfigurationController::class, 'destroyStatus'])->name('reporting-configuration.status.destroy');
 
-        Route::get('sub-status', [ReportingConfigurationController::class, 'subStatus'])->name('reporting-configuration.sub-status');
-        Route::post('sub-status/store', [ReportingConfigurationController::class, 'storeSubStatus'])->name('reporting-configuration.sub-status.store');
-        Route::get('sub-status/destroy/{id}', [ReportingConfigurationController::class, 'destroySubStatus'])->name('reporting-configuration.sub-status.destroy');
-
         Route::get('segments', [ReportingConfigurationController::class, 'segments'])->name('reporting-configuration.segments');
         Route::post('segments/store', [ReportingConfigurationController::class, 'storeSegment'])->name('reporting-configuration.segments.store');
         Route::get('segments/destroy/{id}', [ReportingConfigurationController::class, 'destroySegment'])->name('reporting-configuration.segments.destroy');
@@ -160,10 +156,7 @@ Route::middleware(['auth'])->group(function ()
     {
         Route::prefix('order')->group(function ()
         {
-            Route::get('status/step/{id}', [AjaxController::class, 'get_order_status_by_step'])->name('ajax.order.status.step');
-
-            Route::get('sub-status/{id}', [AjaxController::class, 'get_order_sub_status_by_id'])->name('ajax.order.sub-status.id');
-            Route::get('sub-status/by-status/{id}', [AjaxController::class, 'get_order_sub_status_by_status_id'])->name('ajax.order.sub-status.by-status');
+            Route::get('status/step/{next_step}', [AjaxController::class, 'get_order_status_by_step'])->name('ajax.order.status.step');
 
             Route::get('photo-list/{sourcedata}/{id}', [AjaxController::class, 'get_photo_list'])->name('ajax.order.photo-list');
 
@@ -232,8 +225,6 @@ Route::middleware(['auth'])->group(function ()
         {
             Route::get('status', [AjaxController::class, 'get_order_status'])->name('ajax.reporting-configuration.status');
             Route::get('status/{id}', [AjaxController::class, 'get_order_status_by_id'])->name('ajax.reporting-configuration.status.id');
-
-            Route::get('sub-status', [AjaxController::class, 'get_order_sub_status'])->name('ajax.reporting-configuration.sub-status');
 
             Route::get('segments', [AjaxController::class, 'get_order_segments'])->name('ajax.reporting-configuration.segments');
             Route::get('segments/{id}', [AjaxController::class, 'get_order_segment_by_id'])->name('ajax.reporting-configuration.segments.id');

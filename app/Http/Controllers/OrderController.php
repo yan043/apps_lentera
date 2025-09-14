@@ -24,7 +24,6 @@ class OrderController extends Controller
             [
                 'id'                         => 'required',
                 'order_status_id'            => 'required',
-                'order_substatus_id'         => 'required',
                 'report_odp_name'            => 'nullable',
                 'report_odp_coordinates'     => 'nullable',
                 'report_valins_id'           => 'nullable',

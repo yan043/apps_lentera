@@ -58,6 +58,16 @@
             color: #dc3545;
             z-index: 2;
         }
+
+        .option-title {
+            font-weight: bold;
+            display: block;
+        }
+
+        .option-desc {
+            font-size: 0.85em;
+            color: #666;
+        }
     </style>
 @endsection
 
@@ -213,24 +223,12 @@
                             </div>
                         </div>
                         <div id="card-update-form" class="collapse show">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="order_status_id" class="form-label">Status</label>
-                                        <select name="order_status_id" id="order_status_id" class="form-select select2"
-                                            required>
-                                            <option value="" disabled selected>Pilih Status</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="order_substatus_id" class="form-label">Sub Status</label>
-                                        <select name="order_substatus_id" id="order_substatus_id"
-                                            class="form-select select2" required>
-                                            <option value="" disabled selected>Pilih Sub Status</option>
-                                        </select>
-                                    </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="order_status_id" class="form-label">Status</label>
+                                    <select name="order_status_id" id="order_status_id" class="form-select" required>
+                                        <option value="" disabled selected>Pilih Status</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row is_sourcedata_hidden">
@@ -421,7 +419,7 @@
             </div>
         </div>
 
-        <div class="row mt-4">
+        <div class="row">
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
@@ -567,7 +565,7 @@
             renderOrderDetails();
             updateMaterialsList();
 
-            $(".select2").not('#inventory_nte_id_ont, #inventory_nte_id_stb, #inventory_material_id').select2({
+            $(".select2").select2({
                 allowClear: true,
                 placeholder: "Silahkan Pilih",
                 width: '100%'
@@ -590,18 +588,37 @@
             });
 
             $.ajax({
-                url: '{{ route('ajax.order.status.step', $id) }}',
+                url: '/ajax/order/status/step/' + (orderData.order_status_next_step || '2.1'),
                 method: 'GET',
                 success: function(data) {
                     let statusSelect = $('#order_status_id');
                     statusSelect.empty().append(
                         '<option value="" disabled selected>Pilih Status</option>');
                     data.forEach(function(item) {
-                        statusSelect.append(`<option value="${item.id}">${item.name}</option>`);
+                        statusSelect.append(
+                            `<option value="${item.id}" data-desc="${item.status_description || ''}">${item.name}</option>`
+                        );
                     });
                     if (orderData.order_status_id) {
-                        statusSelect.val(orderData.order_status_id).trigger('change');
+                        statusSelect.val(orderData.order_status_id);
                     }
+
+                    function formatOption(option) {
+                        if (!option.id) {
+                            return option.text;
+                        }
+                        var desc = $(option.element).data('desc');
+                        var $option = $(
+                            '<div><span class="option-title">' + option.text + '</span>' +
+                            '<span class="option-desc">' + desc + '</span></div>'
+                        );
+                        return $option;
+                    }
+
+                    $('#order_status_id').select2({
+                        templateResult: formatOption,
+                        // templateSelection: formatOption
+                    });
                 }
             });
 
@@ -625,34 +642,7 @@
                 }
             });
 
-            $('#order_status_id').on('change', function() {
-                let statusId = $(this).val();
-                if (statusId) {
-                    $.ajax({
-                        url: '{{ route('ajax.order.sub-status.by-status', ':id') }}'
-                            .replace(':id', statusId),
-                        method: 'GET',
-                        success: function(data) {
-                            let substatusSelect = $('#order_substatus_id');
-                            substatusSelect.empty().append(
-                                '<option value="" disabled selected>Pilih Sub Status</option>'
-                            );
-                            data.forEach(function(item) {
-                                substatusSelect.append(
-                                    `<option value="${item.id}">${item.name}</option>`
-                                );
-                            });
-                            if (orderData.order_substatus_id) {
-                                substatusSelect.val(orderData.order_substatus_id).trigger(
-                                    'change');
-                            }
-                        }
-                    });
-                } else {
-                    $('#order_substatus_id').empty().append(
-                        '<option value="" disabled selected>Pilih Sub Status</option>');
-                }
-            });
+
 
             $('#order_segment_id').on('change', function() {
                 let segmentId = $(this).val();
@@ -1048,7 +1038,7 @@
 
                 var ajaxId = segmentId;
                 if (sourcedata === 'bima') {
-                    ajaxId = orderData.order_substatus_id || 0;
+                    ajaxId = orderData.order_next_step || "2.1";
                 }
 
                 if (!sourcedata || !ajaxId) {
@@ -1097,7 +1087,6 @@
                         data.forEach(function(item) {
                             var date = new Date(item.created_at).toLocaleString();
                             var description = 'Status: ' + (item.order_status_name || '-') +
-                                ' - ' + (item.order_substatus_name || '-') +
                                 ', Segment: ' + (item.order_segment_name || '-') +
                                 ', Action: ' + (item.order_action_name || '-') +
                                 ', Notes: ' + (item.report_notes || '-') +

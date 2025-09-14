@@ -8,57 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderModel extends Model
 {
-    public static function get_order_sub_status_by_id($id)
+    public static function get_order_status_by_step($step = "1.1")
     {
-        return DB::table('tb_order_sub_status AS toss')
-            ->leftJoin('tb_order_status AS tos', 'tos.id', '=', 'toss.order_status_id')
-            ->select('toss.*', 'tos.step AS order_status_step', 'tos.name AS order_status_name')
-            ->where('toss.id', $id)
-            ->first();
-    }
-
-    public static function get_order_status_by_step($id)
-    {
-        $check = DB::table('tb_assign_orders AS tao')
-            ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
-            ->select(
-                'tst.*',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step',
-                'tss.next_step'
-            )
-            ->where('tao.id', $id)
-            ->first();
-
-        if ($check->name == null && Session::get('role_id') == 1)
+        if ($step == 'ALL')
         {
-            $data = DB::table('tb_order_status')->where('step', 2);
-        }
-        elseif ($check->step == 3)
-        {
-            $data = DB::table('tb_order_status')->whereIn('step', [3, 4]);
-        }
-        elseif ($check->name != null)
-        {
-            $data = DB::table('tb_order_status')->where('step', $check->after_step);
+            $data = DB::table('tb_order_status');
         }
         else
         {
-            $data = DB::table('tb_order_status')->where('step', '!=', 1);
+            $data = DB::table('tb_order_status')->where('previous_step', $step);
         }
 
-        return $data->get();
-    }
-
-    public static function get_order_sub_status_by_status_id($order_status_id)
-    {
-        return DB::table('tb_order_sub_status AS toss')
-            ->leftJoin('tb_order_status AS tos', 'tos.id', '=', 'toss.order_status_id')
-            ->select('toss.*', 'tos.step AS order_status_step', 'tos.name AS order_status_name')
-            ->where('toss.order_status_id', $order_status_id)
-            ->get();
+        return $data->where('is_active', 1)->orderBy('id', 'ASC')->get();
     }
 
     public static function index($id)
@@ -70,8 +31,7 @@ class OrderModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -93,15 +53,12 @@ class OrderModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tss.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step AS order_substatus_previous_step',
-                'tss.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
 
                 'tar.order_segment_id',
                 'tos.name AS order_segment_name',
@@ -127,8 +84,7 @@ class OrderModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -150,15 +106,12 @@ class OrderModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tss.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step AS order_substatus_previous_step',
-                'tss.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
 
                 'tar.order_segment_id',
                 'tos.name AS order_segment_name',
@@ -184,8 +137,7 @@ class OrderModel extends Model
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
             ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tss', 'tar.order_substatus_id', '=', 'tss.id')
-            ->leftJoin('tb_order_status AS tst', 'tss.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tos', 'tar.order_segment_id', '=', 'tos.id')
             ->leftJoin('tb_order_action AS toa', 'tos.id', '=', 'toa.order_segment_id')
             ->select(
@@ -207,15 +159,12 @@ class OrderModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tss.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tss.name AS order_substatus_name',
-                'tss.previous_step AS order_substatus_previous_step',
-                'tss.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
 
                 'tar.order_segment_id',
                 'tos.name AS order_segment_name',
@@ -264,7 +213,7 @@ class OrderModel extends Model
                 'assign_order_id' => $request['id'],
             ],
             [
-                'order_substatus_id'          => $request['order_substatus_id'],
+                'order_status_id'             => $request['order_status_id'],
                 'report_notes'                => $request['report_notes'],
                 'report_phone_number'         => $request['report_phone_number'],
                 'report_coordinates_location' => $request['report_coordinates_location'],
@@ -292,7 +241,7 @@ class OrderModel extends Model
         $id = DB::table('tb_assign_order_reports_log')->insertGetId(
             [
                 'assign_order_id'             => $request['id'],
-                'order_substatus_id'          => $request['order_substatus_id'],
+                'order_status_id'             => $request['order_status_id'],
                 'order_segment_id'            => $request['order_segment_id'],
                 'order_action_id'             => $request['order_action_id'],
                 'report_notes'                => $request['report_notes'],
@@ -403,7 +352,7 @@ class OrderModel extends Model
         }
         elseif ($sourcedata == 'bima')
         {
-            $photos = DB::table('tb_order_sub_status')->where('id', $id)->first();
+            $photos = DB::table('tb_order_status')->where('previous_step', $id)->first();
         }
         else
         {
@@ -417,16 +366,13 @@ class OrderModel extends Model
     {
         return DB::table('tb_assign_order_reports_log AS tarl')
             ->leftJoin('tb_employee AS te', 'tarl.created_by', '=', 'te.nik')
-            ->leftJoin('tb_order_sub_status AS toss', 'tarl.order_substatus_id', '=', 'toss.id')
-            ->leftJoin('tb_order_status AS tos', 'toss.order_status_id', '=', 'tos.id')
+            ->leftJoin('tb_order_status AS toss', 'tarl.order_status_id', '=', 'toss.id')
             ->leftJoin('tb_order_segment AS tose', 'tarl.order_segment_id', '=', 'tose.id')
             ->leftJoin('tb_order_action AS toa', 'tarl.order_action_id', '=', 'toa.id')
             ->select(
                 'tarl.*',
                 'te.full_name AS created_name',
-                'toss.name AS order_substatus_name',
-                'tos.name AS order_status_name',
-                'tos.step AS order_status_step',
+                'toss.name AS order_status_name',
                 'tose.name AS order_segment_name',
                 'toa.name AS order_action_name'
             )

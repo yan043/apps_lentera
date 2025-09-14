@@ -364,10 +364,7 @@
                                         data-region_name="${row.region_name || ''}"
                                         data-witel="${row.witel || ''}"
                                         data-workzone="${row.workzone || ''}"
-                                        data-order_status_after_step="${row.order_status_after_step || ''}"
                                         data-order_status_name="${row.order_status_name || ''}"
-                                        data-order_substatus_id="${row.order_substatus_id || ''}"
-                                        data-order_substatus_name="${row.order_substatus_name || ''}"
                                         data-order_segment_id="${row.order_segment_id || ''}"
                                         data-order_segment_name="${row.order_segment_name || ''}"
                                         data-order_action_id="${row.order_action_id || ''}"
@@ -401,10 +398,7 @@
                                     data-region_name="${row.region_name || ''}"
                                     data-witel="${row.witel || ''}"
                                     data-workzone="${row.workzone || ''}"
-                                    data-order_status_after_step="${row.order_status_after_step || ''}"
                                     data-order_status_name="${row.order_status_name || ''}"
-                                    data-order_substatus_id="${row.order_substatus_id || ''}"
-                                    data-order_substatus_name="${row.order_substatus_name || ''}"
                                     data-order_segment_id="${row.order_segment_id || ''}"
                                     data-order_segment_name="${row.order_segment_name || ''}"
                                     data-order_action_id="${row.order_action_id || ''}"
@@ -442,10 +436,7 @@
                         region_name: item.region_name ?? '',
                         witel: item.witel ?? '',
                         workzone: item.workzone ?? '',
-                        order_status_after_step: item.order_status_after_step ?? '',
                         order_status_name: item.order_status_name ?? '',
-                        order_substatus_id: item.order_substatus_id ?? '',
-                        order_substatus_name: item.order_substatus_name ?? '',
                         order_segment_id: item.order_segment_id ?? '',
                         order_segment_name: item.order_segment_name ?? '',
                         order_action_id: item.order_action_id ?? '',

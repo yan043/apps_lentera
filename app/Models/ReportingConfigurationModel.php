@@ -33,29 +33,6 @@ class ReportingConfigurationModel extends Model
         return DB::table('tb_order_status')->where('id', $id)->delete();
     }
 
-    public static function get_order_sub_status()
-    {
-        return DB::table('tb_order_sub_status AS toss')
-            ->leftJoin('tb_order_status AS tos', 'tos.id', '=', 'toss.order_status_id')
-            ->select('toss.*', 'tos.name AS order_status_name')
-            ->get();
-    }
-
-    public static function insert_order_sub_status($data)
-    {
-        return DB::table('tb_order_sub_status')->insert($data);
-    }
-
-    public static function update_order_sub_status($id, $data)
-    {
-        return DB::table('tb_order_sub_status')->where('id', $id)->update($data);
-    }
-
-    public static function delete_order_sub_status($id)
-    {
-        return DB::table('tb_order_sub_status')->where('id', $id)->delete();
-    }
-
     public static function get_order_segments()
     {
         return DB::table('tb_order_segment')->get();

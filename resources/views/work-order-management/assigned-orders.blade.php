@@ -115,7 +115,7 @@
                             <th>No</th>
                             <th>Order Code</th>
                             <th>Assign Date</th>
-                            <th>Sub Status</th>
+                            <th>Status</th>
                             <th>Service Area</th>
                             <th>Team</th>
                             <th>Action</th>
@@ -268,7 +268,7 @@
                         defaultContent: '-'
                     },
                     {
-                        data: 'order_substatus_name',
+                        data: 'order_status_name',
                         defaultContent: '-'
                     },
                     {
@@ -305,10 +305,7 @@
                                 data-region_name="${row.region_name || ''}"
                                 data-witel="${row.witel || ''}"
                                 data-workzone="${row.workzone || ''}"
-                                data-order_status_after_step="${row.order_status_after_step || ''}"
                                 data-order_status_name="${row.order_status_name || ''}"
-                                data-order_substatus_id="${row.order_substatus_id || ''}"
-                                data-order_substatus_name="${row.order_substatus_name || ''}"
                                 data-order_segment_id="${row.order_segment_id || ''}"
                                 data-order_segment_name="${row.order_segment_name || ''}"
                                 data-order_action_id="${row.order_action_id || ''}"

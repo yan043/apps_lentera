@@ -272,10 +272,6 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li class="{{ Request::is('reporting-configuration/status') ? 'active' : '' }}"><a
                                             href="/reporting-configuration/status">Order Status</a></li>
-                                    <li
-                                        class="{{ Request::is('reporting-configuration/sub-status') ? 'active' : '' }}">
-                                        <a href="/reporting-configuration/sub-status">Order Sub Status</a>
-                                    </li>
                                     <li class="{{ Request::is('reporting-configuration/segments') ? 'active' : '' }}">
                                         <a href="/reporting-configuration/segments">Order Segments</a>
                                     </li>
@@ -497,3 +493,4 @@
 </body>
 
 </html>
+

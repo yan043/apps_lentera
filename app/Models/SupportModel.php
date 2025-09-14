@@ -16,10 +16,12 @@ class SupportModel extends Model
         if (preg_match('/^INC\d+$/', $id))
         {
             $searchType = 'incident';
-        } elseif (preg_match('/^\d{10,}$/', $id))
+        }
+        elseif (preg_match('/^\d{10,}$/', $id))
         {
             $searchType = 'service_no';
-        } else
+        }
+        else
         {
             $searchType = 'order_code';
         }
@@ -56,10 +58,12 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedInsera->where('tsi.incident', $id);
-        } elseif ($searchType == 'service_no')
+        }
+        elseif ($searchType == 'service_no')
         {
             $assignedInsera->where('tsi.service_no', $id);
-        } else
+        }
+        else
         {
             $assignedInsera->where('tao.order_code', $id);
         }
@@ -96,10 +100,12 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedManual->where('tsm.incident', $id);
-        } elseif ($searchType == 'service_no')
+        }
+        elseif ($searchType == 'service_no')
         {
             $assignedManual->where('tsm.service_no', $id);
-        } else
+        }
+        else
         {
             $assignedManual->where('tao.order_code', $id);
         }
@@ -135,10 +141,12 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $assignedBima->where('tbm.c_wonum', $id);
-        } elseif ($searchType == 'service_no')
+        }
+        elseif ($searchType == 'service_no')
         {
             $assignedBima->where('tbm.c_servicenum', $id);
-        } else
+        }
+        else
         {
             $assignedBima->where('tao.order_code', $id);
         }
@@ -169,10 +177,12 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newInsera->where('tsi.incident', $id);
-        } elseif ($searchType == 'service_no')
+        }
+        elseif ($searchType == 'service_no')
         {
             $newInsera->where('tsi.service_no', $id);
-        } else
+        }
+        else
         {
             $newInsera->where('tsi.incident', $id);
         }
@@ -203,10 +213,12 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newManual->where('tsm.incident', $id);
-        } elseif ($searchType == 'service_no')
+        }
+        elseif ($searchType == 'service_no')
         {
             $newManual->where('tsm.service_no', $id);
-        } else
+        }
+        else
         {
             $newManual->where('tsm.incident', $id);
         }
@@ -237,10 +249,12 @@ class SupportModel extends Model
         if ($searchType == 'incident')
         {
             $newBima->where('tbm.c_wonum', $id);
-        } elseif ($searchType == 'service_no')
+        }
+        elseif ($searchType == 'service_no')
         {
             $newBima->where('tbm.c_servicenum', $id);
-        } else
+        }
+        else
         {
             $newBima->where('tbm.c_wonum', $id);
         }
@@ -265,7 +279,7 @@ class SupportModel extends Model
     {
         $data = DB::table('tb_assign_orders AS tao')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_status AS tos', 'tar.order_status_id', '=', 'tos.id')
             ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
             ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
@@ -297,7 +311,7 @@ class SupportModel extends Model
     {
         $data = DB::table('tb_assign_orders AS tao')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
+            ->leftJoin('tb_order_status AS tos', 'tar.order_status_id', '=', 'tos.id')
             ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
             ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
@@ -326,8 +340,7 @@ class SupportModel extends Model
         $inseraQuery = DB::table('tb_assign_orders AS tao')
             ->leftJoin('tb_source_insera AS tsi', 'tao.order_id', '=', 'tsi.incident_id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
-            ->leftJoin('tb_order_status AS tst', 'tos.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
             ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
@@ -349,15 +362,13 @@ class SupportModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tos.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tos.name AS order_substatus_name',
-                'tos.previous_step AS order_substatus_previous_step',
-                'tos.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
+                'tst.status_description AS order_status_description',
 
                 'tar.order_segment_id',
                 'tseg.name AS order_segment_name',
@@ -377,8 +388,7 @@ class SupportModel extends Model
         $manualQuery = DB::table('tb_assign_orders AS tao')
             ->leftJoin('tb_source_manuals AS tsm', 'tao.order_id', '=', 'tsm.incident_id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
-            ->leftJoin('tb_order_status AS tst', 'tos.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
             ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
@@ -400,15 +410,13 @@ class SupportModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tos.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tos.name AS order_substatus_name',
-                'tos.previous_step AS order_substatus_previous_step',
-                'tos.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
+                'tst.status_description AS order_status_description',
 
                 'tar.order_segment_id',
                 'tseg.name AS order_segment_name',
@@ -428,8 +436,7 @@ class SupportModel extends Model
         $bimaQuery = DB::table('tb_assign_orders AS tao')
             ->leftJoin('tb_source_bima AS tbm', 'tao.order_id', '=', 'tbm.c_wonum_id')
             ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
-            ->leftJoin('tb_order_sub_status AS tos', 'tar.order_substatus_id', '=', 'tos.id')
-            ->leftJoin('tb_order_status AS tst', 'tos.order_status_id', '=', 'tst.id')
+            ->leftJoin('tb_order_status AS tst', 'tar.order_status_id', '=', 'tst.id')
             ->leftJoin('tb_order_segment AS tseg', 'tar.order_segment_id', '=', 'tseg.id')
             ->leftJoin('tb_order_action AS toa', 'tar.order_action_id', '=', 'toa.id')
             ->leftJoin('tb_team AS tt', 'tao.team_id', '=', 'tt.id')
@@ -451,15 +458,13 @@ class SupportModel extends Model
                 'tt.name AS team_name',
                 'tsa.name AS service_area_name',
 
-                'tos.order_status_id',
+                'tar.order_status_id',
+                'tst.previous_step AS order_status_previous_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
-                'tst.step AS order_status_step',
-                'tst.after_step AS order_status_after_step',
-
-                'tar.order_substatus_id',
-                'tos.name AS order_substatus_name',
-                'tos.previous_step AS order_substatus_previous_step',
-                'tos.next_step AS order_substatus_next_step',
+                'tst.status_code AS order_status_code',
+                'tst.status_group AS order_status_group',
+                'tst.status_description AS order_status_description',
 
                 'tar.order_segment_id',
                 'tseg.name AS order_segment_name',
@@ -479,13 +484,16 @@ class SupportModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
-        } elseif ($sourcedata == 'manual')
+        }
+        elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
-        } elseif ($sourcedata == 'bima')
+        }
+        elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
-        } else
+        }
+        else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');

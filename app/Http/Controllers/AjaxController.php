@@ -26,30 +26,9 @@ class AjaxController extends Controller
         return response()->json($data);
     }
 
-    public function get_order_status_by_step($id)
+    public function get_order_status_by_step($next_step)
     {
-        $data = OrderModel::get_order_status_by_step($id);
-
-        return response()->json($data);
-    }
-
-    public function get_order_sub_status()
-    {
-        $data = ReportingConfigurationModel::get_order_sub_status();
-
-        return response()->json($data);
-    }
-
-    public function get_order_sub_status_by_id($id)
-    {
-        $data = OrderModel::get_order_sub_status_by_id($id);
-
-        return response()->json($data);
-    }
-
-    public function get_order_sub_status_by_status_id($id)
-    {
-        $data = OrderModel::get_order_sub_status_by_status_id($id);
+        $data = OrderModel::get_order_status_by_step($next_step);
 
         return response()->json($data);
     }
@@ -356,9 +335,9 @@ class AjaxController extends Controller
         }
         elseif ($sourcedata == 'bima')
         {
-            $order_substatus_id = $id;
+            $next_step = $id;
 
-            $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_substatus_id)->photo_list);
+            $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $next_step)->photo_list);
         }
         else
         {

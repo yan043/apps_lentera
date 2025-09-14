@@ -19,7 +19,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_status($data['id'], ['name' => $data['name']]);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_status(['name' => $data['name']]);
         }
@@ -34,35 +35,6 @@ class ReportingConfigurationController extends Controller
         return redirect()->back()->with('success', 'Status berhasil dihapus.');
     }
 
-    public function subStatus()
-    {
-        $get_order_status = ReportingConfigurationModel::get_order_status();
-
-        return view('reporting-configuration.sub-status', ['get_order_status' => $get_order_status]);
-    }
-
-    public function storeSubStatus(Request $request)
-    {
-        $data = $request->only(['id', 'order_status_id', 'name']);
-
-        if (isset($data['id']) && $data['id'])
-        {
-            ReportingConfigurationModel::update_order_sub_status($data['id'], $data);
-        } else
-        {
-            ReportingConfigurationModel::insert_order_sub_status($data);
-        }
-
-        return redirect()->back()->with('success', 'Sub-Status berhasil disimpan.');
-    }
-
-    public function destroySubStatus($id)
-    {
-        ReportingConfigurationModel::delete_order_sub_status($id);
-
-        return redirect()->back()->with('success', 'Sub-Status berhasil dihapus.');
-    }
-
     public function segments()
     {
         return view('reporting-configuration.segments');
@@ -75,7 +47,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_segment($data['id'], ['name' => $data['name']]);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_segment(['name' => $data['name']]);
         }
@@ -104,7 +77,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_action($data['id'], $data);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_action($data);
         }
@@ -131,7 +105,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_label($data['id'], ['name' => $data['name']]);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_label(['name' => $data['name']]);
         }
