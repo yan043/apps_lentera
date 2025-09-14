@@ -158,9 +158,19 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div data-simplebar style="max-height: 310px;">
-                            <ul class="verti-timeline list-unstyled" id="logAssignmentList">
-                            </ul>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped text-center text-muted" id="logAssignmentTable">
+                                <thead>
+                                    <tr>
+                                        <th>Assign Date</th>
+                                        <th>Team</th>
+                                        <th>Created By</th>
+                                        <th>Created At</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logAssignmentList">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -494,6 +504,7 @@
         var materialsData = @json($get_inventory_by_order_material ?? []);
         var nteOntData = @json($get_inventory_by_order_nte_ont);
         var nteStbData = @json($get_inventory_by_order_nte_stb);
+        var photos = @json($photos ?? []);
 
         if (!Array.isArray(materialsData)) {
             materialsData = [];
@@ -588,6 +599,18 @@
                         '</div>' +
                         '</div>';
                     $('#photoContainer').append(html);
+
+                    if (photos[type]) {
+                        photos[type].forEach(function(photoUrl) {
+                            var thumb = $('<div class="photo-thumb"></div>');
+                            thumb.append('<img src="' + photoUrl +
+                                '" alt="photo" class="preview-clickable">');
+                            thumb.append(
+                                '<button type="button" class="photo-delete"><i class="fa fa-trash"></i></button>'
+                            );
+                            $('#preview_' + type).append(thumb);
+                        });
+                    }
                 });
             }
 
@@ -1149,7 +1172,11 @@
                 }
 
                 if (!sourcedata || !ajaxId) {
-                    generatePhotoBoxes(defaultPhotos);
+                    var allTypes = new Set(defaultPhotos);
+                    Object.keys(photos).forEach(function(type) {
+                        allTypes.add(type);
+                    });
+                    generatePhotoBoxes(Array.from(allTypes));
                     return;
                 }
 
@@ -1157,10 +1184,18 @@
                     .replace(':sourcedata', sourcedata)
                     .replace(':id', ajaxId),
                     function(photoList) {
-                        generatePhotoBoxes(photoList);
+                        var allTypes = new Set(photoList);
+                        Object.keys(photos).forEach(function(type) {
+                            allTypes.add(type);
+                        });
+                        generatePhotoBoxes(Array.from(allTypes));
                     }
                 ).fail(function() {
-                    generatePhotoBoxes(defaultPhotos);
+                    var allTypes = new Set(defaultPhotos);
+                    Object.keys(photos).forEach(function(type) {
+                        allTypes.add(type);
+                    });
+                    generatePhotoBoxes(Array.from(allTypes));
                 });
             }
 
@@ -1221,34 +1256,25 @@
                         list.empty();
                         if (data.length === 0) {
                             list.append(
-                                '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>No log entries found.</div></div></div></li>'
+                                '<tr><td colspan="3" class="text-center">No log entries found.</td></tr>'
                             );
                             return;
                         }
                         data.forEach(function(item) {
                             var date = new Date(item.created_at).toLocaleString();
-                            var description = 'Assigned to Team: ' + (item.team_name || '-') +
-                                ', By: ' + (item.created_name || '-');
-                            var li = '<li class="event-list">' +
-                                '<div class="event-timeline-dot">' +
-                                '<i class="bx bx-right-arrow-circle font-size-18"></i>' +
-                                '</div>' +
-                                '<div class="d-flex">' +
-                                '<div class="flex-shrink-0 me-3">' +
-                                '<h5 class="font-size-14">' + date +
-                                ' <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>' +
-                                '</div>' +
-                                '<div class="flex-grow-1">' +
-                                '<div>' + description + '</div>' +
-                                '</div>' +
-                                '</div>' +
-                                '</li>';
-                            list.append(li);
+                            var row = '<tr>' +
+                                '<td>' + (item.assign_date || '-') + '</td>' +
+                                '<td>' + (item.team_name || '-') + '</td>' +
+                                '<td>' + (item.created_name || '-') + ' (' + (item.created_by ||
+                                    '-') + ')</td>' +
+                                '<td>' + (item.created_at || '-') + '</td>' +
+                                '</tr>';
+                            list.append(row);
                         });
                     },
                     error: function() {
                         $('#logAssignmentList').html(
-                            '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>Failed to load log.</div></div></div></li>'
+                            '<tr><td colspan="3" class="text-center">Failed to load log.</td></tr>'
                         );
                     }
                 });

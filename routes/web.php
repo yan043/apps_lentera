@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function ()
     {
         Route::get('{id}', [OrderController::class, 'index'])->name('order.index');
         Route::put('{id}', [OrderController::class, 'indexUpdate'])->name('order.index.update');
+        Route::delete('photo/{id}/{filename}', [OrderController::class, 'deletePhoto'])->name('order.photo.delete');
     });
 
     Route::prefix('work-order-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
