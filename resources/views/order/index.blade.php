@@ -689,10 +689,9 @@
                         ontSelect.empty().append(
                             '<option value="" disabled selected>Pilih Tipe ONT</option>');
                         data.forEach(function(item) {
-                            let optionText = item.brand ?
-                                `${item.name} (${item.brand})` : item.name;
                             ontSelect.append(
-                                `<option value="${item.id}">${optionText}</option>`);
+                                `<option value="${item.id}" data-desc="${item.brand || ''}">${item.name}</option>`
+                            );
                         });
                         if (nteOntData && nteOntData.id) {
                             ontSelect.val(nteOntData.id).trigger('change');
@@ -700,6 +699,28 @@
                         } else {
                             $('#serial_number_ont').val('');
                         }
+
+                        function formatOption(option) {
+                            if (!option.id) {
+                                return option.text;
+                            }
+                            var desc = $(option.element).data('desc');
+                            var $option = $(
+                                '<div><span class="option-title">' + option.text +
+                                '</span>' +
+                                '<span class="option-desc">' + desc + '</span></div>'
+                            );
+                            return $option;
+                        }
+
+                        $('#inventory_nte_id_ont').select2('destroy');
+                        $('#inventory_nte_id_ont').select2({
+                            templateResult: formatOption,
+                            dropdownParent: $('#nteModal'),
+                            allowClear: true,
+                            placeholder: "Pilih Tipe ONT",
+                            width: '100%'
+                        });
                     }
                 });
 
@@ -711,10 +732,9 @@
                         stbSelect.empty().append(
                             '<option value="" disabled selected>Pilih Tipe STB</option>');
                         data.forEach(function(item) {
-                            let optionText = item.brand ?
-                                `${item.name} (${item.brand})` : item.name;
                             stbSelect.append(
-                                `<option value="${item.id}">${optionText}</option>`);
+                                `<option value="${item.id}" data-desc="${item.brand || ''}">${item.name}</option>`
+                            );
                         });
                         if (nteStbData && nteStbData.id) {
                             stbSelect.val(nteStbData.id).trigger('change');
@@ -722,6 +742,28 @@
                         } else {
                             $('#serial_number_stb').val('');
                         }
+
+                        function formatOption(option) {
+                            if (!option.id) {
+                                return option.text;
+                            }
+                            var desc = $(option.element).data('desc');
+                            var $option = $(
+                                '<div><span class="option-title">' + option.text +
+                                '</span>' +
+                                '<span class="option-desc">' + desc + '</span></div>'
+                            );
+                            return $option;
+                        }
+
+                        $('#inventory_nte_id_stb').select2('destroy');
+                        $('#inventory_nte_id_stb').select2({
+                            templateResult: formatOption,
+                            dropdownParent: $('#nteModal'),
+                            allowClear: true,
+                            placeholder: "Pilih Tipe STB",
+                            width: '100%'
+                        });
                     }
                 });
             });
@@ -736,10 +778,31 @@
                             '<option value="" disabled selected>Pilih Jenis Material</option>'
                         );
                         data.forEach(function(item) {
-                            let optionText = item.designator_desc ?
-                                `${item.name} (${item.designator_desc})` : item.name;
                             materialSelect.append(
-                                `<option value="${item.id}">${optionText}</option>`);
+                                `<option value="${item.id}" data-desc="${item.designator_desc || ''}">${item.name}</option>`
+                            );
+                        });
+
+                        function formatOption(option) {
+                            if (!option.id) {
+                                return option.text;
+                            }
+                            var desc = $(option.element).data('desc');
+                            var $option = $(
+                                '<div><span class="option-title">' + option.text +
+                                '</span>' +
+                                '<span class="option-desc">' + desc + '</span></div>'
+                            );
+                            return $option;
+                        }
+
+                        $('#inventory_material_id').select2('destroy');
+                        $('#inventory_material_id').select2({
+                            templateResult: formatOption,
+                            dropdownParent: $('#materialModal'),
+                            allowClear: true,
+                            placeholder: "Pilih Jenis Material",
+                            width: '100%'
                         });
                     }
                 });
