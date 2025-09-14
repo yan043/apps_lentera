@@ -84,6 +84,13 @@
             font-size: 0.85em;
             color: #666;
         }
+
+        .bs-modal-history-log-order .modal-body,
+        .bs-modal-history-log-assignment .modal-body,
+        #materialModal .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
     </style>
 @endsection
 
