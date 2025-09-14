@@ -617,7 +617,15 @@
 
                     $('#order_status_id').select2({
                         templateResult: formatOption,
-                        // templateSelection: formatOption
+                        allowClear: true,
+                        placeholder: "Pilih Status"
+                    });
+
+                    $('#order_status_id').on('change', function() {
+                        var sourcedata = (orderData.sourcedata || '').toLowerCase();
+                        if (sourcedata === 'bima') {
+                            fetchPhotoList(sourcedata, $(this).val());
+                        }
                     });
                 }
             });
@@ -1031,14 +1039,13 @@
                 $('#photoPreviewModal').modal('show');
             });
 
-            function fetchPhotoList(sourcedata, segmentId) {
-                var defaultPhotos = ['Lokasi_Rumah', 'Kondisi_Dalam_ODP', 'Hasil_Ukur_Power_IN',
-                    'Hasil_Ukur_Power_OUT'
+            function fetchPhotoList(sourcedata, ajaxId) {
+                var defaultPhotos = [
+                    'Lokasi_Rumah', 'Kondisi_Dalam_ODP', 'Hasil_Ukur_Power_IN', 'Hasil_Ukur_Power_OUT'
                 ];
 
-                var ajaxId = segmentId;
                 if (sourcedata === 'bima') {
-                    ajaxId = orderData.order_status_id || 0;
+                    ajaxId = ajaxId || orderData.order_status_id;
                 }
 
                 if (!sourcedata || !ajaxId) {

@@ -1,3 +1,0 @@
-- [x] Remove sub-status related code from the view JS
-- [x] Update status select2 ajax to use order_status_step instead of order id
-- [x] Adjust log description to remove sub-status reference
