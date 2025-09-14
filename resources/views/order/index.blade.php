@@ -2,8 +2,24 @@
 
 @section('styles')
     <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
     <link href="/assets/libs/leaflet/leaflet.css" rel="stylesheet" type="text/css" />
     <style>
+        .detail-data-table th,
+        .detail-data-table td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+            font-size: 12px !important;
+        }
+
+        .detail-data-table tr {
+            height: 22px
+        }
+
         #materialModal .row {
             align-items: end;
         }
@@ -112,9 +128,21 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div data-simplebar style="max-height: 310px;">
-                            <ul class="verti-timeline list-unstyled" id="logOrderList">
-                            </ul>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped text-center text-muted" id="logOrderTable">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Segment</th>
+                                        <th>Action</th>
+                                        <th>Notes</th>
+                                        <th>Created By</th>
+                                        <th>Created At</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logOrderList">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -457,6 +485,9 @@
 
 @section('scripts')
     <script src="/assets/libs/select2/js/select2.min.js"></script>
+    <script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/assets/libs/leaflet/leaflet.js"></script>
     <script>
         var orderData = @json($data);
@@ -1156,37 +1187,26 @@
                         list.empty();
                         if (data.length === 0) {
                             list.append(
-                                '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>No log entries found.</div></div></div></li>'
+                                '<tr><td colspan="6" class="text-center">No log entries found.</td></tr>'
                             );
                             return;
                         }
                         data.forEach(function(item) {
-                            var date = new Date(item.created_at).toLocaleString();
-                            var description = 'Status: ' + (item.order_status_name || '-') +
-                                ', Segment: ' + (item.order_segment_name || '-') +
-                                ', Action: ' + (item.order_action_name || '-') +
-                                ', Notes: ' + (item.report_notes || '-') +
-                                ', By: ' + (item.created_name || '-');
-                            var li = '<li class="event-list">' +
-                                '<div class="event-timeline-dot">' +
-                                '<i class="bx bx-right-arrow-circle font-size-18"></i>' +
-                                '</div>' +
-                                '<div class="d-flex">' +
-                                '<div class="flex-shrink-0 me-3">' +
-                                '<h5 class="font-size-14">' + date +
-                                ' <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>' +
-                                '</div>' +
-                                '<div class="flex-grow-1">' +
-                                '<div>' + description + '</div>' +
-                                '</div>' +
-                                '</div>' +
-                                '</li>';
-                            list.append(li);
+                            var row = '<tr>' +
+                                '<td>' + (item.order_status_name || '-') + '</td>' +
+                                '<td>' + (item.order_segment_name || '-') + '</td>' +
+                                '<td>' + (item.order_action_name || '-') + '</td>' +
+                                '<td>' + (item.report_notes || '-') + '</td>' +
+                                '<td>' + (item.created_name || '-') + ' (' + (item.created_by ||
+                                    '-') + ')</td>' +
+                                '<td>' + item.created_at + '</td>' +
+                                '</tr>';
+                            list.append(row);
                         });
                     },
                     error: function() {
                         $('#logOrderList').html(
-                            '<li class="event-list"><div class="d-flex"><div class="flex-grow-1"><div>Failed to load log.</div></div></div></li>'
+                            '<tr><td colspan="6" class="text-center">Failed to load log.</td></tr>'
                         );
                     }
                 });
