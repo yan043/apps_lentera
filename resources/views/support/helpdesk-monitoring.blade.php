@@ -163,7 +163,7 @@
                                 <tr>
                                     <th rowspan="2">TEAM</th>
                                     <th rowspan="2">ORDER</th>
-                                    <th colspan="6">STATUS</th>
+                                    <th colspan="6">GROUP STATUS</th>
                                     <th rowspan="2">TOTAL</th>
                                 </tr>
                                 <tr>
@@ -220,7 +220,44 @@
                                                     }
                                                 @endphp
                                                 <span class="badge-status {{ $badgeClass }} mb-1 d-inline-block"
-                                                    style="min-width:60px;">
+                                                    data-bs-toggle="popover" data-bs-placement="auto"
+                                                    data-bs-content="
+                                                        <div style='position: relative;'>
+                                                            <div class='tabl-responsive'>
+                                                                <table class='table table-sm text-center text-muted' style='font-size: 12px'>
+                                                                    <tr>
+                                                                        <th>Order Code</th>
+                                                                        <td>:</td>
+                                                                        <td>{{ $order->order_code }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Order Status</th>
+                                                                        <td>:</td>
+                                                                        <td>{{ $order->order_status_name }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Order Segment</th>
+                                                                        <td>:</td>
+                                                                        <td>{{ $order->order_segment_name }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Order Action</th>
+                                                                        <td>:</td>
+                                                                        <td>{{ $order->order_action_name }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Notes</th>
+                                                                        <td>:</td>
+                                                                        <td>{{ $order->report_notes }}</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                            <div class='d-flex justify-content-between align-items-center'>
+                                                                <a href='/order/{{ $order->id }}' class='btn btn-sm btn-primary'> <i class='fas fa-eye'></i> View</a>
+                                                                <button type='button' class='btn btn-sm btn-danger close-popover'> <i class='fas fa-times'></i> Close</button>
+                                                            </div>
+                                                        </div>
+                                                    ">
                                                     {{ $order->order_code }}
                                                 </span>
                                                 <br>
@@ -294,6 +331,33 @@
                 autoclose: true,
                 todayHighlight: true,
             });
+
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+
+            popoverTriggerList.forEach(function(el) {
+                new bootstrap.Popover(el, {
+                    container: 'body',
+                    trigger: 'click',
+                    placement: 'auto',
+                    fallbackPlacements: ['top', 'bottom', 'left', 'right'],
+                    html: true,
+                    sanitize: false
+                });
+            });
+
+            document.addEventListener("click", function(e) {
+                if (e.target.classList.contains("close-popover")) {
+                    let popoverEl = e.target.closest(".popover");
+                    if (popoverEl) {
+                        let id = popoverEl.getAttribute("id");
+                        let triggerEl = document.querySelector(`[aria-describedby='${id}']`);
+                        if (triggerEl) {
+                            bootstrap.Popover.getInstance(triggerEl).hide();
+                        }
+                    }
+                }
+            });
         });
     </script>
 @endsection
+

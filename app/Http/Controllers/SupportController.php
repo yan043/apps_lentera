@@ -27,24 +27,29 @@ class SupportController extends Controller
             {
                 foreach ($team as $order)
                 {
-                    $status = $order->order_status_name ?? 'READY';
+                    $status_group = $order->order_status_group ?? 'READY';
 
-                    if ($status === null || $status === 'READY')
+                    if ($status_group === null || $status_group === 'READY')
                     {
                         $summary['READY']++;
-                    } elseif ($status === 'ON-PROGRESS')
+                    }
+                    elseif ($status_group === 'ON-PROGRESS')
                     {
                         $summary['ON-PROGRESS']++;
-                    } elseif ($status === 'CUST-ISSUE')
+                    }
+                    elseif ($status_group === 'CUST-ISSUE')
                     {
                         $summary['CUST-ISSUE']++;
-                    } elseif ($status === 'TECH-ISSUE')
+                    }
+                    elseif ($status_group === 'TECH-ISSUE')
                     {
                         $summary['TECH-ISSUE']++;
-                    } elseif ($status === 'OTHER-ISSUE')
+                    }
+                    elseif ($status_group === 'OTHER-ISSUE')
                     {
                         $summary['OTHER-ISSUE']++;
-                    } elseif ($status === 'DONE')
+                    }
+                    elseif ($status_group === 'DONE')
                     {
                         $summary['DONE']++;
                     }
