@@ -117,8 +117,8 @@ Route::middleware(['auth'])->group(function ()
         Route::get('service-area/destroy/{id}', [OrganizationStructureController::class, 'destroyServiceArea'])->name('organization-structure.service-area.destroy');
 
         Route::get('work-zone', [OrganizationStructureController::class, 'workZone'])->name('organization-structure.work-zone');
-        Route::post('work-zone/store', [OrganizationStructureController::class, 'storeworkZone'])->name('organization-structure.work-zone.store');
-        Route::get('work-zone/destroy/{id}', [OrganizationStructureController::class, 'destroyworkZone'])->name('organization-structure.work-zone.destroy');
+        Route::post('work-zone/store', [OrganizationStructureController::class, 'storeWorkZone'])->name('organization-structure.work-zone.store');
+        Route::get('work-zone/destroy/{id}', [OrganizationStructureController::class, 'destroyWorkZone'])->name('organization-structure.work-zone.destroy');
 
         Route::get('team', [OrganizationStructureController::class, 'team'])->name('organization-structure.team');
         Route::post('team/store', [OrganizationStructureController::class, 'storeTeam'])->name('organization-structure.team.store');

@@ -151,7 +151,6 @@ class OrganizationStructureModel extends Model
                 'tw.id AS witel_id',
                 'tw.name AS witel_name'
             )
-            ->where('ta.witel_id', Session()->get('witel_id'))
             ->get();
     }
 
@@ -170,10 +169,7 @@ class OrganizationStructureModel extends Model
                 'tw.id AS witel_id',
                 'tw.name AS witel_name'
             )
-            ->where([
-                'wz.id'       => $id,
-                'ta.witel_id' => Session()->get('witel_id'),
-            ])
+            ->where('wz.id', $id)
             ->first();
     }
 

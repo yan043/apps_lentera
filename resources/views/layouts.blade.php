@@ -247,7 +247,7 @@
                                             href="/organization-structure/mitra">Mitra</a></li>
                                     <li
                                         class="{{ Request::is('organization-structure/service-area') ? 'active' : '' }}">
-                                        <a href="/organization-structure/service-area">Service Area</a>
+                                        <a href="/organization-structure/service-area">Service-Area</a>
                                     </li>
                                     <li class="{{ Request::is('organization-structure/work-zone') ? 'active' : '' }}">
                                         <a href="/organization-structure/work-zone">Work Zone</a>
@@ -486,3 +486,4 @@
 </body>
 
 </html>
+
