@@ -445,7 +445,6 @@
 
             let newOrderDetailsTable = $('#newOrderDetailsTable').DataTable({
                 processing: true,
-                serverSide: false,
                 ajax: {
                     url: '/ajax/work-order-management/new/details',
                     type: 'GET',

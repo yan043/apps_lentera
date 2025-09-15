@@ -32,24 +32,19 @@ class SupportController extends Controller
                     if ($status_group === null || $status_group === 'READY')
                     {
                         $summary['READY']++;
-                    }
-                    elseif ($status_group === 'ON-PROGRESS')
+                    } elseif ($status_group === 'ON-PROGRESS')
                     {
                         $summary['ON-PROGRESS']++;
-                    }
-                    elseif ($status_group === 'CUST-ISSUE')
+                    } elseif ($status_group === 'CUST-ISSUE')
                     {
                         $summary['CUST-ISSUE']++;
-                    }
-                    elseif ($status_group === 'TECH-ISSUE')
+                    } elseif ($status_group === 'TECH-ISSUE')
                     {
                         $summary['TECH-ISSUE']++;
-                    }
-                    elseif ($status_group === 'OTHER-ISSUE')
+                    } elseif ($status_group === 'OTHER-ISSUE')
                     {
                         $summary['OTHER-ISSUE']++;
-                    }
-                    elseif ($status_group === 'DONE')
+                    } elseif ($status_group === 'DONE')
                     {
                         $summary['DONE']++;
                     }

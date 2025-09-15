@@ -27,7 +27,14 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Previous Step</th>
+                            <th class="text-center">Next Step</th>
+                            <th class="text-center">Status Code</th>
+                            <th class="text-center">Status Group</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Photo List</th>
+                            <th class="text-center">Active</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -39,7 +46,7 @@
     </div>
 
     <div class="modal fade" id="modal-add" tabindex="-1" aria-labelledby="modal-add-label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-add-label">Add Status</h5>
@@ -48,9 +55,51 @@
                 <div class="modal-body">
                     <form action="/reporting-configuration/status/store" method="POST">
                         @csrf
-                        <div class="mb-3">
-                            <label class="form-label">Status Name</label>
-                            <input type="text" class="form-control" name="name" required>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Status Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Previous Step</label>
+                                <input type="text" class="form-control" name="previous_step">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Next Step</label>
+                                <input type="text" class="form-control" name="next_step">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Status Code</label>
+                                <input type="text" class="form-control" name="status_code">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Status Group</label>
+                                <select class="form-control select2" name="status_group">
+                                    <option value="" disabled>Select Status Group</option>
+                                    <option value="READY">READY</option>
+                                    <option value="ON-PROGRESS">ON-PROGRESS</option>
+                                    <option value="CUST-ISSUE">CUST-ISSUE</option>
+                                    <option value="TECH-ISSUE">TECH-ISSUE</option>
+                                    <option value="OTHER-ISSUE">OTHER-ISSUE</option>
+                                    <option value="DONE">DONE</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Is Active</label>
+                                <select class="form-control select2" name="is_active">
+                                    <option value="" disabled>Select Status</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="status_description" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Photo List (JSON format)</label>
+                                <textarea class="form-control" name="photo_list" rows="3" placeholder='["photo1","photo2"]'></textarea>
+                            </div>
                         </div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">
@@ -72,10 +121,26 @@
     <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $(".select2").select2({
+                allowClear: true
+            });
+
+            $('#modal-add').on('shown.bs.modal', function() {
+                $(this).find('.select2').select2({
+                    dropdownParent: $(this),
+                    allowClear: true
+                });
+            });
+
+            $(document).on('shown.bs.modal', '[id^="modal-edit-"]', function() {
+                $(this).find('.select2').select2({
+                    dropdownParent: $(this),
+                    allowClear: true
+                });
+            });
+
             let table = $(".detail-data-table").DataTable({
-                responsive: true,
                 processing: true,
-                serverSide: false,
                 ajax: {
                     url: '/ajax/reporting-configuration/status',
                     dataSrc: ''
@@ -85,6 +150,30 @@
                     },
                     {
                         data: 'name'
+                    },
+                    {
+                        data: 'previous_step'
+                    },
+                    {
+                        data: 'next_step'
+                    },
+                    {
+                        data: 'status_code'
+                    },
+                    {
+                        data: 'status_group'
+                    },
+                    {
+                        data: 'status_description'
+                    },
+                    {
+                        data: 'photo_list'
+                    },
+                    {
+                        data: 'is_active',
+                        render: function(data) {
+                            return data == 1 ? 'Active' : 'Inactive';
+                        }
                     },
                     {
                         data: 'id',
@@ -107,7 +196,7 @@
         function generateEditModal(data) {
             let modal = `
             <div class="modal fade" id="modal-edit-${data.id}" tabindex="-1" aria-labelledby="modal-edit-label-${data.id}" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modal-edit-label-${data.id}">Edit Status</h5>
@@ -117,9 +206,51 @@
                             <form action="/reporting-configuration/status/store" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" value="${data.id}">
-                                <div class="mb-3">
-                                    <label class="form-label">Status Name</label>
-                                    <input type="text" class="form-control" name="name" required value="${data.name}">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Status Name</label>
+                                        <input type="text" class="form-control" name="name" required value="${data.name || ''}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Previous Step</label>
+                                        <input type="text" class="form-control" name="previous_step" value="${data.previous_step || ''}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Next Step</label>
+                                        <input type="text" class="form-control" name="next_step" value="${data.next_step || ''}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Status Code</label>
+                                        <input type="text" class="form-control" name="status_code" value="${data.status_code || ''}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Status Group</label>
+                                        <select class="form-control select2" name="status_group">
+                                            <option value="" disabled>Select Status Group</option>
+                                            <option value="READY" ${data.status_group == 'READY' ? 'selected' : ''}>READY</option>
+                                            <option value="ON-PROGRESS" ${data.status_group == 'ON-PROGRESS' ? 'selected' : ''}>ON-PROGRESS</option>
+                                            <option value="CUST-ISSUE" ${data.status_group == 'CUST-ISSUE' ? 'selected' : ''}>CUST-ISSUE</option>
+                                            <option value="TECH-ISSUE" ${data.status_group == 'TECH-ISSUE' ? 'selected' : ''}>TECH-ISSUE</option>
+                                            <option value="OTHER-ISSUE" ${data.status_group == 'OTHER-ISSUE' ? 'selected' : ''}>OTHER-ISSUE</option>
+                                            <option value="DONE" ${data.status_group == 'DONE' ? 'selected' : ''}>DONE</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Is Active</label>
+                                        <select class="form-control select2" name="is_active">
+                                            <option value="" disabled>Select Status</option>
+                                            <option value="1" ${data.is_active == 1 ? 'selected' : ''}>Active</option>
+                                            <option value="0" ${data.is_active == 0 ? 'selected' : ''}>Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="status_description" rows="3">${data.status_description || ''}</textarea>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label">Photo List (JSON format)</label>
+                                        <textarea class="form-control" name="photo_list" rows="3" placeholder='["photo1","photo2"]'>${data.photo_list || ''}</textarea>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">

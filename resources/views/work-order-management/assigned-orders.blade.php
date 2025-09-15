@@ -245,7 +245,6 @@
 
             let table = $('#assignedOrdersTable').DataTable({
                 processing: true,
-                serverSide: false,
                 ajax: {
                     url: '/ajax/work-order-management/assigned/details',
                     type: 'GET',

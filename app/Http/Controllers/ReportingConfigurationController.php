@@ -14,14 +14,14 @@ class ReportingConfigurationController extends Controller
 
     public function storeStatus(Request $request)
     {
-        $data = $request->only(['id', 'name']);
+        $data = $request->only(['id', 'name', 'previous_step', 'next_step', 'status_code', 'status_group', 'status_description', 'photo_list', 'is_active']);
 
         if (isset($data['id']) && $data['id'])
         {
-            ReportingConfigurationModel::update_order_status($data['id'], ['name' => $data['name']]);
+            ReportingConfigurationModel::update_order_status($data['id'], $data);
         } else
         {
-            ReportingConfigurationModel::insert_order_status(['name' => $data['name']]);
+            ReportingConfigurationModel::insert_order_status($data);
         }
 
         return redirect()->back()->with('success', 'Status berhasil disimpan.');
@@ -41,14 +41,14 @@ class ReportingConfigurationController extends Controller
 
     public function storeSegment(Request $request)
     {
-        $data = $request->only(['id', 'name']);
+        $data = $request->only(['id', 'name', 'photo_list']);
 
         if (isset($data['id']) && $data['id'])
         {
-            ReportingConfigurationModel::update_order_segment($data['id'], ['name' => $data['name']]);
+            ReportingConfigurationModel::update_order_segment($data['id'], $data);
         } else
         {
-            ReportingConfigurationModel::insert_order_segment(['name' => $data['name']]);
+            ReportingConfigurationModel::insert_order_segment($data);
         }
 
         return redirect()->back()->with('success', 'Segment berhasil disimpan.');

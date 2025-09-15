@@ -28,6 +28,7 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th class="text-center">Segment</th>
+                            <th class="text-center">Photo List</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -52,6 +53,10 @@
                             <label class="form-label">Segment Name</label>
                             <input type="text" class="form-control" name="name" required>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Photo List (JSON format)</label>
+                            <textarea class="form-control" name="photo_list" rows="3" placeholder='["photo1","photo2"]'></textarea>
+                        </div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i>&nbsp; Save
@@ -73,9 +78,7 @@
     <script>
         $(document).ready(function() {
             let table = $(".detail-data-table").DataTable({
-                responsive: true,
                 processing: true,
-                serverSide: false,
                 ajax: {
                     url: '/ajax/reporting-configuration/segments',
                     dataSrc: ''
@@ -85,6 +88,9 @@
                     },
                     {
                         data: 'name'
+                    },
+                    {
+                        data: 'photo_list'
                     },
                     {
                         data: 'id',
@@ -119,7 +125,11 @@
                                 <input type="hidden" name="id" value="${data.id}">
                                 <div class="mb-3">
                                     <label class="form-label">Segment Name</label>
-                                    <input type="text" class="form-control" name="name" required value="${data.name}">
+                                    <input type="text" class="form-control" name="name" required value="${data.name || ''}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Photo List (JSON format)</label>
+                                    <textarea class="form-control" name="photo_list" rows="3" placeholder='["photo1","photo2"]'>${data.photo_list || ''}</textarea>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">

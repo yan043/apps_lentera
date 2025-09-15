@@ -100,9 +100,7 @@
     <script>
         $(document).ready(function() {
             let table = $(".detail-data-table").DataTable({
-                responsive: true,
                 processing: true,
-                serverSide: false,
                 ajax: {
                     url: '/ajax/organization-structure/sub-group',
                     dataSrc: ''
