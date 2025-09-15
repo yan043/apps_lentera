@@ -174,6 +174,7 @@
             <form id="assign-form" action="{{ route('work-order-management.updateOrInsertOrder') }}" method="POST"
                 class="modal-content">
                 @csrf
+                <input type="hidden" name="id" value="new">
                 <input type="hidden" name="source_data" id="source_data">
                 <input type="hidden" name="order_id" id="order_id">
                 <input type="hidden" name="order_code" id="order_code">

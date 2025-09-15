@@ -89,7 +89,7 @@
                         <tr>
                             <th style="width: 3%;">No</th>
                             <th style="width: 10%;">Order Code</th>
-                            <th style="width: 15%;">Service NO</th>
+                            <th style="width: 15%;">Service No</th>
                             <th style="width: 12%;">Assign Date</th>
                             <th style="width: 15%;">Service Area</th>
                             <th style="width: 15%;">Team</th>

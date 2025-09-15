@@ -117,13 +117,6 @@
                                             href="/work-order-management/new">New Orders</a></li>
                                     <li class="{{ Request::is('work-order-management/assigned') ? 'active' : '' }}"><a
                                             href="/work-order-management/assigned">Assigned Orders</a></li>
-                                    <li class="{{ Request::is('work-order-management/in-progress') ? 'active' : '' }}">
-                                        <a href="/work-order-management/in-progress">In Progress</a>
-                                    </li>
-                                    <li class="{{ Request::is('work-order-management/completed') ? 'active' : '' }}"><a
-                                            href="/work-order-management/completed">Completed Orders</a></li>
-                                    <li class="{{ Request::is('work-order-management/cancelled') ? 'active' : '' }}"><a
-                                            href="/work-order-management/cancelled">Cancelled Orders</a></li>
                                 </ul>
                             </li>
                             <li class="{{ Request::is('support/order-tracking') ? 'active' : '' }}">

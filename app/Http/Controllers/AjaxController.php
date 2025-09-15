@@ -244,8 +244,7 @@ class AjaxController extends Controller
                     ],
                 ],
             ]);
-        }
-        elseif ($type == 'pie')
+        } elseif ($type == 'pie')
         {
             $sla = [
                 '0-2'   => 0,
@@ -325,14 +324,12 @@ class AjaxController extends Controller
             $order_segment_id = $id;
 
             $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             $order_status_id = $id;
 
             $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_status_id)->photo_list);
-        }
-        else
+        } else
         {
             $photo_list = [
                 'Lokasi_Rumah',

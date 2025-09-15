@@ -45,15 +45,6 @@ Route::middleware(['auth'])->group(function ()
 
         Route::get('assigned', [WorkOrderManagementController::class, 'assignedOrders'])->name('work-order-management.assigned');
         Route::get('assigned/details', [WorkOrderManagementController::class, 'assignedOrderDetail'])->name('work-order-management.assigned.detail');
-
-        Route::get('in-progress', [WorkOrderManagementController::class, 'inProgressOrders'])->name('work-order-management.in-progress');
-        Route::get('in-progress/details', [WorkOrderManagementController::class, 'inProgressOrderDetail'])->name('work-order-management.in-progress.detail');
-
-        Route::get('completed', [WorkOrderManagementController::class, 'completedOrders'])->name('work-order-management.completed');
-        Route::get('completed/details', [WorkOrderManagementController::class, 'completedOrderDetail'])->name('work-order-management.completed.detail');
-
-        Route::get('cancelled', [WorkOrderManagementController::class, 'cancelledOrders'])->name('work-order-management.cancelled');
-        Route::get('cancelled/details', [WorkOrderManagementController::class, 'cancelledOrderDetail'])->name('work-order-management.cancelled.detail');
     });
 
     Route::prefix('support')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()

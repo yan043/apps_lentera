@@ -13,8 +13,7 @@ class OrderModel extends Model
         if ($step == 'ALL')
         {
             $data = DB::table('tb_order_status');
-        }
-        else
+        } else
         {
             $data = DB::table('tb_order_status')->where('previous_step', $step);
         }
@@ -55,7 +54,7 @@ class OrderModel extends Model
 
                 'tar.order_status_id',
                 'tst.previous_step AS order_status_previous_step',
-                'tst.next_step AS order_status_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
                 'tst.status_code AS order_status_code',
                 'tst.status_group AS order_status_group',
@@ -108,7 +107,7 @@ class OrderModel extends Model
 
                 'tar.order_status_id',
                 'tst.previous_step AS order_status_previous_step',
-                'tst.next_step AS order_status_step',
+                'tst.next_step AS order_status_next_step',
                 'tst.name AS order_status_name',
                 'tst.status_code AS order_status_code',
                 'tst.status_group AS order_status_group',
@@ -290,17 +289,20 @@ class OrderModel extends Model
             $materials = json_decode($request['materials_data'], true);
             foreach ($materials as $material)
             {
-                DB::table('tb_inventory_material_reports')->updateOrInsert(
-                    [
-                        'assign_order_reports_id' => $request['id'],
-                        'inventory_material_id'   => $material['id'],
-                    ],
-                    [
-                        'qty'        => $material['qty'],
-                        'created_by' => Session::get('nik'),
-                        'created_at' => now(),
-                    ]
-                );
+                if ($material['id'] != null)
+                {
+                    DB::table('tb_inventory_material_reports')->updateOrInsert(
+                        [
+                            'assign_order_reports_id' => $request['id'],
+                            'inventory_material_id'   => $material['id'],
+                        ],
+                        [
+                            'qty'        => $material['qty'],
+                            'created_by' => Session::get('nik'),
+                            'created_at' => now(),
+                        ]
+                    );
+                }
             }
         }
     }
@@ -316,8 +318,7 @@ class OrderModel extends Model
                 ->select('tim.*', 'tmr.qty')
                 ->where('tao.id', $id)
                 ->get();
-        }
-        elseif ($inventory == 'nte')
+        } elseif ($inventory == 'nte')
         {
             if ($type == 'ont')
             {
@@ -329,8 +330,7 @@ class OrderModel extends Model
                     ->where('tao.id', $id)
                     ->where('tin.nte_type', 'ont')
                     ->first();
-            }
-            elseif ($type == 'stb')
+            } elseif ($type == 'stb')
             {
                 return DB::table('tb_assign_orders AS tao')
                     ->leftJoin('tb_assign_order_reports AS tar', 'tao.id', '=', 'tar.assign_order_id')
@@ -349,12 +349,10 @@ class OrderModel extends Model
         if (in_array($sourcedata, ['insera', 'manuals']))
         {
             $photos = DB::table('tb_order_segment')->where('id', $id)->first();
-        }
-        elseif ($sourcedata == 'bima')
+        } elseif ($sourcedata == 'bima')
         {
             $photos = DB::table('tb_order_status')->where('id', $id)->first();
-        }
-        else
+        } else
         {
             $photos = [];
         }

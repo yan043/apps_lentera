@@ -10,13 +10,12 @@ class WorkOrderManagementModel extends Model
 {
     public static function updateOrInsertOrder($data)
     {
-        DB::table('tb_assign_orders')->updateOrInsert(
-            [
-                'order_id' => $data['order_id'],
-            ],
-            [
+        if (array_key_exists($data['id'], $data) == false || $data['id'] == 'new')
+        {
+            $id = DB::table('tb_assign_orders')->insertGetId([
                 'sourcedata'    => $data['source_data'],
                 'order_code'    => $data['order_code'],
+                'order_id'      => $data['order_id'],
                 'team_id'       => $data['team_id'],
                 'team_name'     => $data['team_name'],
                 'assign_date'   => $data['assign_date'],
@@ -24,10 +23,27 @@ class WorkOrderManagementModel extends Model
                 'assign_notes'  => $data['assign_notes'],
                 'created_by'    => Session::get('nik'),
                 'created_at'    => now(),
-                'updated_by'    => Session::get('nik'),
-                'updated_at'    => now(),
-            ]
-        );
+            ]);
+        } else
+        {
+            $id = $data['id'];
+            DB::table('tb_assign_orders')
+                ->where('id', $id)
+                ->update(
+                    [
+                        'sourcedata'    => $data['source_data'],
+                        'order_code'    => $data['order_code'],
+                        'order_id'      => $data['order_id'],
+                        'team_id'       => $data['team_id'],
+                        'team_name'     => $data['team_name'],
+                        'assign_date'   => $data['assign_date'],
+                        'assign_labels' => json_encode($data['assign_labels']),
+                        'assign_notes'  => $data['assign_notes'],
+                        'updated_by'    => Session::get('nik'),
+                        'updated_at'    => now(),
+                    ]
+                );
+        }
 
         DB::table('tb_assign_orders_log')->insert(
             [
@@ -43,6 +59,20 @@ class WorkOrderManagementModel extends Model
                 'created_at'    => now(),
             ]
         );
+
+        $check = DB::table('tb_assign_order_reports')->where('assign_order_id', $id)->first();
+        if ($check != null)
+        {
+            DB::table('tb_assign_order_reports')
+                ->where('assign_order_id', $id)
+                ->update(
+                    [
+                        'order_status_id'  => 0,
+                        'order_segment_id' => 0,
+                        'order_action_id'  => 0,
+                    ]
+                );
+        }
     }
 
     public static function get_new_order_charts($type, $startdate, $enddate)

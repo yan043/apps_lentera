@@ -10,6 +10,7 @@ class WorkOrderManagementController extends Controller
     public function updateOrInsertOrder(Request $request)
     {
         $validateData = $request->validate([
+            'id'            => 'required',
             'source_data'   => 'required',
             'order_code'    => 'required',
             'order_id'      => 'required',
@@ -44,20 +45,5 @@ class WorkOrderManagementController extends Controller
     public function assignedOrders()
     {
         return view('work-order-management.assigned-orders');
-    }
-
-    public function inProgress()
-    {
-        return view('work-order-management.in-progress');
-    }
-
-    public function completedOrders()
-    {
-        return view('work-order-management.completed-orders');
-    }
-
-    public function cancelledOrders()
-    {
-        return view('work-order-management.cancelled-orders');
     }
 }

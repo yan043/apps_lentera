@@ -132,8 +132,8 @@
         <div class="col-md-2">
             <div class="summary-card bg-gradient-externalissue">
                 <div>
-                    <h6 class="mb-1">EXTERNAL-ISSUE</h6>
-                    <h4 class="mb-0">{{ $summary['EXTERNAL-ISSUE'] ?? 0 }}</h4>
+                    <h6 class="mb-1">OTHER-ISSUE</h6>
+                    <h4 class="mb-0">{{ $summary['OTHER-ISSUE'] ?? 0 }}</h4>
                 </div>
                 <div class="icon"><i class="fas fa-network-wired"></i></div>
             </div>
@@ -171,51 +171,51 @@
                                     <th>ON-PROGRESS</th>
                                     <th>CUST-ISSUE</th>
                                     <th>TECH-ISSUE</th>
-                                    <th>EXTERNAL-ISSUE</th>
+                                    <th>OTHER-ISSUE</th>
                                     <th>DONE</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
-                                    $total_status_ready = $total_status_on_progress = $total_status_cust_issue = $total_status_tech_issue = $total_status_external_issue = $total_status_done = $total_order = 0;
+                                    $total_status_ready = $total_status_on_progress = $total_status_cust_issue = $total_status_tech_issue = $total_status_other_issue = $total_status_done = $total_order = 0;
                                 @endphp
                                 @foreach ($t as $team => $list_order)
                                     <tr>
                                         <td>{{ $team }}</td>
                                         <td>
                                             @php
-                                                $amount_status_ready = $amount_status_on_progress = $amount_status_cust_issue = $amount_status_tech_issue = $amount_status_external_issue = $amount_status_done = $amount_order = 0;
+                                                $amount_status_ready = $amount_status_on_progress = $amount_status_cust_issue = $amount_status_tech_issue = $amount_status_other_issue = $amount_status_done = $amount_order = 0;
                                             @endphp
                                             @foreach ($list_order as $order)
                                                 @php
                                                     $amount_order++;
                                                     $badgeClass = 'badge bg-gradient-ready text-black';
-                                                    if ($order->order_status_name == 'ON-PROGRESS') {
+                                                    if ($order->order_status_group == 'ON-PROGRESS') {
                                                         $badgeClass = 'badge bg-gradient-onprogress text-white';
-                                                    } elseif ($order->order_status_name == 'CUST-ISSUE') {
+                                                    } elseif ($order->order_status_group == 'CUST-ISSUE') {
                                                         $badgeClass = 'badge bg-gradient-custissue text-white';
-                                                    } elseif ($order->order_status_name == 'TECH-ISSUE') {
+                                                    } elseif ($order->order_status_group == 'TECH-ISSUE') {
                                                         $badgeClass = 'badge bg-gradient-techissue text-white';
-                                                    } elseif ($order->order_status_name == 'EXTERNAL-ISSUE') {
+                                                    } elseif ($order->order_status_group == 'OTHER-ISSUE') {
                                                         $badgeClass = 'badge bg-gradient-externalissue text-white';
-                                                    } elseif ($order->order_status_name == 'DONE') {
+                                                    } elseif ($order->order_status_group == 'DONE') {
                                                         $badgeClass = 'badge bg-gradient-done text-white';
                                                     }
 
                                                     if (
-                                                        $order->order_status_name == 'READY' ||
-                                                        $order->order_status_name == null
+                                                        $order->order_status_group == 'READY' ||
+                                                        $order->order_status_group == null
                                                     ) {
                                                         $amount_status_ready++;
-                                                    } elseif ($order->order_status_name == 'ON-PROGRESS') {
+                                                    } elseif ($order->order_status_group == 'ON-PROGRESS') {
                                                         $amount_status_on_progress++;
-                                                    } elseif ($order->order_status_name == 'CUST-ISSUE') {
+                                                    } elseif ($order->order_status_group == 'CUST-ISSUE') {
                                                         $amount_status_cust_issue++;
-                                                    } elseif ($order->order_status_name == 'TECH-ISSUE') {
+                                                    } elseif ($order->order_status_group == 'TECH-ISSUE') {
                                                         $amount_status_tech_issue++;
-                                                    } elseif ($order->order_status_name == 'EXTERNAL-ISSUE') {
-                                                        $amount_status_external_issue++;
-                                                    } elseif ($order->order_status_name == 'DONE') {
+                                                    } elseif ($order->order_status_group == 'OTHER-ISSUE') {
+                                                        $amount_status_other_issue++;
+                                                    } elseif ($order->order_status_group == 'DONE') {
                                                         $amount_status_done++;
                                                     }
                                                 @endphp
@@ -230,7 +230,7 @@
                                         <td>{{ $amount_status_on_progress }}</td>
                                         <td>{{ $amount_status_cust_issue }}</td>
                                         <td>{{ $amount_status_tech_issue }}</td>
-                                        <td>{{ $amount_status_external_issue }}</td>
+                                        <td>{{ $amount_status_other_issue }}</td>
                                         <td>{{ $amount_status_done }}</td>
                                         <td>{{ $amount_order }}</td>
                                         @php
@@ -238,7 +238,7 @@
                                             $total_status_on_progress += $amount_status_on_progress;
                                             $total_status_cust_issue += $amount_status_cust_issue;
                                             $total_status_tech_issue += $amount_status_tech_issue;
-                                            $total_status_external_issue += $amount_status_external_issue;
+                                            $total_status_other_issue += $amount_status_other_issue;
                                             $total_status_done += $amount_status_done;
                                             $total_order += $amount_order;
                                         @endphp
@@ -252,7 +252,7 @@
                                     <td>{{ $total_status_on_progress }}</td>
                                     <td>{{ $total_status_cust_issue }}</td>
                                     <td>{{ $total_status_tech_issue }}</td>
-                                    <td>{{ $total_status_external_issue }}</td>
+                                    <td>{{ $total_status_other_issue }}</td>
                                     <td>{{ $total_status_done }}</td>
                                     <td>{{ $total_order }}</td>
                                 </tr>

@@ -19,7 +19,7 @@ class SupportController extends Controller
 
         $data = SupportModel::helpdesk_monitoring($service_area_id, $sourcedata, $date);
 
-        $summary = ['READY' => 0, 'ON-PROGRESS' => 0, 'CUST-ISSUE' => 0, 'TECH-ISSUE' => 0, 'EXTERNAL-ISSUE' => 0, 'DONE' => 0];
+        $summary = ['READY' => 0, 'ON-PROGRESS' => 0, 'CUST-ISSUE' => 0, 'TECH-ISSUE' => 0, 'OTHER-ISSUE' => 0, 'DONE' => 0];
 
         foreach ($data as $area)
         {
@@ -41,9 +41,9 @@ class SupportController extends Controller
                     } elseif ($status === 'TECH-ISSUE')
                     {
                         $summary['TECH-ISSUE']++;
-                    } elseif ($status === 'EXTERNAL-ISSUE')
+                    } elseif ($status === 'OTHER-ISSUE')
                     {
-                        $summary['EXTERNAL-ISSUE']++;
+                        $summary['OTHER-ISSUE']++;
                     } elseif ($status === 'DONE')
                     {
                         $summary['DONE']++;

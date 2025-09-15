@@ -102,7 +102,6 @@
         @method('PUT')
         <input type="hidden" name="id" value="{{ $id }}" />
         <input type="hidden" name="sourcedata" id="sourcedata" />
-        <input type="hidden" name="order_status_step" id="order_status_step" />
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
@@ -541,16 +540,14 @@
                     ' / ' + (orderData.workzone || '-'));
 
                 $('#sourcedata').val(orderData.sourcedata);
-                $('#order_status_step').val(orderData.order_status_step || 0);
-                $('#report_phone_number').val(orderData.report_phone_number || orderData.contact_phone || '-');
+                $('#report_phone_number').val(orderData.report_phone_number || orderData.contact_phone);
                 $('#report_coordinates_location').val(orderData.report_coordinates_location || orderData
-                    .customer_coordinate || '-');
-                $('#report_odp_name').val(orderData.report_odp_name || orderData.odp_name || '-');
-                $('#report_odp_coordinates').val(orderData.report_odp_coordinates || orderData.odp_coordinates ||
-                    '-');
-                $('#report_valins_id').val(orderData.report_valins_id || '-');
-                $('#report_refferal_order_code').val(orderData.report_refferal_order_code || '-');
-                $('#report_notes').val(orderData.report_notes || '-');
+                    .customer_coordinate);
+                $('#report_odp_name').val(orderData.report_odp_name || orderData.odp_name);
+                $('#report_odp_coordinates').val(orderData.report_odp_coordinates || orderData.odp_coordinates);
+                $('#report_valins_id').val(orderData.report_valins_id);
+                $('#report_refferal_order_code').val(orderData.report_refferal_order_code);
+                $('#report_notes').val(orderData.report_notes);
 
                 var sourcedata = (orderData.sourcedata || '').toLowerCase();
                 if (sourcedata === 'bima' || sourcedata === 'manuals') {
@@ -1174,9 +1171,7 @@
             });
 
             function fetchPhotoList(sourcedata, ajaxId) {
-                var defaultPhotos = [
-                    'Lokasi_Rumah', 'Kondisi_Dalam_ODP', 'Hasil_Ukur_Power_IN', 'Hasil_Ukur_Power_OUT'
-                ];
+                var defaultPhotos = [];
 
                 if (sourcedata === 'bima') {
                     ajaxId = ajaxId || orderData.order_status_id;
@@ -1293,4 +1288,3 @@
         });
     </script>
 @endsection
-

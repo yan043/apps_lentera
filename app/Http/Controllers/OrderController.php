@@ -15,27 +15,27 @@ class OrderController extends Controller
         $get_inventory_by_order_nte_ont  = OrderModel::get_inventory_by_order($id, 'nte', 'ont');
         $get_inventory_by_order_nte_stb  = OrderModel::get_inventory_by_order($id, 'nte', 'stb');
 
-        $photos = [];
-        $uploadDir = public_path('upload_order_reports/' . $id);
+        $photos    = [];
+        $uploadDir = public_path('upload_order_reports/'.$id);
         if (File::exists($uploadDir))
         {
             $files = File::files($uploadDir);
             foreach ($files as $file)
             {
-                $fileName = $file->getFilename();
+                $fileName       = $file->getFilename();
                 $nameWithoutExt = pathinfo($fileName, PATHINFO_FILENAME);
-                $parts = explode('_', $nameWithoutExt);
+                $parts          = explode('_', $nameWithoutExt);
                 if (count($parts) >= 2)
                 {
                     $fileId = end($parts);
-                    $type = implode('_', array_slice($parts, 0, -1));
+                    $type   = implode('_', array_slice($parts, 0, -1));
                     if ($fileId == $id)
                     {
-                        if (!isset($photos[$type]))
+                        if (! isset($photos[$type]))
                         {
                             $photos[$type] = [];
                         }
-                        $photos[$type][] = '/upload_order_reports/' . $id . '/' . $fileName;
+                        $photos[$type][] = '/upload_order_reports/'.$id.'/'.$fileName;
                     }
                 }
             }
@@ -85,9 +85,9 @@ class OrderController extends Controller
 
         if (! empty($request['photos_data']))
         {
-            $photos = json_decode($request['photos_data'], true);
-            $uploadDir = public_path('upload_order_reports/' . $request['id']);
-            if (!File::exists($uploadDir))
+            $photos    = json_decode($request['photos_data'], true);
+            $uploadDir = public_path('upload_order_reports/'.$request['id']);
+            if (! File::exists($uploadDir))
             {
                 File::makeDirectory($uploadDir, 0755, true);
             }
@@ -97,18 +97,18 @@ class OrderController extends Controller
                 {
                     return strpos($img, 'data:image') === 0;
                 });
-                if (!empty($base64Images))
+                if (! empty($base64Images))
                 {
-                    $imageData = end($base64Images);
-                    $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
-                    $imageData = str_replace('data:image/png;base64,', '', $imageData);
-                    $imageData = str_replace('data:image/jpg;base64,', '', $imageData);
-                    $imageData = str_replace(' ', '+', $imageData);
+                    $imageData   = end($base64Images);
+                    $imageData   = str_replace('data:image/jpeg;base64,', '', $imageData);
+                    $imageData   = str_replace('data:image/png;base64,', '', $imageData);
+                    $imageData   = str_replace('data:image/jpg;base64,', '', $imageData);
+                    $imageData   = str_replace(' ', '+', $imageData);
                     $imageBinary = base64_decode($imageData);
 
-                    $fileName = $type . '_' . $request['id'] . '.jpg';
+                    $fileName = $type.'_'.$request['id'].'.jpg';
 
-                    $filePath = $uploadDir . '/' . $fileName;
+                    $filePath = $uploadDir.'/'.$fileName;
                     file_put_contents($filePath, $imageBinary);
                 }
             }
@@ -116,25 +116,25 @@ class OrderController extends Controller
 
         if (! empty($request['photos_data']))
         {
-            $photos = json_decode($request['photos_data'], true);
+            $photos       = json_decode($request['photos_data'], true);
             $currentTypes = array_keys(array_filter($photos, function ($imgs)
             {
-                return !empty($imgs);
+                return ! empty($imgs);
             }));
-            $uploadDir = public_path('upload_order_reports/' . $request['id']);
+            $uploadDir = public_path('upload_order_reports/'.$request['id']);
             if (File::exists($uploadDir))
             {
                 $files = File::files($uploadDir);
                 foreach ($files as $file)
                 {
-                    $fileName = $file->getFilename();
+                    $fileName       = $file->getFilename();
                     $nameWithoutExt = pathinfo($fileName, PATHINFO_FILENAME);
-                    $parts = explode('_', $nameWithoutExt);
+                    $parts          = explode('_', $nameWithoutExt);
                     if (count($parts) >= 2)
                     {
                         $fileId = end($parts);
-                        $type = implode('_', array_slice($parts, 0, -1));
-                        if ($fileId == $request['id'] && !in_array($type, $currentTypes))
+                        $type   = implode('_', array_slice($parts, 0, -1));
+                        if ($fileId == $request['id'] && ! in_array($type, $currentTypes))
                         {
                             File::delete($file->getPathname());
                         }
