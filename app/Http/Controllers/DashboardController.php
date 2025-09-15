@@ -10,7 +10,7 @@ class DashboardController extends Controller
     {
         if (! Session::get('is_logged_in'))
         {
-            return redirect()->route('login')->withErrors(['login' => 'Harap login terlebih dahulu.']);
+            return redirect()->route('login')->withErrors(['login' => 'Please log in first.']);
         }
 
         return view('dashboard.index');

@@ -19,19 +19,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_regional', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_regional', $data);
         }
 
-        return redirect()->back()->with('success', 'Regional berhasil disimpan.');
+        return redirect()->back()->with('success', 'Regional has been successfully saved.');
     }
 
     public function destroyRegional($id)
     {
         OrganizationStructureModel::delete_data('tb_regional', $id);
 
-        return redirect()->back()->with('success', 'Regional berhasil dihapus.');
+        return redirect()->back()->with('success', 'Regional has been successfully deleted.');
     }
 
     public function witel()
@@ -48,19 +49,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_witel', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_witel', $data);
         }
 
-        return redirect()->back()->with('success', 'Witel berhasil disimpan.');
+        return redirect()->back()->with('success', 'Witel has been successfully saved.');
     }
 
     public function destroyWitel($id)
     {
         OrganizationStructureModel::delete_data('tb_witel', $id);
 
-        return redirect()->back()->with('success', 'Witel berhasil dihapus.');
+        return redirect()->back()->with('success', 'Witel has been successfully deleted.');
     }
 
     public function subUnit()
@@ -77,19 +79,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_sub_unit', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_sub_unit', $data);
         }
 
-        return redirect()->back()->with('success', 'Sub-Unit berhasil disimpan.');
+        return redirect()->back()->with('success', 'Sub-Unit has been successfully saved.');
     }
 
     public function destroySubUnit($id)
     {
         OrganizationStructureModel::delete_data('tb_sub_unit', $id);
 
-        return redirect()->back()->with('success', 'Sub-Unit berhasil dihapus.');
+        return redirect()->back()->with('success', 'Sub-Unit has been successfully deleted.');
     }
 
     public function subGroup()
@@ -104,19 +107,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_sub_group', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_sub_group', $data);
         }
 
-        return redirect()->back()->with('success', 'Sub-Group berhasil dihapus.');
+        return redirect()->back()->with('success', 'Sub-Group has been successfully saved.');
     }
 
     public function destroySubGroup($id)
     {
         OrganizationStructureModel::delete_data('tb_sub_group', $id);
 
-        return redirect()->back()->with('success', 'Sub-Group berhasil dihapus.');
+        return redirect()->back()->with('success', 'Sub-Group has been successfully deleted.');
     }
 
     public function mitra()
@@ -133,19 +137,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_mitra', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_mitra', $data);
         }
 
-        return redirect()->back()->with('success', 'Mitra berhasil disimpan.');
+        return redirect()->back()->with('success', 'Mitra has been successfully saved.');
     }
 
     public function destroyMitra($id)
     {
         OrganizationStructureModel::delete_data('tb_mitra', $id);
 
-        return redirect()->back()->with('success', 'Mitra berhasil dihapus.');
+        return redirect()->back()->with('success', 'Mitra has been successfully deleted.');
     }
 
     public function serviceArea()
@@ -160,19 +165,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_service_area', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_service_area', $data);
         }
 
-        return redirect()->back()->with('success', 'Service Area berhasil disimpan.');
+        return redirect()->back()->with('success', 'Service Area has been successfully saved.');
     }
 
     public function destroyServiceArea($id)
     {
         OrganizationStructureModel::delete_data('tb_service_area', $id);
 
-        return redirect()->back()->with('success', 'Service Area berhasil dihapus.');
+        return redirect()->back()->with('success', 'Service Area has been successfully deleted.');
     }
 
     public function workZone()
@@ -189,19 +195,20 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_work_zone', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_work_zone', $data);
         }
 
-        return redirect()->back()->with('success', 'Work Zone berhasil disimpan.');
+        return redirect()->back()->with('success', 'Work Zone has been successfully saved.');
     }
 
     public function destroyWorkZone($id)
     {
         OrganizationStructureModel::delete_data('tb_work_zone', $id);
 
-        return redirect()->back()->with('success', 'Work Zone berhasil dihapus.');
+        return redirect()->back()->with('success', 'Work Zone has been successfully deleted.');
     }
 
     public function team()
@@ -216,18 +223,19 @@ class OrganizationStructureController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             OrganizationStructureModel::update_data('tb_team', $data['id'], $data);
-        } else
+        }
+        else
         {
             OrganizationStructureModel::insert_data('tb_team', $data);
         }
 
-        return redirect()->back()->with('success', 'Team berhasil disimpan.');
+        return redirect()->back()->with('success', 'Team has been successfully saved.');
     }
 
     public function destroyTeam($id)
     {
         OrganizationStructureModel::delete_data('tb_team', $id);
 
-        return redirect()->back()->with('success', 'Team berhasil dihapus.');
+        return redirect()->back()->with('success', 'Team has been successfully deleted.');
     }
 }

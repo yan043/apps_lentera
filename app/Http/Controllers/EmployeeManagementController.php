@@ -43,7 +43,7 @@ class EmployeeManagementController extends Controller
 
         EmployeeManagementModel::storeEmployee($validatedData);
 
-        return redirect()->back()->with('success', 'Employee berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Employee has been successfully added.');
     }
 
     public function updateEmployee(Request $request, $id)
@@ -67,7 +67,7 @@ class EmployeeManagementController extends Controller
 
         EmployeeManagementModel::updateEmployee($id, $validatedData);
 
-        return redirect()->back()->with('success', 'Employee berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Employee has been successfully updated.');
     }
 
     public function storeRole(Request $request)
@@ -78,7 +78,7 @@ class EmployeeManagementController extends Controller
 
         EmployeeManagementModel::storeRole($validatedData);
 
-        return redirect()->back()->with('success', 'Role berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Role has been successfully added.');
     }
 
     public function updateRole(Request $request)
@@ -90,6 +90,6 @@ class EmployeeManagementController extends Controller
 
         EmployeeManagementModel::updateRole($validatedData);
 
-        return redirect()->back()->with('success', 'Role berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Role has been successfully updated.');
     }
 }

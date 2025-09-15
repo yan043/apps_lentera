@@ -25,7 +25,7 @@ class AuthController extends Controller
             'password' => 'required|string',
             'captcha'  => 'required|captcha',
         ], [
-            'captcha.captcha' => 'Captcha yang dimasukkan salah.',
+            'captcha.captcha' => 'The entered captcha is incorrect.',
         ]);
 
         $user = AuthModel::identity($request->nik);
@@ -34,7 +34,7 @@ class AuthController extends Controller
         {
             if ($user->is_active == 0)
             {
-                return back()->withErrors(['login' => 'User tidak aktif!']);
+                return back()->withErrors(['login' => 'User is not active!']);
             }
 
             Auth::login($user);
@@ -46,22 +46,28 @@ class AuthController extends Controller
             if (isset($_SERVER['HTTP_CLIENT_IP']))
             {
                 $ip_address = $_SERVER['HTTP_CLIENT_IP'];
-            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            }
+            elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            } elseif (isset($_SERVER['HTTP_X_FORWARDED']))
+            }
+            elseif (isset($_SERVER['HTTP_X_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED'];
-            } elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
+            }
+            elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
-            } elseif (isset($_SERVER['HTTP_FORWARDED']))
+            }
+            elseif (isset($_SERVER['HTTP_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED'];
-            } elseif (isset($_SERVER['REMOTE_ADDR']))
+            }
+            elseif (isset($_SERVER['REMOTE_ADDR']))
             {
                 $ip_address = $_SERVER['REMOTE_ADDR'];
-            } else
+            }
+            else
             {
                 $ip_address = 'UNKNOWN';
             }
@@ -100,7 +106,7 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return back()->withErrors(['login' => 'NIK atau password salah!']);
+        return back()->withErrors(['login' => 'NIK or password is incorrect!']);
     }
 
     public function logout()
@@ -132,7 +138,7 @@ class AuthController extends Controller
             Session::flush();
         }
 
-        return redirect()->route('login')->with('success', 'Akun berhasil dinonaktifkan.');
+        return redirect()->route('login')->with('success', 'Account has been successfully deactivated.');
     }
 
     public function profile()
@@ -176,7 +182,7 @@ class AuthController extends Controller
 
         if (! $user)
         {
-            return back()->withErrors(['update' => 'User tidak ditemukan!']);
+            return back()->withErrors(['update' => 'User not found!']);
         }
 
         $user->update([
@@ -207,22 +213,28 @@ class AuthController extends Controller
             if (isset($_SERVER['HTTP_CLIENT_IP']))
             {
                 $ip_address = $_SERVER['HTTP_CLIENT_IP'];
-            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            }
+            elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            } elseif (isset($_SERVER['HTTP_X_FORWARDED']))
+            }
+            elseif (isset($_SERVER['HTTP_X_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_X_FORWARDED'];
-            } elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
+            }
+            elseif (isset($_SERVER['HTTP_FORWARDED_FOR']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
-            } elseif (isset($_SERVER['HTTP_FORWARDED']))
+            }
+            elseif (isset($_SERVER['HTTP_FORWARDED']))
             {
                 $ip_address = $_SERVER['HTTP_FORWARDED'];
-            } elseif (isset($_SERVER['REMOTE_ADDR']))
+            }
+            elseif (isset($_SERVER['REMOTE_ADDR']))
             {
                 $ip_address = $_SERVER['REMOTE_ADDR'];
-            } else
+            }
+            else
             {
                 $ip_address = 'UNKNOWN';
             }
@@ -232,6 +244,6 @@ class AuthController extends Controller
             Session::forget(['remember_token', 'is_logged_in']);
         }
 
-        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->route('profile')->with('success', 'Profile has been successfully updated!');
     }
 }
