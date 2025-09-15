@@ -88,4 +88,19 @@ class ReportingConfigurationModel extends Model
     {
         return DB::table('tb_order_labels')->get();
     }
+
+    public static function insert_order_label($data)
+    {
+        return DB::table('tb_order_labels')->insert($data);
+    }
+
+    public static function update_order_label($id, $data)
+    {
+        return DB::table('tb_order_labels')->where('id', $id)->update($data);
+    }
+
+    public static function delete_order_label($id)
+    {
+        return DB::table('tb_order_labels')->where('id', $id)->delete();
+    }
 }

@@ -13,7 +13,7 @@ export default [
 			},
 		},
 		rules: {
-			"brace-style": ["error", "allman"], // Allman style
+			"brace-style": ["error", "allman"],
 			indent: ["error", "tab"],
 			semi: ["error", "always"],
 		},

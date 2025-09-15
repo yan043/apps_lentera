@@ -19,7 +19,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_status($data['id'], $data);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_status($data);
         }
@@ -46,7 +47,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_segment($data['id'], $data);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_segment($data);
         }
@@ -75,7 +77,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_action($data['id'], $data);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_action($data);
         }
@@ -102,7 +105,8 @@ class ReportingConfigurationController extends Controller
         if (isset($data['id']) && $data['id'])
         {
             ReportingConfigurationModel::update_order_label($data['id'], ['name' => $data['name']]);
-        } else
+        }
+        else
         {
             ReportingConfigurationModel::insert_order_label(['name' => $data['name']]);
         }
