@@ -9,6 +9,7 @@ use App\Models\OrganizationStructureModel;
 use App\Models\ReportingConfigurationModel;
 use App\Models\SupportModel;
 use App\Models\WorkOrderManagementModel;
+use App\Models\ReportsPaymentModel;
 
 class AjaxController extends Controller
 {
@@ -244,7 +245,8 @@ class AjaxController extends Controller
                     ],
                 ],
             ]);
-        } elseif ($type == 'pie')
+        }
+        elseif ($type == 'pie')
         {
             $sla = [
                 '0-2'   => 0,
@@ -324,12 +326,14 @@ class AjaxController extends Controller
             $order_segment_id = $id;
 
             $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_segment_id)->photo_list);
-        } elseif ($sourcedata == 'bima')
+        }
+        elseif ($sourcedata == 'bima')
         {
             $order_status_id = $id;
 
             $photo_list = json_decode(OrderModel::get_photo_list($sourcedata, $order_status_id)->photo_list);
-        } else
+        }
+        else
         {
             $photo_list = [
                 'Lokasi_Rumah',
@@ -359,5 +363,12 @@ class AjaxController extends Controller
         $data = OrderModel::get_log_assignment($id);
 
         return response()->json($data);
+    }
+
+    public function get_reports_status_group($start_date, $end_date)
+    {
+        $data = ReportsPaymentModel::get_reports_status_group($start_date, $end_date);
+
+        return response()->json(['data' => $data]);
     }
 }

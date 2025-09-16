@@ -155,7 +155,7 @@
                 <div style="height:32px;width:6px;background:#4e73df;border-radius:3px;margin-right:12px;"></div>
                 <h5 class="mb-0 fw-bold">{{ $s }}</h5>
             </div>
-            <div class="card shadow-sm border-0 rounded mb-4" style="margin-top:0;">
+            <div class="card shadow-sm border-0 rounded mb-4" style="margin-top:0">
                 <div class="card-body p-2">
                     <div class="table-responsive">
                         <table class="table text-center detail-data-table mb-0">

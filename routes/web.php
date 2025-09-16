@@ -175,6 +175,11 @@ Route::middleware(['auth'])->group(function ()
             Route::get('designator/nte/{type}', [AjaxController::class, 'get_inventory_nte'])->name('ajax.inventory-management.designator.nte');
         });
 
+        Route::prefix('reports-payment')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan,Staff,Drafter,Helpdesk')->group(function ()
+        {
+            Route::get('reports-status-group/{start_date}/{end_date}', [AjaxController::class, 'get_reports_status_group'])->name('ajax.reports-payment.reports.status-group');
+        });
+
         Route::prefix('employee-management')->middleware('role:Developer,Direktur,OSM,GM_VP_PM,Manager,Officer_1,Assistant_Manager,Officer_2,Head_of_Service_Area,Officer_3,Team_Leader,Kordinator_Lapangan')->group(function ()
         {
             Route::get('list', [AjaxController::class, 'get_employee_list'])->name('ajax.employee-management.list');
