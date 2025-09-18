@@ -99,7 +99,6 @@ class AuthController extends Controller
                 'gender'         => $profile->gender,
                 'date_of_birth'  => $profile->date_of_birth,
                 'place_of_birth' => $profile->place_of_birth,
-                'sidebar_theme'  => $profile->theme ?? 'light',
                 'remember_token' => $token,
                 'is_logged_in'   => true,
             ]);
@@ -246,25 +245,5 @@ class AuthController extends Controller
         }
 
         return redirect()->route('profile')->with('success', 'Profile has been successfully updated!');
-    }
-
-    public function updateTheme(Request $request)
-    {
-        $request->validate([
-            'theme' => 'required|string|in:light,dark,rtl,dark-rtl',
-        ]);
-
-        $user = AuthModel::find(Session::get('employee_id'));
-
-        if (!$user)
-        {
-            return response()->json(['success' => false, 'message' => 'User not found!'], 404);
-        }
-
-        $user->update(['theme' => $request->theme]);
-
-        Session::put('theme', $request->theme);
-
-        return response()->json(['success' => true, 'message' => 'Theme updated successfully!']);
     }
 }

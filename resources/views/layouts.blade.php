@@ -20,11 +20,7 @@
 	<script src="/assets/js/plugin.js"></script>
 </head>
 
-@php
-	$sidebarTheme = session('sidebar_theme', 'light');
-@endphp
-
-<body data-sidebar="{{ $sidebarTheme }}">
+<body data-sidebar="dark">
 
 	<div id="layout-wrapper">
 

@@ -43,22 +43,20 @@
 				"/assets/css/bootstrap.min.css" != s("#bootstrap-style").attr("href") &&
 					s("#bootstrap-style").attr("href", "/assets/css/bootstrap.min.css"),
 				s("html").attr("data-bs-theme", "light"),
-				s("body").attr("data-sidebar", "light"),
 				"/assets/css/app.min.css" != s("#app-style").attr("href") &&
 					s("#app-style").attr("href", "/assets/css/app.min.css"),
-				localStorage.setItem("is_visited", "light-mode-switch"))
+				sessionStorage.setItem("is_visited", "light-mode-switch"))
 			: 1 == s("#dark-mode-switch").prop("checked") && "dark-mode-switch" === e
 				? (s("html").removeAttr("dir"),
 					s("#light-mode-switch").prop("checked", !1),
 					s("#rtl-mode-switch").prop("checked", !1),
 					s("#dark-rtl-mode-switch").prop("checked", !1),
 					s("html").attr("data-bs-theme", "dark"),
-					s("body").attr("data-sidebar", "dark"),
 					"/assets/css/bootstrap.min.css" != s("#bootstrap-style").attr("href") &&
 						s("#bootstrap-style").attr("href", "/assets/css/bootstrap.min.css"),
 					"/assets/css/app.min.css" != s("#app-style").attr("href") &&
 						s("#app-style").attr("href", "/assets/css/app.min.css"),
-					localStorage.setItem("is_visited", "dark-mode-switch"))
+					sessionStorage.setItem("is_visited", "dark-mode-switch"))
 				: 1 == s("#rtl-mode-switch").prop("checked") && "rtl-mode-switch" === e
 					? (s("#light-mode-switch").prop("checked", !1),
 						s("#dark-mode-switch").prop("checked", !1),
@@ -69,7 +67,6 @@
 							s("#app-style").attr("href", "/assets/css/app-rtl.min.css"),
 						s("html").attr("dir", "rtl"),
 						s("html").attr("data-bs-theme", "light"),
-						s("body").attr("data-sidebar", "light"),
 						sessionStorage.setItem("is_visited", "rtl-mode-switch"))
 					: 1 == s("#dark-rtl-mode-switch").prop("checked") &&
 						"dark-rtl-mode-switch" === e &&
@@ -82,7 +79,6 @@
 							s("#app-style").attr("href", "/assets/css/app-rtl.min.css"),
 						s("html").attr("dir", "rtl"),
 						s("html").attr("data-bs-theme", "dark"),
-						s("body").attr("data-sidebar", "dark"),
 						sessionStorage.setItem("is_visited", "dark-rtl-mode-switch"));
 	}
 	function l() {
@@ -180,25 +176,25 @@
 		[].slice.call(document.querySelectorAll(".offcanvas")).map(function (e) {
 			return new bootstrap.Offcanvas(e);
 		}),
-		window.localStorage &&
-			((e = localStorage.getItem("is_visited"))
-				? (s(".right-bar input:checkbox").prop("checked", !1), s("#" + e).prop("checked", !0), c(e))
+		window.sessionStorage &&
+			((e = sessionStorage.getItem("is_visited"))
+				? (s(".right-bar input:checkbox").prop("checked", !1), s("#" + e).prop("checked", !0))
 				: "rtl" === s("html").attr("dir") && "dark" === s("html").attr("data-bs-theme")
 					? (s("#dark-rtl-mode-switch").prop("checked", !0),
 						s("#light-mode-switch").prop("checked", !1),
-						localStorage.setItem("is_visited", "dark-rtl-mode-switch"),
+						sessionStorage.setItem("is_visited", "dark-rtl-mode-switch"),
 						c(e))
 					: "rtl" === s("html").attr("dir")
 						? (s("#rtl-mode-switch").prop("checked", !0),
 							s("#light-mode-switch").prop("checked", !1),
-							localStorage.setItem("is_visited", "rtl-mode-switch"),
+							sessionStorage.setItem("is_visited", "rtl-mode-switch"),
 							c(e))
 						: "dark" === s("html").attr("data-bs-theme")
 							? (s("#dark-mode-switch").prop("checked", !0),
 								s("#light-mode-switch").prop("checked", !1),
-								localStorage.setItem("is_visited", "dark-mode-switch"),
+								sessionStorage.setItem("is_visited", "dark-mode-switch"),
 								c(e))
-							: localStorage.setItem("is_visited", "light-mode-switch")),
+							: sessionStorage.setItem("is_visited", "light-mode-switch")),
 		s("#light-mode-switch, #dark-mode-switch, #rtl-mode-switch, #dark-rtl-mode-switch").on("change", function (e) {
 			c(e.target.id);
 		}),
