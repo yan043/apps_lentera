@@ -41,10 +41,12 @@ class TelegramController extends Controller
 
         if ($result && isset($result->result->pending_update_count) && $result->result->pending_update_count != 0)
         {
+            $url = 'https://lentera.jukung-dev.org';
+
             $curl = curl_init();
 
             curl_setopt_array($curl, [
-                CURLOPT_URL            => "https://api.telegram.org/bot{$tokenBot}/setWebhook?url=https://lentera.jukung-dev.org/api/telegram/lenteraBot&max_connections=100&drop_pending_updates=true",
+                CURLOPT_URL            => "https://api.telegram.org/bot{$tokenBot}/setWebhook?url={$url}/api/telegram/lenteraBot&max_connections=100&drop_pending_updates=true",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,
@@ -58,55 +60,11 @@ class TelegramController extends Controller
             curl_close($curl);
 
             print_r(json_decode($response));
-        } else
+        }
+        else
         {
             print_r("Pending Update Count is Zero \n");
         }
-    }
-
-    private static function getAddressFromCoordinates($coordinates)
-    {
-        if (! preg_match('/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/', $coordinates))
-        {
-            return [
-                'street'   => '',
-                'city'     => '',
-                'province' => '',
-                'full'     => 'Format koordinat tidak valid',
-            ];
-        }
-
-        [$lat, $lon] = explode(',', $coordinates);
-        $url         = "https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lon&zoom=18&addressdetails=1";
-        $opts        = [
-            'http' => [
-                'header' => "User-Agent: LenteraBot/1.0\r\n",
-            ],
-        ];
-        $context  = stream_context_create($opts);
-        $response = @file_get_contents($url, false, $context);
-
-        if ($response === false)
-        {
-            Log::error("Gagal mengambil alamat dari OpenStreetMap untuk koordinat: $coordinates");
-
-            return [
-                'street'   => '',
-                'city'     => '',
-                'province' => '',
-                'full'     => 'Gagal mengambil alamat',
-            ];
-        }
-
-        $data    = json_decode($response, true);
-        $address = $data['address'] ?? [];
-
-        return [
-            'street'   => $address['road']      ?? '',
-            'city'     => $address['city']      ?? ($address['town'] ?? ($address['village'] ?? '')),
-            'province' => $address['state']     ?? '',
-            'full'     => $data['display_name'] ?? '',
-        ];
     }
 
     public static function lenteraBot()
@@ -120,7 +78,8 @@ class TelegramController extends Controller
             return;
         }
 
-        $apiBot = 'https://api.telegram.org/bot'.$tokenBot;
+        $apiBot = 'https://api.telegram.org/bot' . $tokenBot;
+
         $update = @json_decode(file_get_contents('php://input'), true);
 
         if ($update === null)
@@ -185,16 +144,20 @@ class TelegramController extends Controller
                 if ($hour > 6 && $hour <= 11)
                 {
                     $saying = 'Selamat Pagi';
-                } elseif ($hour > 11 && $hour <= 15)
+                }
+                elseif ($hour > 11 && $hour <= 15)
                 {
                     $saying = 'Selamat Siang';
-                } elseif ($hour > 15 && $hour <= 17)
+                }
+                elseif ($hour > 15 && $hour <= 17)
                 {
                     $saying = 'Selamat Sore';
-                } elseif ($hour > 17 && $hour <= 23)
+                }
+                elseif ($hour > 17 && $hour <= 23)
                 {
                     $saying = 'Selamat Malam';
-                } else
+                }
+                else
                 {
                     $saying = "Why aren't you asleep? Are you programming?";
                 }
@@ -232,7 +195,7 @@ class TelegramController extends Controller
                 foreach ($odps as $odp)
                 {
                     $odpKeyboard['inline_keyboard'][] = [
-                        ['text' => $odp->odp_name, 'callback_data' => 'tutup_odp_'.$odp->id],
+                        ['text' => $odp->odp_name, 'callback_data' => 'tutup_odp_' . $odp->id],
                     ];
                 }
 
@@ -256,9 +219,9 @@ class TelegramController extends Controller
 
                 $msg = "<b>Detail ODP Terbuka</b>\n";
                 $msg .= '<i>';
-                $msg .= '🔖 Nama ODP : '.($odp->odp_name ?? '-')."\n";
-                $msg .= '📍 Koordinat ODP : <code>'.($odp->odp_coordinates ?? '-')."</code>\n";
-                $msg .= '📝 Catatan : '.($odp->note ?? '-')."\n";
+                $msg .= '🔖 Nama ODP : ' . ($odp->odp_name ?? '-') . "\n";
+                $msg .= '📍 Koordinat ODP : <code>' . ($odp->odp_coordinates ?? '-') . "</code>\n";
+                $msg .= '📝 Catatan : ' . ($odp->note ?? '-') . "\n";
                 $msg .= '</i>';
 
                 self::setUserState($chat_id, [
@@ -270,7 +233,8 @@ class TelegramController extends Controller
                 if ($odp->photo_odp && file_exists(public_path($odp->photo_odp)))
                 {
                     Telegram::sendPhoto($tokenBot, $chat_id, $msg, public_path($odp->photo_odp));
-                } else
+                }
+                else
                 {
                     Telegram::sendMessage($tokenBot, $chat_id, $msg);
                 }
@@ -329,7 +293,7 @@ class TelegramController extends Controller
             if ($state && $state['step'] === 'input_odp_photo' && $photo)
             {
                 $file_id    = end($photo)['file_id'];
-                $filename   = 'odp_open_'.date('Ymd_His').'_'.$chat_id.'.jpg';
+                $filename   = 'odp_open_' . date('Ymd_His') . '_' . $chat_id . '.jpg';
                 $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_open_alpro_reports', $filename);
 
                 self::setUserState($chat_id, [
@@ -344,7 +308,7 @@ class TelegramController extends Controller
 
             if ($state && $state['step'] === 'input_odp_location' && $location)
             {
-                $coordinates = $location['latitude'].','.$location['longitude'];
+                $coordinates = $location['latitude'] . ',' . $location['longitude'];
                 $address     = self::getAddressFromCoordinates($coordinates);
 
                 if ($address['full'] === 'Format koordinat tidak valid' || $address['full'] === 'Gagal mengambil alamat')
@@ -371,25 +335,26 @@ class TelegramController extends Controller
                 $pelapor = $update['message']['from']['first_name'] ?? '';
                 if (isset($update['message']['from']['last_name']))
                 {
-                    $pelapor .= ' '.$update['message']['from']['last_name'];
+                    $pelapor .= ' ' . $update['message']['from']['last_name'];
                 }
                 $username = $update['message']['from']['username'] ?? '';
                 $user_id  = $update['message']['from']['id']       ?? '';
 
                 $caption = "<b>📢 Laporan ODP Terbuka</b>\n\n";
                 $caption .= '<i>';
-                $caption .= '🔖 Nama ODP : '.($state['odp_name'] ?? '-')."\n";
-                $caption .= '📍 Koordinat ODP : <code>'.$coordinates."</code>\n";
+                $caption .= '🔖 Nama ODP : ' . ($state['odp_name'] ?? '-') . "\n";
+                $caption .= '📍 Koordinat ODP : <code>' . $coordinates . "</code>\n";
                 $caption .= "📝 Catatan : \n\n";
-                $caption .= '🙋 Pelapor : '.$pelapor.' | '.$user_id.($username ? " (@$username)" : '')."\n";
-                $caption .= '🗓️ Tanggal : '.date('Y-m-d H:i:s')."\n";
+                $caption .= '🙋 Pelapor : ' . $pelapor . ' | ' . $user_id . ($username ? " (@$username)" : '') . "\n";
+                $caption .= '🗓️ Tanggal : ' . date('Y-m-d H:i:s') . "\n";
                 $caption .= '</i>';
 
                 if (! empty($state['photo_odp']) && file_exists(public_path($state['photo_odp'])))
                 {
                     Telegram::sendPhoto($tokenBot, $group_chat_id, $caption, public_path($state['photo_odp']));
                     Telegram::sendPhoto($tokenBot, $chat_id, $caption, public_path($state['photo_odp']));
-                } else
+                }
+                else
                 {
                     Telegram::sendMessage($tokenBot, $group_chat_id, $caption);
                     Telegram::sendMessage($tokenBot, $chat_id, $caption);
@@ -413,7 +378,7 @@ class TelegramController extends Controller
             if ($state && $state['step'] === 'input_repair_photo' && $photo)
             {
                 $file_id    = end($photo)['file_id'];
-                $filename   = 'odp_repair_'.date('Ymd_His').'_'.$state['odp_id'].'.jpg';
+                $filename   = 'odp_repair_' . date('Ymd_His') . '_' . $state['odp_id'] . '.jpg';
                 $photo_path = Telegram::downloadTelegramPhotoAndRename($tokenBot, $file_id, 'upload_open_alpro_reports', $filename);
 
                 self::setUserState($chat_id, [
@@ -429,7 +394,7 @@ class TelegramController extends Controller
 
             if ($state && $state['step'] === 'input_repair_location' && $location)
             {
-                $coordinates = $location['latitude'].','.$location['longitude'];
+                $coordinates = $location['latitude'] . ',' . $location['longitude'];
                 $address     = self::getAddressFromCoordinates($coordinates);
 
                 if ($address['full'] === 'Format koordinat tidak valid' || $address['full'] === 'Gagal mengambil alamat')
@@ -456,25 +421,26 @@ class TelegramController extends Controller
                 $pelapor = $update['message']['from']['first_name'] ?? '';
                 if (isset($update['message']['from']['last_name']))
                 {
-                    $pelapor .= ' '.$update['message']['from']['last_name'];
+                    $pelapor .= ' ' . $update['message']['from']['last_name'];
                 }
                 $username = $update['message']['from']['username'] ?? '';
                 $user_id  = $update['message']['from']['id']       ?? '';
 
                 $caption = "<b>✅ ODP Berhasil Ditutup & Diperbaiki</b>\n\n";
                 $caption .= '<i>';
-                $caption .= '🔖 Nama ODP : '.($state['odp_name'] ?? '-')."\n";
-                $caption .= '📍 Koordinat Perbaikan : <code>'.$coordinates."</code>\n";
-                $caption .= "📝 Catatan Perbaikan : \n\n".($state['repair_notes'] ?? '-')."\n";
-                $caption .= '🙋 Pelapor : '.$pelapor.' | '.$user_id.($username ? " (@$username)" : '')."\n";
-                $caption .= '🗓️ Tanggal : '.date('Y-m-d H:i:s')."\n";
+                $caption .= '🔖 Nama ODP : ' . ($state['odp_name'] ?? '-') . "\n";
+                $caption .= '📍 Koordinat Perbaikan : <code>' . $coordinates . "</code>\n";
+                $caption .= "📝 Catatan Perbaikan : \n\n" . ($state['repair_notes'] ?? '-') . "\n";
+                $caption .= '🙋 Pelapor : ' . $pelapor . ' | ' . $user_id . ($username ? " (@$username)" : '') . "\n";
+                $caption .= '🗓️ Tanggal : ' . date('Y-m-d H:i:s') . "\n";
                 $caption .= '</i>';
 
                 if (! empty($state['repair_photo_odp']) && file_exists(public_path($state['repair_photo_odp'])))
                 {
                     Telegram::sendPhoto($tokenBot, $group_chat_id, $caption, public_path($state['repair_photo_odp']));
                     Telegram::sendPhoto($tokenBot, $chat_id, $caption, public_path($state['repair_photo_odp']));
-                } else
+                }
+                else
                 {
                     Telegram::sendMessage($tokenBot, $group_chat_id, $caption);
                     Telegram::sendMessage($tokenBot, $chat_id, $caption);
@@ -508,49 +474,41 @@ class TelegramController extends Controller
                     if ($hour > 6 && $hour <= 11)
                     {
                         $saying = 'Selamat Pagi';
-                    } elseif ($hour > 11 && $hour <= 15)
+                    }
+                    elseif ($hour > 11 && $hour <= 15)
                     {
                         $saying = 'Selamat Siang';
-                    } elseif ($hour > 15 && $hour <= 17)
+                    }
+                    elseif ($hour > 15 && $hour <= 17)
                     {
                         $saying = 'Selamat Sore';
-                    } elseif ($hour > 17 && $hour <= 23)
+                    }
+                    elseif ($hour > 17 && $hour <= 23)
                     {
                         $saying = 'Selamat Malam';
-                    } else
+                    }
+                    else
                     {
                         $saying = "Why aren't you asleep? Are you programming?";
                     }
 
                     $msg = "Hai $chat_title, $saying ...";
                     Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
-                } elseif (strpos($text, '/chat_id') === 0)
+                }
+                elseif (strpos($text, '/chat_id') === 0)
                 {
                     $chat_title = self::getChatTitle($update['message']['chat'] ?? []);
                     $msg        = "Name    : <b>$chat_title</b>\n";
                     $msg .= "Chat ID : <b>$chat_id</b>";
                     Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
-                } else
+                }
+                else
                 {
                     $msg = 'Maaf perintah tidak tersedia ...';
                     Telegram::sendMessageWithInlineKeyboard($tokenBot, $chat_id, $msg, $keyboard);
                 }
             }
         }
-    }
-
-    private static function getChatTitle($chat)
-    {
-        if (isset($chat['title']))
-        {
-            return $chat['title'];
-        }
-        if (isset($chat['first_name']))
-        {
-            return $chat['first_name'].(isset($chat['last_name']) ? ' '.$chat['last_name'] : '');
-        }
-
-        return '';
     }
 
     private static function getUserState($chat_id)
@@ -562,9 +520,10 @@ class TelegramController extends Controller
             {
                 return json_decode(file_get_contents($file), true);
             }
-        } catch (\Exception $e)
+        }
+        catch (\Exception $e)
         {
-            Log::error('Gagal membaca state file: '.$e->getMessage());
+            Log::error('Gagal membaca state file: ' . $e->getMessage());
         }
 
         return null;
@@ -576,9 +535,10 @@ class TelegramController extends Controller
         try
         {
             file_put_contents($file, json_encode($data));
-        } catch (\Exception $e)
+        }
+        catch (\Exception $e)
         {
-            Log::error('Gagal menyimpan state file: '.$e->getMessage());
+            Log::error('Gagal menyimpan state file: ' . $e->getMessage());
         }
     }
 
@@ -591,20 +551,81 @@ class TelegramController extends Controller
             {
                 unlink($file);
             }
-        } catch (\Exception $e)
+        }
+        catch (\Exception $e)
         {
-            Log::error('Gagal menghapus state file: '.$e->getMessage());
+            Log::error('Gagal menghapus state file: ' . $e->getMessage());
         }
     }
 
-    public static function comparin_ibooster($id)
+    private static function getChatTitle($chat)
+    {
+        if (isset($chat['title']))
+        {
+            return $chat['title'];
+        }
+        if (isset($chat['first_name']))
+        {
+            return $chat['first_name'] . (isset($chat['last_name']) ? ' ' . $chat['last_name'] : '');
+        }
+
+        return '';
+    }
+
+    private static function getAddressFromCoordinates($coordinates)
+    {
+        if (! preg_match('/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/', $coordinates))
+        {
+            return [
+                'street'   => '',
+                'city'     => '',
+                'province' => '',
+                'full'     => 'Format koordinat tidak valid',
+            ];
+        }
+
+        [$lat, $lon] = explode(',', $coordinates);
+        $url         = "https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lon&zoom=18&addressdetails=1";
+        $opts        = [
+            'http' => [
+                'header' => "User-Agent: LenteraBot/1.0\r\n",
+            ],
+        ];
+        $context  = stream_context_create($opts);
+        $response = @file_get_contents($url, false, $context);
+
+        if ($response === false)
+        {
+            Log::error("Gagal mengambil alamat dari OpenStreetMap untuk koordinat: $coordinates");
+
+            return [
+                'street'   => '',
+                'city'     => '',
+                'province' => '',
+                'full'     => 'Gagal mengambil alamat',
+            ];
+        }
+
+        $data    = json_decode($response, true);
+        $address = $data['address'] ?? [];
+
+        return [
+            'street'   => $address['road']      ?? '',
+            'city'     => $address['city']      ?? ($address['town'] ?? ($address['village'] ?? '')),
+            'province' => $address['state']     ?? '',
+            'full'     => $data['display_name'] ?? '',
+        ];
+    }
+
+    private static function comparin_ibooster($id)
     {
         $result = ApiModel::comparin_ibooster($id);
 
         if (! empty($result->MESSAGE) || $result == null)
         {
             $data = null;
-        } else
+        }
+        else
         {
             $data = $result;
         }
@@ -612,7 +633,8 @@ class TelegramController extends Controller
         if ($data == null)
         {
             $msg = "Nomor internet $id@telkom.net tidak memiliki usage";
-        } else
+        }
+        else
         {
             $msg = "Berikut hasil pengukuran i-booster untuk nomor internet $id.\n\n";
             $msg .= "CLID : $data->clid\n";

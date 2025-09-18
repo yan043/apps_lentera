@@ -1287,7 +1287,7 @@ class TlkmLeakController extends Controller
 
         $caption = 'Kode Captcha Starclick One ' . date('Y-m-d H:i:s');
 
-        Telegram::sendPhoto('7292690834:AAGz4ZcB_pUNVYwiFMsLpHFMik-SvErUJ_8', $chatid, $caption, 'sc1.jpg');
+        Telegram::sendPhoto('8147257850:AAGOLLqVaXynMYF7B9C71R3fE2MsaaYnUw8', $chatid, $caption, 'sc1.jpg');
 
         print_r("\nMasukan Captcha :\n");
 
