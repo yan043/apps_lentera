@@ -1006,7 +1006,7 @@ class TlkmLeakController extends Controller
 
         foreach ($witel as $value)
         {
-            for ($i = 0; $i <= 2; $i++)
+            for ($i = 0; $i <= 7; $i++)
             {
                 $date = date('Y-m-d', strtotime("-$i days"));
 
@@ -1029,28 +1029,30 @@ class TlkmLeakController extends Controller
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => [
-                'data[type]'                   => 'inbox_search',
-                'data[sdate]'                  => $date,
-                'data[edate]'                  => $date,
-                'data[range]'                  => 'xd2',
-                'data[tipe_pekerjaan]'         => '',
-                'data[where][order_code]'      => '',
-                'data[where][xs1]'             => '',
-                'data[where][xs4]'             => '',
-                'data[where][xs5]'             => '',
-                'data[where][order_status_id]' => '',
-                'data[where][xs9]'             => $witel,
-                'data[where][xs10]'            => $ref_code,
-                'data[isHistory]'              => 'true',
-                'page'                         => '1',
-                'size'                         => '15'
-            ]
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => [
+                'data[sdate]'                     => $date,
+                'data[edate]'                     => $date,
+                'data[range]'                     => 'xd2',
+                'data[tipKer]'                    => '',
+                'data[where][order_status_id]'    => '',
+                'data[where][order_code]'         => '',
+                'data[where][xs1]'                => '',
+                'data[where][xs2]'                => '',
+                'data[where][xs3]'                => '',
+                'data[where][xs4]'                => '',
+                'data[where][xs5]'                => '',
+                'data[where][xs9]'                => $witel,
+                'data[where][xs10]'               => $ref_code,
+                'data[whereLike][customer_desc]'  => '',
+                'page'                            => '1',
+                'size'                            => '25',
+            ],
         ));
 
         $response = curl_exec($curl);
         curl_close($curl);
+
 
         if ($response != null)
         {
@@ -1074,23 +1076,24 @@ class TlkmLeakController extends Controller
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_HEADER         => false,
                     CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => [
-                        'data[type]'                   => 'inbox_search',
-                        'data[sdate]'                  => $date,
-                        'data[edate]'                  => $date,
-                        'data[range]'                  => 'xd2',
-                        'data[tipe_pekerjaan]'         => '',
-                        'data[where][order_code]'      => '',
-                        'data[where][xs1]'             => '',
-                        'data[where][xs4]'             => '',
-                        'data[where][xs5]'             => '',
-                        'data[where][order_status_id]' => '',
-                        'data[where][xs9]'             => $witel,
-                        'data[where][xs10]'            => $ref_code,
-                        'data[isHistory]'              => 'true',
-                        'page'                         => '1',
-                        'size'                         => $result->total_rows
-                    ]
+                    CURLOPT_POSTFIELDS     => [
+                        'data[sdate]'                     => $date,
+                        'data[edate]'                     => $date,
+                        'data[range]'                     => 'xd2',
+                        'data[tipKer]'                    => '',
+                        'data[where][order_status_id]'    => '',
+                        'data[where][order_code]'         => '',
+                        'data[where][xs1]'                => '',
+                        'data[where][xs2]'                => '',
+                        'data[where][xs3]'                => '',
+                        'data[where][xs4]'                => '',
+                        'data[where][xs5]'                => '',
+                        'data[where][xs9]'                => $witel,
+                        'data[where][xs10]'               => $ref_code,
+                        'data[whereLike][customer_desc]'  => '',
+                        'page'                            => '1',
+                        'size'                            => $result->total_rows,
+                    ],
                 ));
 
                 $response = curl_exec($curl);
@@ -1102,6 +1105,9 @@ class TlkmLeakController extends Controller
 
                     if (isset($result->data) && is_array($result->data))
                     {
+
+                        // print_r("proccess: utonline:list-order $ref_code $witel $date \n");
+
                         $total = count($result->data);
 
                         if ($total > 0)
@@ -1152,7 +1158,7 @@ class TlkmLeakController extends Controller
                                         'typeOrderinProgress' => $value->typeOrderinProgress,
                                         'approver'            => json_encode($value->approver),
                                         'getFlowLatest'       => json_encode($value->getFlowLatest),
-                                        'agent'               => $value->agent,
+                                        'agent'               => json_encode($value->agent),
                                         'retryOrderAction'    => $value->retryOrderAction,
                                         'ujiPetikInvalid'     => json_encode($value->ujiPetikInvalid),
                                     ];
@@ -1161,24 +1167,28 @@ class TlkmLeakController extends Controller
 
                             DB::table('tb_source_utonline')->insert($insert);
 
-                            print_r("success: utonline_list_order $ref_code $witel $date total_rows $result->total_rows \n");
+                            print_r("success: utonline:list-order $ref_code $witel $date total_rows $result->total_rows \n\n");
                         }
                     }
                     else
                     {
-                        print_r("failed: utonline_list_order $ref_code $witel $date \n");
+                        print_r("failed: utonline:list-order $ref_code $witel $date \n\n");
                     }
                 }
                 else
                 {
-                    print_r("failed: utonline_list_order $ref_code $witel $date \n");
+                    print_r("failed: utonline:list-order $ref_code $witel $date \n\n");
                 }
             }
         }
+
+        sleep(1);
     }
 
     public static function utonline_load_keterangan_semua_foto($id)
     {
+        $utonline = DB::table('tb_auth_storage')->where('apps', 'utonline')->first();
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -1188,9 +1198,9 @@ class TlkmLeakController extends Controller
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
-            // CURLOPT_HTTPHEADER     => array(
-            //     'Cookie: '
-            // ),
+            CURLOPT_HTTPHEADER     => array(
+                'Cookie: ' . $utonline->cookies
+            ),
         ));
 
         $response = curl_exec($curl);
@@ -1199,6 +1209,61 @@ class TlkmLeakController extends Controller
         if ($response != null)
         {
             $result = json_decode($response);
+
+            if (isset($result->data) && is_array($result->data))
+            {
+                $data = $result->data;
+            }
+        }
+        else
+        {
+            $data = null;
+        }
+
+        return $data;
+    }
+
+    public static function utonline_reports_not_valid()
+    {
+        $data = DB::table('tb_source_utonline')->where('qcStatusName', 'Tidak Valid')->get();
+
+        if ($data != null)
+        {
+            foreach ($data as $value)
+            {
+                $message = "<code>";
+                $message .= "🚨 $value->statusName 🚨\n\n";
+                $message .= "Order Code: $value->order_code\n";
+                $message .= "SC ID     : $value->scId\n";
+                $message .= "Regional  : $value->regional\n";
+                $message .= "Witel     : $value->witel\n";
+                $message .= "STO       : $value->sto\n";
+                $message .= "Mitra     : $value->namaPerusahaan\n";
+                $message .= "Technician: $value->laborCode / $value->laborName\n\n";
+
+                $info_return = "";
+                $lists = self::utonline_load_keterangan_semua_foto($value->order_id);
+
+                if ($lists != null)
+                {
+                    $lists = collect($lists)->sortByDesc('create_dtm')->unique('evidence_name');
+
+                    $info_return = "";
+                    foreach ($lists as $list)
+                    {
+                        $remark = strip_tags($list->remark);
+                        $info_return .= "► $list->evidence_name\n";
+                        $info_return .= "Created: $list->create_dtm\n";
+                        $info_return .= "Notes  : $remark\n\n";
+                    }
+
+                    $message .= "==== Info Return ====\n$info_return";
+                }
+                $message .= "</code>";
+
+                Telegram::sendMessage('8147257850:AAGOLLqVaXynMYF7B9C71R3fE2MsaaYnUw8', '-1003029091111', $message);
+            }
+            print_r("success: utonline_reports_not_valid");
         }
     }
 

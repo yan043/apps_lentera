@@ -154,7 +154,7 @@ class Telegram extends Model
             mkdir($saveDir, 0777, true);
         }
 
-        $savePath = $path.'/'.$filename;
+        $savePath = $path . '/' . $filename;
         file_put_contents(public_path($savePath), $contents);
 
         return $savePath;

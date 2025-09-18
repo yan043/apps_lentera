@@ -47,6 +47,16 @@ Artisan::command('utonline:list-order {ref_code} {witel} {date}', function ($ref
     \App\Http\Controllers\TlkmLeakController::utonline_list_order($ref_code, $witel, $date);
 });
 
+Artisan::command('utonline:load-keterangan-semua-foto {id}', function ($id)
+{
+    \App\Http\Controllers\TlkmLeakController::utonline_load_keterangan_semua_foto($id);
+});
+
+Artisan::command('utonline:reports-not-valid', function ()
+{
+    \App\Http\Controllers\TlkmLeakController::utonline_reports_not_valid();
+});
+
 Artisan::command('scone:login {username} {password} {chatid}', function ($username, $password, $chatid)
 {
     \App\Http\Controllers\TlkmLeakController::scone_login($username, $password, $chatid);
