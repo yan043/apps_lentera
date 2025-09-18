@@ -7,7 +7,7 @@
 	<meta charset="utf-8" />
 	<title>@yield('title', 'Dashboard') - Lentera</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" href="/assets/images/favicon.ico">
+	<link rel="shortcut icon" href="/assets/images/lentera-light.ico">
 
 	<link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -20,7 +20,11 @@
 	<script src="/assets/js/plugin.js"></script>
 </head>
 
-<body data-sidebar="dark">
+@php
+	$sidebarTheme = session('sidebar_theme', 'light');
+@endphp
+
+<body data-sidebar="{{ $sidebarTheme }}">
 
 	<div id="layout-wrapper">
 
@@ -30,7 +34,7 @@
 					<div class="navbar-brand-box">
 						<a href="/" class="logo logo-dark">
 							<span class="logo-sm">
-								<img src="/assets/images/logo-light.svg" alt="" height="22">
+								<img src="/assets/images/lentera-dark.png" alt="" height="22">
 							</span>
 							<span class="logo-lg">
 								<img src="/assets/images/logo-dark.png" alt="" height="70">
@@ -39,7 +43,7 @@
 
 						<a href="/" class="logo logo-light">
 							<span class="logo-sm">
-								<img src="/assets/images/logo-light.svg" alt="" height="22">
+								<img src="/assets/images/lentera-light.png" alt="" height="22">
 							</span>
 							<span class="logo-lg">
 								<img src="/assets/images/logo-light.png" alt="" height="70">
