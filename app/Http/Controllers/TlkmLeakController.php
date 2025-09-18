@@ -1225,6 +1225,14 @@ class TlkmLeakController extends Controller
 
     public static function utonline_reports_not_valid()
     {
+        $tokenBot = env('TELEGRAM_BOT_TOKEN');
+        if (! $tokenBot)
+        {
+            echo "Telegram bot token not set in .env\n";
+
+            return;
+        }
+
         $data = DB::table('tb_source_utonline')->where('qcStatusName', 'Tidak Valid')->get();
 
         if ($data != null)
@@ -1261,7 +1269,7 @@ class TlkmLeakController extends Controller
                 }
                 $message .= "</code>";
 
-                Telegram::sendMessage('8147257850:AAGOLLqVaXynMYF7B9C71R3fE2MsaaYnUw8', '-1003029091111', $message);
+                Telegram::sendMessage($tokenBot, '-1003029091111', $message);
             }
             print_r("success: utonline_reports_not_valid");
         }
@@ -1269,6 +1277,14 @@ class TlkmLeakController extends Controller
 
     public static function scone_login($uname, $pass, $chatid)
     {
+        $tokenBot = env('TELEGRAM_BOT_TOKEN');
+        if (! $tokenBot)
+        {
+            echo "Telegram bot token not set in .env\n";
+
+            return;
+        }
+
         $curl = curl_init();
 
         curl_setopt_array($curl, [
@@ -1352,7 +1368,7 @@ class TlkmLeakController extends Controller
 
         $caption = 'Kode Captcha Starclick One ' . date('Y-m-d H:i:s');
 
-        Telegram::sendPhoto('8147257850:AAGOLLqVaXynMYF7B9C71R3fE2MsaaYnUw8', $chatid, $caption, 'sc1.jpg');
+        Telegram::sendPhoto($tokenBot, $chatid, $caption, 'sc1.jpg');
 
         print_r("\nMasukan Captcha :\n");
 
