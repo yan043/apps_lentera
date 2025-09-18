@@ -163,19 +163,19 @@ class AuthController extends Controller
     public function storeProfile(Request $request)
     {
         $request->validate([
-            'full_name'      => 'required|string|max:255',
-            'chat_id'        => 'nullable|string|max:255',
-            'number_phone'   => 'required|numeric|min:11',
-            'home_address'   => 'nullable|string',
-            'gender'         => 'required|string',
-            'date_of_birth'  => 'nullable|date',
-            'place_of_birth' => 'nullable|string|max:255',
-            'regional_id'    => 'required|integer',
-            'witel_id'       => 'required|integer',
-            'mitra_id'       => 'required|integer',
-            'sub_unit_id'    => 'required|integer',
-            'sub_group_id'   => 'required|integer',
-            'password'       => 'nullable|string|min:6',
+            'full_name'      => 'required',
+            'chat_id'        => 'nullable',
+            'number_phone'   => 'nullable|numeric|min:11',
+            'home_address'   => 'nullable',
+            'gender'         => 'required',
+            'date_of_birth'  => 'nullable',
+            'place_of_birth' => 'nullable',
+            'regional_id'    => 'required',
+            'witel_id'       => 'required',
+            'mitra_id'       => 'required',
+            'sub_unit_id'    => 'required',
+            'sub_group_id'   => 'required',
+            'password'       => 'nullable|min:6',
         ]);
 
         $user = AuthModel::find(Session::get('employee_id'));
