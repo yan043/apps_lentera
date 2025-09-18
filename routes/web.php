@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function ()
 
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('profile/store', [AuthController::class, 'storeProfile'])->name('profile.store');
+    Route::post('profile/update-theme', [AuthController::class, 'updateTheme'])->name('profile.update-theme');
     Route::get('profile/deactivate', [AuthController::class, 'deactivateAccount'])->name('profile.deactivate');
 
     Route::prefix('order')->group(function ()

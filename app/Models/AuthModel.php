@@ -32,6 +32,7 @@ class AuthModel extends Authenticatable
         'ip_address',
         'login_at',
         'is_active',
+        'theme',
         'created_by',
         'created_at',
         'updated_by',
