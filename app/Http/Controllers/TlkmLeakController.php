@@ -1275,573 +1275,842 @@ class TlkmLeakController extends Controller
         }
     }
 
-    public static function scone_login($uname, $pass, $chatid)
+    public static function kpro_ps_bulanan($kolom, $regional = 4, $witel = 'ALL', $tahun, $bulan)
     {
-        $tokenBot = env('TELEGRAM_BOT_TOKEN');
-        if (! $tokenBot)
-        {
-            echo "Telegram bot token not set in .env\n";
-
-            return;
-        }
-
         $curl = curl_init();
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/sc',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => true,
+        curl_setopt_array($curl, array(
+            CURLOPT_URL            => 'https://kpro.telkom.co.id/kpro/pstelkom/dlrekapbulanendstate?dl=true&mode=WITEL&kolom= ' . $kolom . '&reg=' . $regional . '&witel=' . $witel . '&package=&payment=&witel=' . $witel . '&unit=&psb=ALL%2CALL&reseller=ALL&tbg=ALL&play=&channel=&source=ALL&product=ALL&status=&thn=' . $tahun . '&bln=' . $bulan,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-        ]);
-
-        $response = curl_exec($curl);
-
-        libxml_use_internal_errors(true);
-
-        $dom = new \DOMDocument;
-        $dom->loadHTML(trim($response));
-
-        $header         = curl_getinfo($curl);
-        $header_content = substr($response, 0, $header['header_size']);
-
-        trim(str_replace($header_content, '', $response));
-
-        $pattern = '#Set-Cookie:\\s+(?<cookie>[^=]+=[^;]+)#m';
-        preg_match_all($pattern, $header_content, $matches);
-
-        $cookiesOut        = '';
-        $header['headers'] = $header_content;
-        $header['cookies'] = $cookiesOut;
-
-        $cookiesOut = implode('; ', $matches['cookie']);
-
-        print_r("Cookies Login Page : $cookiesOut\n\n");
-
-        $token = $dom->getElementById('token')->getAttribute('value');
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/sc/user/preauth',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => 'guid=0&code=0&data=' . urlencode('{"token":"' . $token . '","code":"' . $uname . '","password":"' . $pass . '"}'),
-            CURLOPT_HTTPHEADER     => [
-                'Content-Type: application/x-www-form-urlencoded',
-                'Cookie: ' . $cookiesOut,
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-
-        $otp = 0;
-
-        print_r("\nMasukan Kode OTP :\n");
-
-        $handle = fopen('php://stdin', 'r');
-        $line   = fgets($handle);
-
-        if (trim($line) == 'cancel')
-        {
-            print_r("ABORTING!\n");
-            exit;
-        }
-
-        $otp = trim($line);
-        fclose($handle);
-
-        $result = json_decode($response);
-
-        $based64Captcha = 'data:image/png;base64,' . $result->data->captcha;
-
-        [$type, $based64Captcha] = explode(';', $based64Captcha);
-        [, $based64Captcha]      = explode(',', $based64Captcha);
-
-        $imageData = base64_decode($based64Captcha);
-
-        $filename = 'sc1.jpg';
-
-        file_put_contents($filename, $imageData);
-
-        $caption = 'Kode Captcha Starclick One ' . date('Y-m-d H:i:s');
-
-        Telegram::sendPhoto($tokenBot, $chatid, $caption, 'sc1.jpg');
-
-        print_r("\nMasukan Captcha :\n");
-
-        $captcha = 0;
-
-        $handle = fopen('php://stdin', 'r');
-        $line   = fgets($handle);
-
-        if (trim($line) == 'cancel')
-        {
-            print_r("ABORTING!\n");
-            exit;
-        }
-
-        $captcha = trim($line);
-        fclose($handle);
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/sc/index/n',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookiesOut,
-            ],
-        ]);
-
-        curl_exec($curl);
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/sc/user/auth',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => true,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => 'guid=0&code=0&data=' . urlencode('{"token":"' . $token . '","code":"' . $uname . '","password":"' . $pass . '","otp":"' . $otp . '","captcha":"' . $captcha . '"}'),
-            CURLOPT_HTTPHEADER     => [
-                'Content-Type: application/x-www-form-urlencoded',
-                'Cookie: ' . $cookiesOut,
-            ],
-        ]);
-        $response = curl_exec($curl);
-        libxml_use_internal_errors(true);
-        $dom = new \DOMDocument;
-        $dom->loadHTML(trim($response));
-        $header         = curl_getinfo($curl);
-        $header_content = substr($response, 0, $header['header_size']);
-        trim(str_replace($header_content, '', $response));
-        $pattern = '#Set-Cookie:\\s+(?<cookie>[^=]+=[^;]+)#m';
-        preg_match_all($pattern, $header_content, $matches);
-        $cookiesOut        = '';
-        $header['headers'] = $header_content;
-        $header['cookies'] = $cookiesOut;
-
-        $cookiesOut = implode('; ', $matches['cookie']);
-        print_r("Cookies Home Page : $cookiesOut\n\n");
-
-        if ($cookiesOut)
-        {
-            DB::table('tb_auth_storage')
-                ->where('apps', 'starclick1')
-                ->update([
-                    'username' => $uname,
-                    'password' => $pass,
-                    'cookies'  => $cookiesOut,
-                ]);
-        }
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookiesOut,
-            ],
-        ]);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $result = json_decode($response);
-        dd($result);
-    }
-
-    public static function scone_logout()
-    {
-        DB::table('tb_auth_storage')
-            ->where('apps', 'starclick1')
-            ->update([
-                'username' => null,
-                'password' => null,
-                'cookies'  => null,
-            ]);
-
-        $sc1 = DB::table('tb_auth_storage')->where('apps', 'starclick1')->first();
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/logout',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $sc1->cookies,
-            ],
-        ]);
+        ));
 
         $response = curl_exec($curl);
         curl_close($curl);
 
-        dd($response);
-    }
-
-    public static function scone_refresh()
-    {
-        $sc1 = DB::table('tb_auth_storage')->where('apps', 'starclick1')->first();
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $sc1->cookies,
-            ],
-        ]);
-
-        curl_exec($curl);
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/sc',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $sc1->cookies,
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        dd($response);
-    }
-
-    public static function scone_order_weekly($witel)
-    {
-        $sc1 = DB::table('tb_auth_storage')->where('apps', 'starclick1')->first();
-
-        for ($i = 0; $i <= 14; $i++)
+        if ($response != null)
         {
-            $datex = date('d/m/Y', strtotime("-$i days"));
+            libxml_use_internal_errors(true);
+            $dom = new \DOMDocument;
+            $dom->loadHTML(trim($response));
 
-            $curl = curl_init();
+            $table = $dom->getElementsByTagName('table')->item(0);
 
-            curl_setopt_array($curl, [
-                CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER         => false,
-                CURLOPT_SSL_VERIFYHOST => false,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_HTTPHEADER     => [
-                    'Cookie: ' . $sc1->cookies,
-                ],
-            ]);
-
-            curl_exec($curl);
-
-            $link = 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data=' . urlencode('{"SearchText":"' . $witel . '","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"' . $datex . '","EndDate":"' . $datex . '","start":null,"source":"NOSS","typeMenu":"TRACKING"}') . '&page=1&start=0&limit=10';
-
-            curl_setopt_array($curl, [
-                CURLOPT_URL            => $link,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER         => false,
-                CURLOPT_SSL_VERIFYHOST => false,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_HTTPHEADER     => [
-                    'Cookie: ' . $sc1->cookies,
-                ],
-            ]);
-
-            $response = curl_exec($curl);
-
-            if (curl_errno($curl))
+            if ($table !== null)
             {
-                echo 'Error:' . curl_error($curl);
-                curl_close($curl);
-            }
-            else
-            {
-                curl_close($curl);
-                $response = json_decode($response);
+                $rows = $table->getElementsByTagName('tr');
 
-                if ($response == null)
-                {
-                    print_r('starclick one session expired!');
-                }
-
-                $data       = $response->data;
-                $jumlahpage = round(@(int) $data->CNT / 10);
-
-                if (isset($data->LIST) && isset($data->CNT))
-                {
-                    $start = 0;
-
-                    if ($data->CNT > 0 && $data->CNT < 10)
-                    {
-                        self::scone_insert_order($witel, $datex, 1, 0, $sc1->cookies);
-                    }
-                    else
-                    {
-                        for ($x = 1; $x <= $jumlahpage; $x++)
-                        {
-                            if ($x == 1)
-                            {
-                                $start = $start + 11;
-                            }
-                            else
-                            {
-                                $start = $start + 10;
-                            }
-
-                            self::scone_insert_order($witel, $datex, $x, $start, $sc1->cookies);
-                        }
-                    }
-
-                    sleep(30);
-                }
-            }
-        }
-    }
-
-    public static function scone_insert_order($witel, $datex, $x, $start, $cookies)
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookies,
-            ],
-        ]);
-
-        curl_exec($curl);
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data=' . urlencode('{"SearchText":"' . $witel . '","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"' . $datex . '","EndDate":"' . $datex . '","start":null,"source":"NOSS","typeMenu":"TRACKING"}') . '&page=' . $x . '&start=' . $start . '&limit=10',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Cookie: ' . $cookies,
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $response = json_decode($response);
-
-        if (isset($response->data->LIST))
-        {
-            $list  = $response->data->LIST;
-            $total = count($list);
-
-            foreach ($list as $k => $v)
-            {
-                $insert[] = [
-                    'order_id'        => $v->ORDER_ID,
-                    'order_date'      => date('Y-m-d H: i: s', strtotime($v->ORDER_DATE)),
-                    'order_status'    => $v->ORDER_STATUS,
-                    'order_date_ps'   => date('Y-m-d H: i: s', strtotime($v->ORDER_DATE_PS)),
-                    'extern_order_id' => $v->EXTERN_ORDER_ID,
-                    'ncli'            => $v->NCLI,
-                    'customer_name'   => str_replace(["'", '’'], '', $v->CUSTOMER_NAME),
-                    'witel'           => $v->WITEL,
-                    'agent_id'        => $v->AGENT_ID,
-                    'jenis_psb'       => $v->JENISPSB,
-                    'sto'             => $v->STO,
-                    'speedy'          => $v->SPEEDY,
-                    'pots'            => $v->POTS,
-                    'package_name'    => $v->PACKAGE_NAME,
-                    'status_resume'   => $v->STATUS_RESUME,
-                    'status_code_sc'  => $v->STATUS_CODE_SC,
-                    'order_id_ncx'    => $v->ORDER_ID_NCX,
-                    'customer_addr'   => str_replace(["'", '’'], '', $v->CUSTOMER_ADDR),
-                    'kcontact'        => str_replace(["'", '’'], '', $v->KCONTACT),
-                    'ins_address'     => str_replace(["'", '’'], '', $v->INS_ADDRESS),
-                    'nd_internet'     => $v->ND_INTERNET,
-                    'nd_pots'         => $v->ND_POTS,
-                    'gps_latitude'    => $v->GPS_LATITUDE,
-                    'gps_longitude'   => $v->GPS_LONGITUDE,
-                    'tn_number'       => $v->TN_NUMBER,
-                    'loc_id'          => $v->LOC_ID,
-                    'reserve_tn'      => $v->RESERVE_TN,
-                    'reserve_port'    => $v->RESERVE_PORT,
-                    'tipe_order'      => 'TLKM',
+                $columns = [
+                    1 => 'order_id',
+                    'regional_lama',
+                    'witel_lama',
+                    'datel_lama',
+                    'regional_baru',
+                    'witel_baru',
+                    'datel_baru',
+                    'sto',
+                    'extern_order_id',
+                    'jenispsb',
+                    'type_trans',
+                    'status_resume',
+                    'status_message',
+                    'kcontact',
+                    'ncli',
+                    'ndem',
+                    'speedy',
+                    'pots',
+                    'customer_name',
+                    'contact_hp',
+                    'contact_email',
+                    'ins_address',
+                    'customer_addr',
+                    'city_name',
+                    'gps_latitude',
+                    'gps_longitude',
+                    'package_name',
+                    'loc_id',
+                    'device_id',
+                    'agent_id',
+                    'wfm_id',
+                    'wfm_status',
+                    'wfm_task',
+                    'wfm_task_status',
+                    'crew_id',
+                    'tech_id_1',
+                    'tech_name_1',
+                    'tech_id_2',
+                    'tech_name_2',
+                    'type_layanan',
+                    'isi_comment',
+                    'tindak_lanjut',
+                    'user_id_tl',
+                    'tgl_manja',
+                    'hide',
+                    'category',
+                    'provider',
+                    'nper',
+                    'channel',
+                    'group_channel',
+                    'flag_deposit',
+                    'payment_1st_dtm',
+                    'billing_1st_amount',
+                    'payment_1st_amount',
+                    'product',
+                    'clusters',
+                    'branch',
+                    'regional_tsel',
+                    'area',
+                    'tgl_pi',
+                    'addon',
+                    'msisdn',
+                    'sn',
+                    'provcomp_date',
+                    'eai_completed_date',
+                    'last_updated_date',
+                    'order_dated',
+                    'tl_date',
+                    'tgl_proses',
+                    'sfid',
+                    'c_ownergroup',
+                    'c_amcrew',
+                    'c_assignment_type',
+                    'latitude_ins',
+                    'longitude_ins',
+                    'c_errorcode',
+                    'c_suberrorcode',
+                    'c_engineermemo',
+                    'c_urlevidence',
+                    'c_chief_code',
+                    'c_chief_name',
+                    'c_servicenum',
+                    'c_woclass',
+                    'c_description',
+                    'c_bookingid',
+                    'c_scorderno',
+                    'c_tk_custom_header_07',
+                    'flag_order',
+                    'c_scheduletype',
+                    'status_survey',
+                    'c_ticketid',
+                    'c_package_name',
+                    'speed',
+                    'tipe_transaksi',
+                    'ket_tipe_transaksi',
+                    'source',
+                    'c_errorcode_akhir',
+                    'c_suberrorcode_akhir',
+                    'c_engineermemo_akhir',
+                    'tgl_fo_awal',
+                    'ticket_fo_awal',
+                    'tgl_fo_akhir',
+                    'ticket_fo_akhir',
+                    'keterangan_pi',
+                    'flag_pda',
                 ];
 
-                print_r("saved order id $v->ORDER_ID\n");
-            }
+                $result = [];
 
-            self::scone_insert_update($insert);
-            sleep(1);
+                for ($i = 1, $count = $rows->length; $i < $count; $i++)
+                {
+                    $cells = $rows->item($i)->getElementsByTagName('td');
 
-            print_r("\nFinish Grab Backend SC ONE Total $total\n");
-        }
-    }
+                    $data = [];
 
-    public static function scone_insert_update(array $rows)
-    {
-        $table = 'tb_source_starclick';
-        $first = reset($rows);
-
-        $columns = implode(
-            ',',
-            array_map(function ($value)
-            {
-                return "$value";
-            }, array_keys($first))
-        );
-
-        $values = implode(
-            ',',
-            array_map(function ($row)
-            {
-                return '(' . implode(
-                    ',',
-                    array_map(function ($value)
+                    for ($j = 1, $jcount = count($columns); $j <= $jcount; $j++)
                     {
-                        return '"' . str_replace('"', '""', $value) . '"';
-                    }, $row)
-                ) . ')';
-            }, $rows)
-        );
+                        $td = $cells->item($j);
 
-        $updates = implode(
-            ',',
-            array_map(function ($value)
-            {
-                return "$value = VALUES($value)";
-            }, array_keys($first))
-        );
+                        $data[$columns[$j]] = $td ? $td->nodeValue : null;
+                    }
 
-        $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
+                    dd($data);
 
-        return \DB::statement($sql);
+                    $result[] = $data;
+                }
+
+                $total = count($result);
+            }
+        }
     }
 
-    public static function newscmt_location_id($type, $parent)
+    public static function kpro_selfi()
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => "https://api-item-mgt-scm.telkom.co.id/product-by-location-id/?type_location_id=$type&parent_location_id=$parent&product_id=ALL",
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://kpro.telkom.co.id/kpro/newteknisi/excelselfiendstate?kolom=JML_ORDER&reg=' . $regional . '&witel=' . $witel . '&bulan=' . $tahun . '-' . $bulan . '&psb=ALL&product=ALL&teritory=TELKOM_LAMA&tanggal=' . $date . '&reseller=ALL&tbg=ALL',
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => '',
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDYwODEsInJvbGVfaWQiOjg0LCJ3YXJlaG91c2VfaWQiOjM4NzgsImJ1c2luZXNzX3VuaXRfaWQiOjEwNjksInNjaGVtYV9pZCI6MSwic2NoZW1lX2xvZ2luIjoic2NtdCIsImJ1X3JvbGVfaWQiOjkwMDc5LCJpYXQiOjE3MDAyNzc0ODN9.ZUPlXY4LBSDWjpv5AiNpCp-WXMKlKPiIBbMTYRgWYn8',
-            ],
-        ]);
+            CURLOPT_HEADER         => false,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
 
         $response = curl_exec($curl);
         curl_close($curl);
 
-        $result = json_decode($response);
-
-        if ($result)
+        if ($response != null)
         {
-            $total = count($result->body);
+            libxml_use_internal_errors(true);
+            $dom = new \DOMDocument;
+            $dom->loadHTML(trim($response));
 
-            if ($total > 0)
+            $table = $dom->getElementsByTagName('table')->item(0);
+
+            if ($table !== null)
             {
-                DB::table('newscmt_location_id')->where('parent_location_id', $parent)->delete();
+                $rows = $table->getElementsByTagName('tr');
 
-                foreach ($result->body as $k => $v)
+                $columns = [
+                    1 => 'wonum',
+                    'crmordertype',
+                    'regional_baru',
+                    'district_baru',
+                    'datel_baru',
+                    'sto',
+                    'regional_lama',
+                    'district_lama',
+                    'datel_lama',
+                    'scorderno',
+                    'package_name',
+                    'servicenum',
+                    'ncli',
+                    'flag_order',
+                    'customer_name',
+                    'customer_address',
+                    'no_hp',
+                    'latitude_ins',
+                    'longitude_ins',
+                    'datecreated',
+                    'tgl_manja',
+                    'status_survey',
+                    'desc_task',
+                    'status_task',
+                    'actstart',
+                    'schedule_labor',
+                    'amcrew',
+                    'laborcode',
+                    'laborname',
+                    'chief_code',
+                    'chief_name',
+                    'status',
+                    'statusdate',
+                    'errorcode',
+                    'suberrorcode',
+                    'engineermemo',
+                    'ownergroup',
+                    'measurement',
+                    'odp_name',
+                    'catatan_teknisi',
+                    'tiket_id',
+                    'product',
+                    'jenis_product',
+                    'flag_wsa',
+                    'tgl_pi_awal',
+                    'tgl_pi_akhir',
+                    'tgl_fallout_akhir',
+                    'territory_tif',
+                    'district_tif',
+                    'keterangan_pi',
+                    'flag_pda',
+                    'wsa_re',
+                ];
+
+                $result = [];
+
+                for ($i = 1, $count = $rows->length; $i < $count; $i++)
                 {
-                    $insert[] = [
-                        'parent_location_id'  => $parent,
-                        'product_id'          => $v->product_id,
-                        'product_code'        => $v->product_code,
-                        'product_description' => $v->product_description,
-                        'type_location_id'    => $v->type_location_id,
-                        'available'           => $v->available,
-                        'blocked'             => $v->blocked,
-                        'use_in_transaction'  => $v->use_in_transaction,
-                        'intransit'           => $v->intransit,
-                        'others'              => $v->others,
-                        'total'               => $v->total,
-                    ];
+                    $cells = $rows->item($i)->getElementsByTagName('td');
+
+                    $data = [];
+
+                    for ($j = 1, $jcount = count($columns); $j <= $jcount; $j++)
+                    {
+                        $td = $cells->item($j);
+
+                        $data[$columns[$j]] = $td ? $td->nodeValue : null;
+                    }
+
+                    dd($data);
+
+                    $result[] = $data;
                 }
 
-                DB::table('newscmt_location_id')->insert($insert);
+                $total = count($result);
             }
-
-            print_r("\nsuccess saved data newscmt_location_id type $type parent $parent total $total\n");
         }
     }
 
-    public static function newscmt_detail_location_id($type, $parent)
-    {
-        $curl = curl_init();
+    // public static function scone_login($uname, $pass, $chatid)
+    // {
+    //     $tokenBot = env('TELEGRAM_BOT_TOKEN');
+    //     if (! $tokenBot)
+    //     {
+    //         echo "Telegram bot token not set in .env\n";
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => "https://api-item-mgt-scm.telkom.co.id/product-detail-by-location-id/?type_location_id=$type&parent_location_id=$parent&product_id=ALL",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => '',
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => [
-                'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDYwODEsInJvbGVfaWQiOjg0LCJ3YXJlaG91c2VfaWQiOjM4NzgsImJ1c2luZXNzX3VuaXRfaWQiOjEwNjksInNjaGVtYV9pZCI6MSwic2NoZW1lX2xvZ2luIjoic2NtdCIsImJ1X3JvbGVfaWQiOjkwMDc5LCJpYXQiOjE3MDAyNzc0ODN9.ZUPlXY4LBSDWjpv5AiNpCp-WXMKlKPiIBbMTYRgWYn8',
-            ],
-        ]);
+    //         return;
+    //     }
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+    //     $curl = curl_init();
 
-        $result = json_decode($response);
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/sc',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => true,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //     ]);
 
-        if ($result)
-        {
-            $total = count($result->body);
+    //     $response = curl_exec($curl);
 
-            if ($total > 0)
-            {
-                DB::table('newscmt_detail_location_id')->where('parent_location_id', $parent)->delete();
+    //     libxml_use_internal_errors(true);
 
-                foreach ($result->body as $k => $v)
-                {
-                    $insert[] = [
-                        'parent_location_id'  => $parent,
-                        'product_id'          => $v->product_id,
-                        'product_code'        => $v->product_code,
-                        'product_description' => $v->product_description,
-                        'serial_number'       => $v->serial_number,
-                        'sid'                 => $v->sid,
-                        'inventory_status'    => $v->inventory_status,
-                        'type_location_id'    => $v->type_location_id,
-                    ];
-                }
+    //     $dom = new \DOMDocument;
+    //     $dom->loadHTML(trim($response));
 
-                DB::table('newscmt_detail_location_id')->insert($insert);
-            }
+    //     $header         = curl_getinfo($curl);
+    //     $header_content = substr($response, 0, $header['header_size']);
 
-            print_r("\nsuccess saved data newscmt_detail_location_id type $type parent $parent total $total\n");
-        }
-    }
+    //     trim(str_replace($header_content, '', $response));
+
+    //     $pattern = '#Set-Cookie:\\s+(?<cookie>[^=]+=[^;]+)#m';
+    //     preg_match_all($pattern, $header_content, $matches);
+
+    //     $cookiesOut        = '';
+    //     $header['headers'] = $header_content;
+    //     $header['cookies'] = $cookiesOut;
+
+    //     $cookiesOut = implode('; ', $matches['cookie']);
+
+    //     print_r("Cookies Login Page : $cookiesOut\n\n");
+
+    //     $token = $dom->getElementById('token')->getAttribute('value');
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/sc/user/preauth',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'POST',
+    //         CURLOPT_POSTFIELDS     => 'guid=0&code=0&data=' . urlencode('{"token":"' . $token . '","code":"' . $uname . '","password":"' . $pass . '"}'),
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Content-Type: application/x-www-form-urlencoded',
+    //             'Cookie: ' . $cookiesOut,
+    //         ],
+    //     ]);
+
+    //     $response = curl_exec($curl);
+
+    //     $otp = 0;
+
+    //     print_r("\nMasukan Kode OTP :\n");
+
+    //     $handle = fopen('php://stdin', 'r');
+    //     $line   = fgets($handle);
+
+    //     if (trim($line) == 'cancel')
+    //     {
+    //         print_r("ABORTING!\n");
+    //         exit;
+    //     }
+
+    //     $otp = trim($line);
+    //     fclose($handle);
+
+    //     $result = json_decode($response);
+
+    //     $based64Captcha = 'data:image/png;base64,' . $result->data->captcha;
+
+    //     [$type, $based64Captcha] = explode(';', $based64Captcha);
+    //     [, $based64Captcha]      = explode(',', $based64Captcha);
+
+    //     $imageData = base64_decode($based64Captcha);
+
+    //     $filename = 'sc1.jpg';
+
+    //     file_put_contents($filename, $imageData);
+
+    //     $caption = 'Kode Captcha Starclick One ' . date('Y-m-d H:i:s');
+
+    //     Telegram::sendPhoto($tokenBot, $chatid, $caption, 'sc1.jpg');
+
+    //     print_r("\nMasukan Captcha :\n");
+
+    //     $captcha = 0;
+
+    //     $handle = fopen('php://stdin', 'r');
+    //     $line   = fgets($handle);
+
+    //     if (trim($line) == 'cancel')
+    //     {
+    //         print_r("ABORTING!\n");
+    //         exit;
+    //     }
+
+    //     $captcha = trim($line);
+    //     fclose($handle);
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/sc/index/n',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'POST',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $cookiesOut,
+    //         ],
+    //     ]);
+
+    //     curl_exec($curl);
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/sc/user/auth',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => true,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'POST',
+    //         CURLOPT_POSTFIELDS     => 'guid=0&code=0&data=' . urlencode('{"token":"' . $token . '","code":"' . $uname . '","password":"' . $pass . '","otp":"' . $otp . '","captcha":"' . $captcha . '"}'),
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Content-Type: application/x-www-form-urlencoded',
+    //             'Cookie: ' . $cookiesOut,
+    //         ],
+    //     ]);
+    //     $response = curl_exec($curl);
+    //     libxml_use_internal_errors(true);
+    //     $dom = new \DOMDocument;
+    //     $dom->loadHTML(trim($response));
+    //     $header         = curl_getinfo($curl);
+    //     $header_content = substr($response, 0, $header['header_size']);
+    //     trim(str_replace($header_content, '', $response));
+    //     $pattern = '#Set-Cookie:\\s+(?<cookie>[^=]+=[^;]+)#m';
+    //     preg_match_all($pattern, $header_content, $matches);
+    //     $cookiesOut        = '';
+    //     $header['headers'] = $header_content;
+    //     $header['cookies'] = $cookiesOut;
+
+    //     $cookiesOut = implode('; ', $matches['cookie']);
+    //     print_r("Cookies Home Page : $cookiesOut\n\n");
+
+    //     if ($cookiesOut)
+    //     {
+    //         DB::table('tb_auth_storage')
+    //             ->where('apps', 'starclick1')
+    //             ->update([
+    //                 'username' => $uname,
+    //                 'password' => $pass,
+    //                 'cookies'  => $cookiesOut,
+    //             ]);
+    //     }
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $cookiesOut,
+    //         ],
+    //     ]);
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     $result = json_decode($response);
+    //     dd($result);
+    // }
+
+    // public static function scone_logout()
+    // {
+    //     DB::table('tb_auth_storage')
+    //         ->where('apps', 'starclick1')
+    //         ->update([
+    //             'username' => null,
+    //             'password' => null,
+    //             'cookies'  => null,
+    //         ]);
+
+    //     $sc1 = DB::table('tb_auth_storage')->where('apps', 'starclick1')->first();
+
+    //     $curl = curl_init();
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/logout',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $sc1->cookies,
+    //         ],
+    //     ]);
+
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     dd($response);
+    // }
+
+    // public static function scone_refresh()
+    // {
+    //     $sc1 = DB::table('tb_auth_storage')->where('apps', 'starclick1')->first();
+
+    //     $curl = curl_init();
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $sc1->cookies,
+    //         ],
+    //     ]);
+
+    //     curl_exec($curl);
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/sc',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $sc1->cookies,
+    //         ],
+    //     ]);
+
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     dd($response);
+    // }
+
+    // public static function scone_order_weekly($witel)
+    // {
+    //     $sc1 = DB::table('tb_auth_storage')->where('apps', 'starclick1')->first();
+
+    //     for ($i = 0; $i <= 14; $i++)
+    //     {
+    //         $datex = date('d/m/Y', strtotime("-$i days"));
+
+    //         $curl = curl_init();
+
+    //         curl_setopt_array($curl, [
+    //             CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
+    //             CURLOPT_RETURNTRANSFER => true,
+    //             CURLOPT_HEADER         => false,
+    //             CURLOPT_SSL_VERIFYHOST => false,
+    //             CURLOPT_SSL_VERIFYPEER => false,
+    //             CURLOPT_CUSTOMREQUEST  => 'GET',
+    //             CURLOPT_HTTPHEADER     => [
+    //                 'Cookie: ' . $sc1->cookies,
+    //             ],
+    //         ]);
+
+    //         curl_exec($curl);
+
+    //         $link = 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data=' . urlencode('{"SearchText":"' . $witel . '","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"' . $datex . '","EndDate":"' . $datex . '","start":null,"source":"NOSS","typeMenu":"TRACKING"}') . '&page=1&start=0&limit=10';
+
+    //         curl_setopt_array($curl, [
+    //             CURLOPT_URL            => $link,
+    //             CURLOPT_RETURNTRANSFER => true,
+    //             CURLOPT_HEADER         => false,
+    //             CURLOPT_SSL_VERIFYHOST => false,
+    //             CURLOPT_SSL_VERIFYPEER => false,
+    //             CURLOPT_CUSTOMREQUEST  => 'GET',
+    //             CURLOPT_HTTPHEADER     => [
+    //                 'Cookie: ' . $sc1->cookies,
+    //             ],
+    //         ]);
+
+    //         $response = curl_exec($curl);
+
+    //         if (curl_errno($curl))
+    //         {
+    //             echo 'Error:' . curl_error($curl);
+    //             curl_close($curl);
+    //         }
+    //         else
+    //         {
+    //             curl_close($curl);
+    //             $response = json_decode($response);
+
+    //             if ($response == null)
+    //             {
+    //                 print_r('starclick one session expired!');
+    //             }
+
+    //             $data       = $response->data;
+    //             $jumlahpage = round(@(int) $data->CNT / 10);
+
+    //             if (isset($data->LIST) && isset($data->CNT))
+    //             {
+    //                 $start = 0;
+
+    //                 if ($data->CNT > 0 && $data->CNT < 10)
+    //                 {
+    //                     self::scone_insert_order($witel, $datex, 1, 0, $sc1->cookies);
+    //                 }
+    //                 else
+    //                 {
+    //                     for ($x = 1; $x <= $jumlahpage; $x++)
+    //                     {
+    //                         if ($x == 1)
+    //                         {
+    //                             $start = $start + 11;
+    //                         }
+    //                         else
+    //                         {
+    //                             $start = $start + 10;
+    //                         }
+
+    //                         self::scone_insert_order($witel, $datex, $x, $start, $sc1->cookies);
+    //                     }
+    //                 }
+
+    //                 sleep(30);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public static function scone_insert_order($witel, $datex, $x, $start, $cookies)
+    // {
+    //     $curl = curl_init();
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/user/get-session',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $cookies,
+    //         ],
+    //     ]);
+
+    //     curl_exec($curl);
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => 'https://starclick.telkom.co.id/retail/public/retail/api/tracking-naf?_dc=1694442833467&ScNoss=true&guid=0&code=0&data=' . urlencode('{"SearchText":"' . $witel . '","Field":"ORG","Fieldstatus":null,"Fieldtransaksi":null,"Fieldchannel":null,"StartDate":"' . $datex . '","EndDate":"' . $datex . '","start":null,"source":"NOSS","typeMenu":"TRACKING"}') . '&page=' . $x . '&start=' . $start . '&limit=10',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_HEADER         => false,
+    //         CURLOPT_SSL_VERIFYHOST => false,
+    //         CURLOPT_SSL_VERIFYPEER => false,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Cookie: ' . $cookies,
+    //         ],
+    //     ]);
+
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     $response = json_decode($response);
+
+    //     if (isset($response->data->LIST))
+    //     {
+    //         $list  = $response->data->LIST;
+    //         $total = count($list);
+
+    //         foreach ($list as $k => $v)
+    //         {
+    //             $insert[] = [
+    //                 'order_id'        => $v->ORDER_ID,
+    //                 'order_date'      => date('Y-m-d H: i: s', strtotime($v->ORDER_DATE)),
+    //                 'order_status'    => $v->ORDER_STATUS,
+    //                 'order_date_ps'   => date('Y-m-d H: i: s', strtotime($v->ORDER_DATE_PS)),
+    //                 'extern_order_id' => $v->EXTERN_ORDER_ID,
+    //                 'ncli'            => $v->NCLI,
+    //                 'customer_name'   => str_replace(["'", '’'], '', $v->CUSTOMER_NAME),
+    //                 'witel'           => $v->WITEL,
+    //                 'agent_id'        => $v->AGENT_ID,
+    //                 'jenis_psb'       => $v->JENISPSB,
+    //                 'sto'             => $v->STO,
+    //                 'speedy'          => $v->SPEEDY,
+    //                 'pots'            => $v->POTS,
+    //                 'package_name'    => $v->PACKAGE_NAME,
+    //                 'status_resume'   => $v->STATUS_RESUME,
+    //                 'status_code_sc'  => $v->STATUS_CODE_SC,
+    //                 'order_id_ncx'    => $v->ORDER_ID_NCX,
+    //                 'customer_addr'   => str_replace(["'", '’'], '', $v->CUSTOMER_ADDR),
+    //                 'kcontact'        => str_replace(["'", '’'], '', $v->KCONTACT),
+    //                 'ins_address'     => str_replace(["'", '’'], '', $v->INS_ADDRESS),
+    //                 'nd_internet'     => $v->ND_INTERNET,
+    //                 'nd_pots'         => $v->ND_POTS,
+    //                 'gps_latitude'    => $v->GPS_LATITUDE,
+    //                 'gps_longitude'   => $v->GPS_LONGITUDE,
+    //                 'tn_number'       => $v->TN_NUMBER,
+    //                 'loc_id'          => $v->LOC_ID,
+    //                 'reserve_tn'      => $v->RESERVE_TN,
+    //                 'reserve_port'    => $v->RESERVE_PORT,
+    //                 'tipe_order'      => 'TLKM',
+    //             ];
+
+    //             print_r("saved order id $v->ORDER_ID\n");
+    //         }
+
+    //         self::scone_insert_update($insert);
+    //         sleep(1);
+
+    //         print_r("\nFinish Grab Backend SC ONE Total $total\n");
+    //     }
+    // }
+
+    // public static function scone_insert_update(array $rows)
+    // {
+    //     $table = 'tb_source_starclick';
+    //     $first = reset($rows);
+
+    //     $columns = implode(
+    //         ',',
+    //         array_map(function ($value)
+    //         {
+    //             return "$value";
+    //         }, array_keys($first))
+    //     );
+
+    //     $values = implode(
+    //         ',',
+    //         array_map(function ($row)
+    //         {
+    //             return '(' . implode(
+    //                 ',',
+    //                 array_map(function ($value)
+    //                 {
+    //                     return '"' . str_replace('"', '""', $value) . '"';
+    //                 }, $row)
+    //             ) . ')';
+    //         }, $rows)
+    //     );
+
+    //     $updates = implode(
+    //         ',',
+    //         array_map(function ($value)
+    //         {
+    //             return "$value = VALUES($value)";
+    //         }, array_keys($first))
+    //     );
+
+    //     $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
+
+    //     return \DB::statement($sql);
+    // }
+
+    // public static function newscmt_location_id($type, $parent)
+    // {
+    //     $curl = curl_init();
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => "https://api-item-mgt-scm.telkom.co.id/product-by-location-id/?type_location_id=$type&parent_location_id=$parent&product_id=ALL",
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_ENCODING       => '',
+    //         CURLOPT_MAXREDIRS      => 10,
+    //         CURLOPT_TIMEOUT        => 0,
+    //         CURLOPT_FOLLOWLOCATION => true,
+    //         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDYwODEsInJvbGVfaWQiOjg0LCJ3YXJlaG91c2VfaWQiOjM4NzgsImJ1c2luZXNzX3VuaXRfaWQiOjEwNjksInNjaGVtYV9pZCI6MSwic2NoZW1lX2xvZ2luIjoic2NtdCIsImJ1X3JvbGVfaWQiOjkwMDc5LCJpYXQiOjE3MDAyNzc0ODN9.ZUPlXY4LBSDWjpv5AiNpCp-WXMKlKPiIBbMTYRgWYn8',
+    //         ],
+    //     ]);
+
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     $result = json_decode($response);
+
+    //     if ($result)
+    //     {
+    //         $total = count($result->body);
+
+    //         if ($total > 0)
+    //         {
+    //             DB::table('newscmt_location_id')->where('parent_location_id', $parent)->delete();
+
+    //             foreach ($result->body as $k => $v)
+    //             {
+    //                 $insert[] = [
+    //                     'parent_location_id'  => $parent,
+    //                     'product_id'          => $v->product_id,
+    //                     'product_code'        => $v->product_code,
+    //                     'product_description' => $v->product_description,
+    //                     'type_location_id'    => $v->type_location_id,
+    //                     'available'           => $v->available,
+    //                     'blocked'             => $v->blocked,
+    //                     'use_in_transaction'  => $v->use_in_transaction,
+    //                     'intransit'           => $v->intransit,
+    //                     'others'              => $v->others,
+    //                     'total'               => $v->total,
+    //                 ];
+    //             }
+
+    //             DB::table('newscmt_location_id')->insert($insert);
+    //         }
+
+    //         print_r("\nsuccess saved data newscmt_location_id type $type parent $parent total $total\n");
+    //     }
+    // }
+
+    // public static function newscmt_detail_location_id($type, $parent)
+    // {
+    //     $curl = curl_init();
+
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL            => "https://api-item-mgt-scm.telkom.co.id/product-detail-by-location-id/?type_location_id=$type&parent_location_id=$parent&product_id=ALL",
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_ENCODING       => '',
+    //         CURLOPT_MAXREDIRS      => 10,
+    //         CURLOPT_TIMEOUT        => 0,
+    //         CURLOPT_FOLLOWLOCATION => true,
+    //         CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+    //         CURLOPT_CUSTOMREQUEST  => 'GET',
+    //         CURLOPT_HTTPHEADER     => [
+    //             'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDYwODEsInJvbGVfaWQiOjg0LCJ3YXJlaG91c2VfaWQiOjM4NzgsImJ1c2luZXNzX3VuaXRfaWQiOjEwNjksInNjaGVtYV9pZCI6MSwic2NoZW1lX2xvZ2luIjoic2NtdCIsImJ1X3JvbGVfaWQiOjkwMDc5LCJpYXQiOjE3MDAyNzc0ODN9.ZUPlXY4LBSDWjpv5AiNpCp-WXMKlKPiIBbMTYRgWYn8',
+    //         ],
+    //     ]);
+
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     $result = json_decode($response);
+
+    //     if ($result)
+    //     {
+    //         $total = count($result->body);
+
+    //         if ($total > 0)
+    //         {
+    //             DB::table('newscmt_detail_location_id')->where('parent_location_id', $parent)->delete();
+
+    //             foreach ($result->body as $k => $v)
+    //             {
+    //                 $insert[] = [
+    //                     'parent_location_id'  => $parent,
+    //                     'product_id'          => $v->product_id,
+    //                     'product_code'        => $v->product_code,
+    //                     'product_description' => $v->product_description,
+    //                     'serial_number'       => $v->serial_number,
+    //                     'sid'                 => $v->sid,
+    //                     'inventory_status'    => $v->inventory_status,
+    //                     'type_location_id'    => $v->type_location_id,
+    //                 ];
+    //             }
+
+    //             DB::table('newscmt_detail_location_id')->insert($insert);
+    //         }
+
+    //         print_r("\nsuccess saved data newscmt_detail_location_id type $type parent $parent total $total\n");
+    //     }
+    // }
 }
