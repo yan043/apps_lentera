@@ -218,7 +218,7 @@ class OrganizationStructureController extends Controller
 
     public function storeTeam(Request $request)
     {
-        $data = $request->only(['id', 'service_area_id', 'name', 'technician1', 'technician2']);
+        $data = $request->only(['id', 'service_area_id', 'name', 'technician1', 'technician2', 'is_active']);
 
         if (isset($data['id']) && $data['id'])
         {

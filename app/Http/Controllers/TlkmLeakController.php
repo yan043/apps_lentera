@@ -315,7 +315,7 @@ class TlkmLeakController extends Controller
     {
         $total_all = $total_close = 0;
 
-        for ($i = 0; $i <= 2; $i++)
+        for ($i = 0; $i <= 6; $i++)
         {
             $date = date('Y-m-d', strtotime("-$i days"));
 

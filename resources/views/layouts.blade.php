@@ -68,7 +68,7 @@
 							<img class="rounded-circle header-profile-user" src="/assets/images/{{ Session::get('gender') }}.png"
 								alt="Header Avatar">
 							<span class="d-none d-xl-inline-block ms-1"
-								key="t-{{ Session::get('full_name') }}">{{ Session::get('full_name') }}</span>
+								key="t-{{ Session::get('full_name') }}">{{ Session::get('full_name') }} ({{ Session::get('nik') }})</span>
 							<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
 						</button>
 						<div class="dropdown-menu dropdown-menu-end">
@@ -227,12 +227,12 @@
 										<a href="/organization-structure/sub-unit">Sub Unit</a>
 									</li>
 									<li class="{{ Request::is('organization-structure/sub-group') ? 'active' : '' }}">
-										<a href="/organization-structure/sub-group">Sub-Group</a>
+										<a href="/organization-structure/sub-group">Sub Group</a>
 									</li>
 									<li class="{{ Request::is('organization-structure/mitra') ? 'active' : '' }}"><a
 											href="/organization-structure/mitra">Mitra</a></li>
 									<li class="{{ Request::is('organization-structure/service-area') ? 'active' : '' }}">
-										<a href="/organization-structure/service-area">Service-Area</a>
+										<a href="/organization-structure/service-area">Service Area</a>
 									</li>
 									<li class="{{ Request::is('organization-structure/work-zone') ? 'active' : '' }}">
 										<a href="/organization-structure/work-zone">Work Zone</a>
@@ -352,7 +352,7 @@
 					<label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
 				</div>
 
-				<div class="mb-2">
+				{{-- <div class="mb-2">
 					<img src="/assets/images/layouts/layout-3.jpg" class="img-thumbnail" alt="layout images">
 				</div>
 				<div class="form-check form-switch mb-3">
@@ -366,7 +366,7 @@
 				<div class="form-check form-switch mb-5">
 					<input class="form-check-input theme-choice" type="checkbox" id="dark-rtl-mode-switch">
 					<label class="form-check-label" for="dark-rtl-mode-switch">Dark RTL Mode</label>
-				</div>
+				</div> --}}
 
 			</div>
 

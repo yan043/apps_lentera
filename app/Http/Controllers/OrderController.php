@@ -16,7 +16,7 @@ class OrderController extends Controller
         $get_inventory_by_order_nte_stb  = OrderModel::get_inventory_by_order($id, 'nte', 'stb');
 
         $photos    = [];
-        $uploadDir = public_path('upload_order_reports/'.$id);
+        $uploadDir = public_path('upload_order_reports/' . $id);
         if (File::exists($uploadDir))
         {
             $files = File::files($uploadDir);
@@ -35,7 +35,7 @@ class OrderController extends Controller
                         {
                             $photos[$type] = [];
                         }
-                        $photos[$type][] = '/upload_order_reports/'.$id.'/'.$fileName;
+                        $photos[$type][] = '/upload_order_reports/' . $id . '/' . $fileName;
                     }
                 }
             }
@@ -86,7 +86,7 @@ class OrderController extends Controller
         if (! empty($request['photos_data']))
         {
             $photos    = json_decode($request['photos_data'], true);
-            $uploadDir = public_path('upload_order_reports/'.$request['id']);
+            $uploadDir = public_path('upload_order_reports/' . $request['id']);
             if (! File::exists($uploadDir))
             {
                 File::makeDirectory($uploadDir, 0755, true);
@@ -106,9 +106,9 @@ class OrderController extends Controller
                     $imageData   = str_replace(' ', '+', $imageData);
                     $imageBinary = base64_decode($imageData);
 
-                    $fileName = $type.'_'.$request['id'].'.jpg';
+                    $fileName = $type . '_' . $request['id'] . '.jpg';
 
-                    $filePath = $uploadDir.'/'.$fileName;
+                    $filePath = $uploadDir . '/' . $fileName;
                     file_put_contents($filePath, $imageBinary);
                 }
             }
@@ -121,7 +121,7 @@ class OrderController extends Controller
             {
                 return ! empty($imgs);
             }));
-            $uploadDir = public_path('upload_order_reports/'.$request['id']);
+            $uploadDir = public_path('upload_order_reports/' . $request['id']);
             if (File::exists($uploadDir))
             {
                 $files = File::files($uploadDir);

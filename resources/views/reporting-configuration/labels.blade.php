@@ -6,6 +6,21 @@
 		type="text/css" />
 	<link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 	<style>
+		.detail-data-table th,
+		.detail-data-table td {
+			text-align: center !important;
+			vertical-align: middle !important;
+			padding-top: 2px !important;
+			padding-bottom: 2px !important;
+			padding-left: 4px !important;
+			padding-right: 4px !important;
+			font-size: 12px !important;
+		}
+
+		.detail-data-table tr {
+			height: 22px
+		}
+
 		.modal-body {
 			text-align: left;
 		}
@@ -22,12 +37,12 @@
 				<i class="fas fa-plus-circle"></i>&nbsp; Add Data
 			</button>
 			<div class="table-responsive">
-				<table class="table table-striped text-center detail-data-table">
+				<table class="table table-striped table-hover text-center detail-data-table">
 					<thead>
 						<tr>
-							<th class="text-center">#</th>
-							<th class="text-center">Name</th>
-							<th class="text-center"></th>
+							<th>#</th>
+							<th>Name</th>
+							<th width="7%"></th>
 						</tr>
 					</thead>
 					<tbody>

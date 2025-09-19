@@ -9,7 +9,7 @@ class WorkOrderManagementController extends Controller
 {
     public function updateOrInsertOrder(Request $request)
     {
-        $validateData = $request->validate([
+        $request->validate([
             'id'            => 'required',
             'source_data'   => 'required',
             'order_code'    => 'required',
@@ -21,7 +21,7 @@ class WorkOrderManagementController extends Controller
             'assign_notes'  => 'required',
         ]);
 
-        WorkOrderManagementModel::updateOrInsertOrder($validateData);
+        WorkOrderManagementModel::updateOrInsertOrder($request);
 
         return redirect()->back()->with('success', 'Successfully Assigned Work Order to Team!');
     }

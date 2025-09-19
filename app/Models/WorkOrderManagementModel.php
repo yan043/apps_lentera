@@ -10,35 +10,36 @@ class WorkOrderManagementModel extends Model
 {
     public static function updateOrInsertOrder($data)
     {
-        if (array_key_exists($data['id'], $data) == false || $data['id'] == 'new')
+        if ($data == null || $data->id == 'new')
         {
             $id = DB::table('tb_assign_orders')->insertGetId([
-                'sourcedata'    => $data['source_data'],
-                'order_code'    => $data['order_code'],
-                'order_id'      => $data['order_id'],
-                'team_id'       => $data['team_id'],
-                'team_name'     => $data['team_name'],
-                'assign_date'   => $data['assign_date'],
-                'assign_labels' => json_encode($data['assign_labels']),
-                'assign_notes'  => $data['assign_notes'],
+                'sourcedata'    => $data->source_data,
+                'order_code'    => $data->order_code,
+                'order_id'      => $data->order_id,
+                'team_id'       => $data->team_id,
+                'team_name'     => $data->team_name,
+                'assign_date'   => $data->assign_date,
+                'assign_labels' => json_encode($data->assign_labels),
+                'assign_notes'  => $data->assign_notes,
                 'created_by'    => Session::get('nik'),
                 'created_at'    => now(),
             ]);
-        } else
+        }
+        else
         {
-            $id = $data['id'];
+            $id = $data->id;
             DB::table('tb_assign_orders')
                 ->where('id', $id)
                 ->update(
                     [
-                        'sourcedata'    => $data['source_data'],
-                        'order_code'    => $data['order_code'],
-                        'order_id'      => $data['order_id'],
-                        'team_id'       => $data['team_id'],
-                        'team_name'     => $data['team_name'],
-                        'assign_date'   => $data['assign_date'],
-                        'assign_labels' => json_encode($data['assign_labels']),
-                        'assign_notes'  => $data['assign_notes'],
+                        'sourcedata'    => $data->source_data,
+                        'order_code'    => $data->order_code,
+                        'order_id'      => $data->order_id,
+                        'team_id'       => $data->team_id,
+                        'team_name'     => $data->team_name,
+                        'assign_date'   => $data->assign_date,
+                        'assign_labels' => json_encode($data->assign_labels),
+                        'assign_notes'  => $data->assign_notes,
                         'updated_by'    => Session::get('nik'),
                         'updated_at'    => now(),
                     ]
@@ -47,14 +48,14 @@ class WorkOrderManagementModel extends Model
 
         DB::table('tb_assign_orders_log')->insert(
             [
-                'sourcedata'    => $data['source_data'],
-                'order_code'    => $data['order_code'],
-                'order_id'      => $data['order_id'],
-                'team_id'       => $data['team_id'],
-                'team_name'     => $data['team_name'],
-                'assign_date'   => $data['assign_date'],
-                'assign_labels' => json_encode($data['assign_labels']),
-                'assign_notes'  => $data['assign_notes'],
+                'sourcedata'    => $data->source_data,
+                'order_code'    => $data->order_code,
+                'order_id'      => $data->order_id,
+                'team_id'       => $data->team_id,
+                'team_name'     => $data->team_name,
+                'assign_date'   => $data->assign_date,
+                'assign_labels' => json_encode($data->assign_labels),
+                'assign_notes'  => $data->assign_notes,
                 'created_by'    => Session::get('nik'),
                 'created_at'    => now(),
             ]
@@ -344,13 +345,16 @@ class WorkOrderManagementModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tsi.reported_date', 'DESC')->get();
-        } elseif ($sourcedata == 'manual')
+        }
+        elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tsm.reported_date', 'DESC')->get();
-        } elseif ($sourcedata == 'bima')
+        }
+        elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tbm.c_datemodified', 'DESC')->get();
-        } else
+        }
+        else
         {
             $inseraSql = $inseraQuery->orderBy('tsi.reported_date', 'DESC');
             $manualSql = $manualQuery->orderBy('tsm.reported_date', 'DESC');
@@ -502,13 +506,16 @@ class WorkOrderManagementModel extends Model
         if ($sourcedata == 'insera')
         {
             return $inseraQuery->orderBy('tao.updated_at', 'DESC')->get();
-        } elseif ($sourcedata == 'manual')
+        }
+        elseif ($sourcedata == 'manual')
         {
             return $manualQuery->orderBy('tao.updated_at', 'DESC')->get();
-        } elseif ($sourcedata == 'bima')
+        }
+        elseif ($sourcedata == 'bima')
         {
             return $bimaQuery->orderBy('tao.updated_at', 'DESC')->get();
-        } else
+        }
+        else
         {
             $inseraSql = $inseraQuery->orderBy('tao.updated_at', 'DESC');
             $manualSql = $manualQuery->orderBy('tao.updated_at', 'DESC');

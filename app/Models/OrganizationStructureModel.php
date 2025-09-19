@@ -103,10 +103,7 @@ class OrganizationStructureModel extends Model
                 DB::raw('te3.full_name AS kordinator_lapangan1_name'),
                 DB::raw('te4.full_name AS kordinator_lapangan2_name')
             )
-            ->where([
-                'tsa.is_active' => 1,
-                'tsa.witel_id'  => Session()->get('witel_id'),
-            ])
+            ->where('tsa.witel_id', Session()->get('witel_id'))
             ->get();
     }
 
@@ -129,9 +126,8 @@ class OrganizationStructureModel extends Model
                 DB::raw('te4.full_name AS kordinator_lapangan2_name')
             )
             ->where([
-                'tsa.id'        => $id,
-                'tsa.is_active' => 1,
-                'tsa.witel_id'  => Session()->get('witel_id'),
+                'tsa.id'       => $id,
+                'tsa.witel_id' => Session()->get('witel_id')
             ])
             ->first();
     }
@@ -176,36 +172,36 @@ class OrganizationStructureModel extends Model
     public static function get_team()
     {
         return DB::table('tb_team AS tt')
-            ->leftJoin('tb_service_area AS ta', 'tt.service_area_id', '=', 'ta.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_employee AS te', 'tt.technician1', '=', 'te.nik')
             ->leftJoin('tb_employee AS te2', 'tt.technician2', '=', 'te2.nik')
             ->select(
                 'tt.*',
-                'ta.id AS service_area_id',
-                'ta.name AS service_area_name',
+                'tsa.id AS service_area_id',
+                'tsa.name AS service_area_name',
                 DB::raw('te.full_name AS technician1_name'),
                 DB::raw('te2.full_name AS technician2_name')
             )
-            ->where('tt.is_active', 1)
+            ->where('tsa.witel_id', Session()->get('witel_id'))
             ->get();
     }
 
     public static function get_team_by_id($id)
     {
         return DB::table('tb_team AS tt')
-            ->leftJoin('tb_service_area AS ta', 'tt.service_area_id', '=', 'ta.id')
+            ->leftJoin('tb_service_area AS tsa', 'tt.service_area_id', '=', 'tsa.id')
             ->leftJoin('tb_employee AS te', 'tt.technician1', '=', 'te.nik')
             ->leftJoin('tb_employee AS te2', 'tt.technician2', '=', 'te2.nik')
             ->select(
                 'tt.*',
-                'ta.id AS service_area_id',
-                'ta.name AS service_area_name',
+                'tsa.id AS service_area_id',
+                'tsa.name AS service_area_name',
                 DB::raw('te.full_name AS technician1_name'),
                 DB::raw('te2.full_name AS technician2_name')
             )
             ->where([
                 'tt.id'        => $id,
-                'tt.is_active' => 1,
+                'tsa.witel_id' => Session()->get('witel_id')
             ])
             ->first();
     }

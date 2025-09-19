@@ -24,7 +24,7 @@ class EmployeeManagementController extends Controller
 
     public function storeEmployee(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'nik'          => 'required|min:6',
             'full_name'    => 'required',
             'regional_id'  => 'required',
@@ -36,19 +36,23 @@ class EmployeeManagementController extends Controller
             'is_active'    => 'required',
         ]);
 
+        $data = $request->except(['_token', '_method']);
+        $data['created_by'] = session('nik');
+        $data['created_at'] = now();
+
         if ($request->filled('password'))
         {
-            $validatedData['password'] = Hash::make($request->password);
+            $data['password'] = Hash::make($request->password);
         }
 
-        EmployeeManagementModel::storeEmployee($validatedData);
+        EmployeeManagementModel::storeEmployee($data);
 
         return redirect()->back()->with('success', 'Employee has been successfully added.');
     }
 
     public function updateEmployee(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'nik'          => 'required|min:6',
             'full_name'    => 'required',
             'regional_id'  => 'required',
@@ -60,35 +64,38 @@ class EmployeeManagementController extends Controller
             'is_active'    => 'required',
         ]);
 
+        $data = $request->except(['_token', '_method', 'id']);
+        $data['updated_by'] = session('nik');
+
         if ($request->filled('password'))
         {
-            $validatedData['password'] = Hash::make($request->password);
+            $data['password'] = Hash::make($request->password);
         }
 
-        EmployeeManagementModel::updateEmployee($id, $validatedData);
+        EmployeeManagementModel::updateEmployee($id, $data);
 
         return redirect()->back()->with('success', 'Employee has been successfully updated.');
     }
 
     public function storeRole(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        EmployeeManagementModel::storeRole($validatedData);
+        EmployeeManagementModel::storeRole($request);
 
         return redirect()->back()->with('success', 'Role has been successfully added.');
     }
 
     public function updateRole(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'id'   => 'required|integer|exists:tb_roles_permissions,id',
             'name' => 'required|string|max:255',
         ]);
 
-        EmployeeManagementModel::updateRole($validatedData);
+        EmployeeManagementModel::updateRole($request);
 
         return redirect()->back()->with('success', 'Role has been successfully updated.');
     }
