@@ -217,11 +217,11 @@ class TelegramController extends Controller
                     return;
                 }
 
-                $msg = "<b>Detail ODP Terbuka</b>\n";
+                $msg  = "<b>Detail ODP Terbuka</b>\n";
                 $msg .= '<i>';
-                $msg .= '🔖 Nama ODP : ' . ($odp->odp_name ?? '-') . "\n";
-                $msg .= '📍 Koordinat ODP : <code>' . ($odp->odp_coordinates ?? '-') . "</code>\n";
-                $msg .= '📝 Catatan : ' . ($odp->note ?? '-') . "\n";
+                $msg .= '🔖 Nama ODP     : ' . ($odp->odp_name ?? '-') . "\n";
+                $msg .= '📍 Koordinat ODP: <code>' . ($odp->odp_coordinates ?? '-') . "</code>\n";
+                $msg .= '📝 Catatan      : ' . ($odp->note ?? '-') . "\n";
                 $msg .= '</i>';
 
                 self::setUserState($chat_id, [
@@ -340,13 +340,13 @@ class TelegramController extends Controller
                 $username = $update['message']['from']['username'] ?? '';
                 $user_id  = $update['message']['from']['id']       ?? '';
 
-                $caption = "<b>📢 Laporan ODP Terbuka</b>\n\n";
+                $caption   = "<b>📢 Laporan ODP Terbuka</b>\n\n";
                 $caption .= '<i>';
-                $caption .= '🔖 Nama ODP : ' . ($state['odp_name'] ?? '-') . "\n";
-                $caption .= '📍 Koordinat ODP : <code>' . $coordinates . "</code>\n";
-                $caption .= "📝 Catatan : \n\n";
-                $caption .= '🙋 Pelapor : ' . $pelapor . ' | ' . $user_id . ($username ? " (@$username)" : '') . "\n";
-                $caption .= '🗓️ Tanggal : ' . date('Y-m-d H:i:s') . "\n";
+                $caption .= '🔖 Nama ODP     : ' . ($state['odp_name'] ?? '-') . "\n";
+                $caption .= '📍 Koordinat ODP: <code>' . $coordinates . "</code>\n";
+                $caption .= "📝 Catatan      : \n\n";
+                $caption .= '🙋 Pelapor      : ' . $pelapor . ' | ' . $user_id . ($username ? " (@$username)" : '') . "\n";
+                $caption .= '🗓️ Tanggal      : ' . date('Y-m-d H:i:s') . "\n";
                 $caption .= '</i>';
 
                 if (! empty($state['photo_odp']) && file_exists(public_path($state['photo_odp'])))
@@ -426,13 +426,13 @@ class TelegramController extends Controller
                 $username = $update['message']['from']['username'] ?? '';
                 $user_id  = $update['message']['from']['id']       ?? '';
 
-                $caption = "<b>✅ ODP Berhasil Ditutup & Diperbaiki</b>\n\n";
+                $caption  = "<b>✅ ODP Berhasil Ditutup & Diperbaiki</b>\n\n";
                 $caption .= '<i>';
-                $caption .= '🔖 Nama ODP : ' . ($state['odp_name'] ?? '-') . "\n";
-                $caption .= '📍 Koordinat Perbaikan : <code>' . $coordinates . "</code>\n";
-                $caption .= "📝 Catatan Perbaikan : \n\n" . ($state['repair_notes'] ?? '-') . "\n";
-                $caption .= '🙋 Pelapor : ' . $pelapor . ' | ' . $user_id . ($username ? " (@$username)" : '') . "\n";
-                $caption .= '🗓️ Tanggal : ' . date('Y-m-d H:i:s') . "\n";
+                $caption .= '🔖 Nama ODP           : ' . ($state['odp_name'] ?? '-') . "\n";
+                $caption .= '📍 Koordinat Perbaikan: <code>' . $coordinates . "</code>\n";
+                $caption .= "📝 Catatan Perbaikan  : \n\n" . ($state['repair_notes'] ?? '-') . "\n";
+                $caption .= '🙋 Pelapor            : ' . $pelapor . ' | ' . $user_id . ($username ? " (@$username)" : '') . "\n";
+                $caption .= '🗓️ Tanggal            : ' . date('Y-m-d H:i:s') . "\n";
                 $caption .= '</i>';
 
                 if (! empty($state['repair_photo_odp']) && file_exists(public_path($state['repair_photo_odp'])))
