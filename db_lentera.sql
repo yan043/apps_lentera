@@ -29,12 +29,18 @@ CREATE TABLE IF NOT EXISTS `cache` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Membuang data untuk tabel db_lentera.cache: ~1 rows (lebih kurang)
+-- Membuang data untuk tabel db_lentera.cache: ~9 rows (lebih kurang)
 DELETE FROM `cache`;
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+	('laravel_cache_captcha_00a67f4a73e794b7272719283336d887', 'a:6:{i:0;s:1:"q";i:1;s:1:"f";i:2;s:1:"t";i:3;s:1:"r";i:4;s:1:"t";i:5;s:1:"g";}', 1758291866),
 	('laravel_cache_captcha_0bed73fc95eb82dd535f42ee07e701aa', 'a:6:{i:0;s:1:"x";i:1;s:1:"f";i:2;s:1:"g";i:3;s:1:"q";i:4;s:1:"u";i:5;s:1:"e";}', 1758195587),
+	('laravel_cache_captcha_2d1864729e458068c130eeeb8bf880be', 'a:6:{i:0;s:1:"4";i:1;s:1:"u";i:2;s:1:"u";i:3;s:1:"f";i:4;s:1:"n";i:5;s:1:"y";}', 1758291927),
+	('laravel_cache_captcha_4fa4f36c3f40c41ae4a78b448f0a39e8', 'a:6:{i:0;s:1:"p";i:1;s:1:"a";i:2;s:1:"b";i:3;s:1:"4";i:4;s:1:"p";i:5;s:1:"n";}', 1758291805),
+	('laravel_cache_captcha_8c80559ace2160110324db23dbf8ab87', 'a:6:{i:0;s:1:"u";i:1;s:1:"j";i:2;s:1:"h";i:3;s:1:"t";i:4;s:1:"8";i:5;s:1:"u";}', 1758291988),
+	('laravel_cache_captcha_aa0eee9129a1e4d43c74be976e0fdba8', 'a:6:{i:0;s:1:"z";i:1;s:1:"g";i:2;s:1:"8";i:3;s:1:"u";i:4;s:1:"n";i:5;s:1:"3";}', 1758291690),
 	('laravel_cache_captcha_bbf96e259a4ab868f1622d4cd8503cf1', 'a:6:{i:0;s:1:"m";i:1;s:1:"p";i:2;s:1:"u";i:3;s:1:"8";i:4;s:1:"b";i:5;s:1:"g";}', 1758195686),
-	('laravel_cache_captcha_be3c81665c43bc6e95cbbc8d406e83bd', 'a:6:{i:0;s:1:"f";i:1;s:1:"9";i:2;s:1:"g";i:3;s:1:"y";i:4;s:1:"h";i:5;s:1:"q";}', 1758195750);
+	('laravel_cache_captcha_be3c81665c43bc6e95cbbc8d406e83bd', 'a:6:{i:0;s:1:"f";i:1;s:1:"9";i:2;s:1:"g";i:3;s:1:"y";i:4;s:1:"h";i:5;s:1:"q";}', 1758195750),
+	('laravel_cache_captcha_fb8ce326b3adb9a749aa8043b9b0928e', 'a:6:{i:0;s:1:"2";i:1;s:1:"a";i:2;s:1:"d";i:3;s:1:"q";i:4;s:1:"3";i:5;s:1:"j";}', 1758291743);
 
 -- membuang struktur untuk table db_lentera.cache_locks
 DROP TABLE IF EXISTS `cache_locks`;
@@ -285,9 +291,9 @@ CREATE TABLE IF NOT EXISTS `tb_auth_storage` (
 -- Membuang data untuk tabel db_lentera.tb_auth_storage: ~3 rows (lebih kurang)
 DELETE FROM `tb_auth_storage`;
 INSERT INTO `tb_auth_storage` (`id`, `apps`, `username`, `password`, `cookies`, `last_updated_at`) VALUES
-	(1, 'insera', NULL, NULL, 'JSESSIONID=EOWch9266CRC69jjHF6s_U8dRNTo33CD36tG2Fkz.cident-8485984bc9-p2j8k; a10e07c589b0b6a4b246720bbb392af5=42fe54582c9368202fb0b34446350753;', '2025-09-17 12:59:30'),
+	(1, 'insera', NULL, NULL, 'JSESSIONID=vpb3Z9VUG_Rzooy3k4KskXpzihS4_WKFJJ_AY2JX.cident-76b8ddc5df-7f59r; a10e07c589b0b6a4b246720bbb392af5=bc7b010e46d778c798bfdc86bfee07be;', '2025-09-19 15:14:59'),
 	(2, 'bima', NULL, NULL, 'JSESSIONID=e_-ADANeIF04R4VSKCC1d3uMLfaCgpdFkDVubp4G.bima-8c76457fb-tv5vv; 2583a12ba4a45f8c3321a228b61ba02c=aad52e42354c90df0fa57d11c29436f8; NSC_ESNS=66936c65-7db2-18ca-9678-866515d982dc_2263614569_4238236434_00000000001720892098', '2025-09-17 23:13:18'),
-	(3, 'utonline', NULL, NULL, 'utretailprod=n93jmrjnv7th9pjbrdg8iolr2p', '2025-09-18 10:29:17');
+	(3, 'utonline', NULL, NULL, 'utretailprod=q0q32m8bf3d39d1frqoleml5k4', '2025-09-18 22:44:17');
 
 -- membuang struktur untuk table db_lentera.tb_employee
 DROP TABLE IF EXISTS `tb_employee`;
@@ -327,7 +333,7 @@ CREATE TABLE IF NOT EXISTS `tb_employee` (
   KEY `sub_unit_id` (`sub_unit_id`),
   KEY `level_id` (`role_id`) USING BTREE,
   KEY `unit_id` (`sub_group_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Membuang data untuk tabel db_lentera.tb_employee: ~9 rows (lebih kurang)
 DELETE FROM `tb_employee`;
@@ -339,8 +345,8 @@ INSERT INTO `tb_employee` (`id`, `regional_id`, `witel_id`, `mitra_id`, `sub_uni
 	(5, 4, 1, 2, 1, 2, 9, 885770, 'WAHYUDI EKO PRASETYO', '65451671', NULL, NULL, 'Laki-Laki', NULL, NULL, 'ZwAL9S8d712XYsNRHlpIpE6mEzNVBxLyfgntHrJUKMC6NoYUf6davgImt9f8', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-09-18 18:43:56', 1, 981020, '2025-09-18 19:43:13', NULL, '2025-09-18 19:56:06'),
 	(6, 4, 1, 2, 1, 2, 12, 935501, 'ALDY PRADISMA RAMADHAN', '142765125', NULL, NULL, 'Laki-Laki', NULL, NULL, 'ZwAL9S8d712XYsNRHlpIpE6mEzNVBxLyfgntHrJUKMC6NoYUf6davgImt9f8', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-09-18 18:43:56', 1, 981020, '2025-09-18 19:43:13', NULL, '2025-09-18 19:58:38'),
 	(7, 4, 1, 2, 1, 2, 9, 20941067, 'MUHAMMAD AL MAJID', '171053504', NULL, NULL, 'Laki-Laki', NULL, NULL, 'ZwAL9S8d712XYsNRHlpIpE6mEzNVBxLyfgntHrJUKMC6NoYUf6davgImt9f8', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-09-18 18:43:56', 1, 981020, '2025-09-18 19:43:13', NULL, '2025-09-18 20:00:38'),
-	(8, 4, 1, 2, 1, 2, 1, 981020, 'MAHDIAN', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, 'n5Jmnr2hgr5xCtSdlDcfYIOuVjTqiKCVy85eZ163ujqXLcKRjxR2wfqCwej6', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-09-18 19:04:42', 1, 981020, '2025-09-18 19:43:13', NULL, '2025-09-18 19:04:42'),
-	(9, 4, 1, 2, 1, 2, 16, 20981020, 'MAHDIAN', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, 'n5Jmnr2hgr5xCtSdlDcfYIOuVjTqiKCVy85eZ163ujqXLcKRjxR2wfqCwej6', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-09-18 19:04:42', 1, 981020, '2025-09-18 19:43:13', NULL, '2025-09-18 20:53:07');
+	(8, 4, 1, 2, 1, 26, 1, 981020, 'MAHDIAN', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, 'SQ1e2LBf6odRF1crpPIgv5Ht4hOJXwplvWmMqFpOMLQXOPloMknBJBF37qhF', NULL, '$2y$12$M9AmlyDhrtqnBpzlJxh9W.sHxIavCkAlXvVvufnWnc8.A/ZlMaRGO', '127.0.0.1', '2025-09-20 12:35:57', 1, 981020, '2025-09-18 19:43:13', NULL, '2025-09-20 12:35:57'),
+	(9, 4, 1, 2, 1, 36, 16, 20981020, 'MAHDIAN', '401791818', NULL, NULL, 'Laki-Laki', NULL, NULL, 'n5Jmnr2hgr5xCtSdlDcfYIOuVjTqiKCVy85eZ163ujqXLcKRjxR2wfqCwej6', NULL, NULL, '127.0.0.1', '2025-09-18 19:04:42', 1, 981020, '2025-09-18 19:43:13', 981020, '2025-09-19 18:00:15');
 
 -- membuang struktur untuk table db_lentera.tb_inventory_material
 DROP TABLE IF EXISTS `tb_inventory_material`;
@@ -540,14 +546,22 @@ CREATE TABLE IF NOT EXISTS `tb_order_labels` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Membuang data untuk tabel db_lentera.tb_order_labels: ~3 rows (lebih kurang)
+-- Membuang data untuk tabel db_lentera.tb_order_labels: ~11 rows (lebih kurang)
 DELETE FROM `tb_order_labels`;
 INSERT INTO `tb_order_labels` (`id`, `name`) VALUES
-	(1, 'INSERA'),
-	(2, 'MANUALS'),
-	(3, 'BIMA');
+	(1, 'HVC_VVIP'),
+	(2, 'HVC_DIAMOND'),
+	(3, 'HVC_PLATINUM'),
+	(4, 'HVC_GOLD'),
+	(5, 'HVC_SILVER'),
+	(6, 'REGULER'),
+	(7, 'TELKOM_CARE_188'),
+	(8, 'TELKOM_CARE_MYINDIHOME'),
+	(9, 'TELKOM_CARE_SOSMED'),
+	(10, 'TELKOM_CARE_WHATSAPP'),
+	(11, 'SQM');
 
 -- membuang struktur untuk table db_lentera.tb_order_segment
 DROP TABLE IF EXISTS `tb_order_segment`;
@@ -697,7 +711,7 @@ CREATE TABLE IF NOT EXISTS `tb_service_area` (
 DELETE FROM `tb_service_area`;
 INSERT INTO `tb_service_area` (`id`, `regional_id`, `witel_id`, `name`, `chat_id`, `head_service_area`, `officer_service_area`, `kordinator_lapangan1`, `kordinator_lapangan2`, `is_active`, `sort_id`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
 	(1, 4, 1, 'BANJARBARU', '-1002832987179', 0, 0, 0, 0, 1, 0, 981020, NULL, NULL, '2025-09-18 19:38:41'),
-	(2, 4, 1, 'BANJARMASIN', '-1002832987179', 0, 0, 0, 0, 1, 0, 981020, NULL, NULL, '2025-09-18 19:38:42'),
+	(2, 4, 1, 'BANJARMASIN', '-1002832987179', 0, 0, 0, 0, 1, 0, 981020, NULL, NULL, '2025-09-19 17:01:50'),
 	(3, 4, 1, 'BATULICIN', '-1002832987179', 0, 0, 0, 0, 1, 0, 981020, NULL, NULL, '2025-09-18 19:38:43'),
 	(4, 4, 1, 'PLEIHARI', '-1002832987179', 0, 0, 0, 0, 1, 0, 981020, NULL, NULL, '2025-09-18 19:38:44'),
 	(5, 4, 1, 'TANJUNG TABALONG', '-1002832987179', 0, 0, 0, 0, 1, 0, 981020, NULL, NULL, '2025-09-18 19:38:45'),
@@ -774,7 +788,7 @@ CREATE TABLE IF NOT EXISTS `tb_source_bima` (
   KEY `c_servicenum` (`c_servicenum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Membuang data untuk tabel db_lentera.tb_source_bima: ~0 rows (lebih kurang)
+-- Membuang data untuk tabel db_lentera.tb_source_bima: ~1.757 rows (lebih kurang)
 DELETE FROM `tb_source_bima`;
 
 -- membuang struktur untuk table db_lentera.tb_source_insera
@@ -875,7 +889,7 @@ CREATE TABLE IF NOT EXISTS `tb_source_insera` (
   KEY `workzone` (`workzone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Membuang data untuk tabel db_lentera.tb_source_insera: ~0 rows (lebih kurang)
+-- Membuang data untuk tabel db_lentera.tb_source_insera: ~1.824 rows (lebih kurang)
 DELETE FROM `tb_source_insera`;
 
 -- membuang struktur untuk table db_lentera.tb_source_manuals
@@ -1024,7 +1038,7 @@ CREATE TABLE IF NOT EXISTS `tb_source_utonline` (
   `typeOrderinProgress` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `approver` text COLLATE utf8mb4_general_ci,
   `getFlowLatest` text COLLATE utf8mb4_general_ci,
-  `agent` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `retryOrderAction` int DEFAULT '0',
   `ujiPetikInvalid` text COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`id`),
@@ -1034,7 +1048,7 @@ CREATE TABLE IF NOT EXISTS `tb_source_utonline` (
   KEY `noInternet` (`noInternet`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Membuang data untuk tabel db_lentera.tb_source_utonline: ~0 rows (lebih kurang)
+-- Membuang data untuk tabel db_lentera.tb_source_utonline: ~16 rows (lebih kurang)
 DELETE FROM `tb_source_utonline`;
 
 -- membuang struktur untuk table db_lentera.tb_sub_group
@@ -1120,7 +1134,7 @@ CREATE TABLE IF NOT EXISTS `tb_team` (
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `technician1` int DEFAULT '0',
   `technician2` int DEFAULT '0',
-  `is_active` int DEFAULT NULL COMMENT '0 : deactive, 1 : active',
+  `is_active` int DEFAULT '0' COMMENT '0 : deactive, 1 : active',
   `created_by` int DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_by` int DEFAULT '0',
@@ -1131,10 +1145,12 @@ CREATE TABLE IF NOT EXISTS `tb_team` (
   KEY `created_by` (`created_by`),
   KEY `updated_by` (`updated_by`),
   KEY `sector_id` (`service_area_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Membuang data untuk tabel db_lentera.tb_team: ~0 rows (lebih kurang)
+-- Membuang data untuk tabel db_lentera.tb_team: ~1 rows (lebih kurang)
 DELETE FROM `tb_team`;
+INSERT INTO `tb_team` (`id`, `service_area_id`, `name`, `technician1`, `technician2`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
+	(1, 1, 'TEAM MAHDIAN', 20981020, 0, 1, 0, NULL, 0, '2025-09-20 14:31:21');
 
 -- membuang struktur untuk table db_lentera.tb_witel
 DROP TABLE IF EXISTS `tb_witel`;
